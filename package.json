@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-avito-api",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "n8n node для интеграции с API Авито для бизнеса",
   "keywords": [
     "n8n-community-node-package",
@@ -20,19 +20,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/b1zya/n8n-nodes-avito-api.git"
+    "url": "git+https://github.com/b1zya/n8n-nodes-avito-api.git"
   },
   "engines": {
-    "node": ">=20.15"
+    "node": ">=22.22"
   },
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "npx rimraf dist && tsc && gulp build:icons",
-    "dev": "tsc --watch",
-    "format": "prettier nodes credentials --write",
-    "lint": "eslint nodes credentials package.json",
-    "lintfix": "eslint nodes credentials package.json --fix",
-    "prepublishOnly": "npm run build && npm run lint -c .eslintrc.prepublish.js nodes credentials package.json"
+    "dev": "n8n-node dev",
+    "build": "n8n-node build",
+    "lint": "n8n-node lint",
+    "lint:fix": "n8n-node lint --fix",
+    "format": "prettier src --write",
+    "release": "n8n-node release"
   },
   "files": [
     "dist"
@@ -40,22 +40,26 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
-      "dist/credentials/AvitoOAuth2Api.credentials.js"
+      "dist/src/credentials/avitoOAuth2Api.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/Avito/Avito.node.js"
-    ]
+      "dist/src/nodes/Avito/Avito.node.js",
+      "dist/src/nodes/Avito/AvitoMessengerTrigger.node.js"
+    ],
+    "strict": false
   },
   "devDependencies": {
-    "@typescript-eslint/parser": "~8.32.0",
-    "eslint": "^8.57.0",
-    "eslint-plugin-n8n-nodes-base": "^1.16.3",
-    "gulp": "^5.0.0",
-    "prettier": "^3.6.2",
-    "rimraf": "^6.0.1",
-    "typescript": "^5.8.2"
+    "@n8n/node-cli": "^0.29.1",
+    "eslint": "9.39.4",
+    "n8n-workflow": "^2.16.0",
+    "prettier": "3.8.3",
+    "release-it": "20.0.1",
+    "typescript": "5.9.3"
   },
   "peerDependencies": {
     "n8n-workflow": "*"
+  },
+  "dependencies": {
+    "form-data": "^4.0.5"
   }
 }

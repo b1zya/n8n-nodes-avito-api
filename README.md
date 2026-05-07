@@ -2,110 +2,201 @@
 
 [English](#english) | [Русский](#русский)
 
+> **✨ Update:** The project was migrated to the current `src/` layout, `@n8n/node-cli`, and recommended runtime `n8n >= 2.19.2`.
+>
+> **Compatibility:** v2.0.0 may be incompatible with n8n versions earlier than `2.12.0` because OAuth2 credential handling was fundamentally changed. Recommended runtime is `n8n >= 2.19.2`; starting from this line, the Authorization Code scope issue from [#1](https://github.com/b1zya/n8n-nodes-avito-api/issues/1) is presumed to be fixed. If authentication fails after updating, recreate Avito OAuth2 credentials.
+>
+> **Совместимость:** v2.0.0 может быть несовместима с n8n ранее `2.12.0` из-за фундаментального изменения OAuth2 credentials. Рекомендуется `n8n >= 2.19.2`: начиная с этой ветки, проблема Authorization Code scopes из [#1](https://github.com/b1zya/n8n-nodes-avito-api/issues/1) предположительно исправлена. Если после обновления авторизация не работает, пересоздайте Avito OAuth2 credentials.
+
 ---
 
 ## English
 
 ### 🚀 Overview
 
-**Avito n8n Custom Node** is a powerful custom node for n8n automation platform that provides seamless integration with Avito API for Business. This node adds convenient functionality for working with Avito API directly in the n8n interface, solving critical authentication and token management issues.
+**Avito n8n Custom Node** is a community node for n8n that integrates with Avito API for Business. It provides ready-to-use Avito resources in the n8n UI, including items, promotion, messenger, ratings, autoload, CPA, CallTracking, user finance, tariffs, and special offers.
 
 ### ✨ Key Features
 
-- **🔧 Convenient API Integration**: Direct access to Avito API functionality within n8n interface
-- **🔑 Automatic Token Management**: Solves the 403 Forbidden token refresh problem that standard HTTP Request node cannot handle
-- **📊 Comprehensive API Coverage**: Support for Items, Promotions, Ratings & Reviews, and Autoload resources
-- **⚡ Built-in Rate Limiting**: Intelligent request throttling to respect API limits
-- **🛡️ Robust Error Handling**: Detailed error messages and automatic retry mechanisms
+- **🔧 Convenient API Integration**: Direct access to Avito API functionality from n8n workflows
+- **🔑 OAuth2 Token Management**: Avito `403 Forbidden` token expiry is handled through credential-level refresh
+- **📊 Broad API Coverage**: Items, User, Promotion v1, CPXPromo Legacy, Messenger, CPA, CallTracking, Ratings & Reviews, Autoload, Tariff, and Special Offers
+- **🧩 Current n8n Layout**: Source code lives in `src/` and builds through `@n8n/node-cli`
+- **🛡️ Validation & Error Handling**: Local validation for documented limits and clearer Avito API errors
 
 ### 🎯 Problem Solved
 
-This node specifically addresses a critical limitation in n8n's standard OAuth2 implementation:
+Avito returns `403 Forbidden` when an access token expires. Earlier n8n setups required awkward custom logic to refresh tokens on `403`. In current n8n versions this is much simpler: the credential defines hidden `tokenExpiredStatusCode: 403`, so refresh is handled at credential level.
 
-- **Standard HTTP Request node** cannot select custom error codes for token refresh
-- **Avito API returns 403 Forbidden** when tokens expire, but n8n only handles 401 Unauthorized by default
-- While technically possible to create Avito credentials with HTTP Request node, **tokens must be manually recreated every 24 hours**, which is extremely inconvenient
-- **This node completely solves this problem** with automatic token refresh on 403 status codes
+Authorization Code scopes are entered as comma-separated values:
+
+```text
+items:info,stats:read,user:read
+```
+
+Client Credentials usually does not require scope. If a specific Avito API explicitly requires one, for example Special Offers, use the documented scope when the connection flow supports it.
+
+Version `2.0.0` may be incompatible with n8n versions earlier than `2.12.0` because the OAuth2 credential implementation changed significantly. Use `n8n >= 2.19.2` where possible; this is the recommended line because the Authorization Code scope handling issue reported in [#1](https://github.com/b1zya/n8n-nodes-avito-api/issues/1) is presumed to be resolved there. Existing Avito OAuth2 credentials may need to be recreated after upgrading.
+
+### 🗂️ Current Project Structure
+
+The old root-level `nodes/` and `credentials/` layout was refactored into `src/`.
+
+- `src/credentials/avitoOAuth2Api.credentials.ts` - OAuth2 credential
+- `src/nodes/Avito/Avito.node.ts` - main Avito node
+- `src/nodes/Avito/AvitoMessengerTrigger.node.ts` - Messenger webhook trigger
+- `src/nodes/Avito/Descriptions/*` - node UI fields
+- `src/nodes/Avito/router/RouterUtils.ts` - operation routing
+- `src/nodes/Avito/<Resource>/*` - API operation implementations
+
+The package configuration points n8n to built files under `dist/src/...`.
 
 ### 📋 Supported Avito API Methods
 
 #### 🏠 **Items (Объявления)**
-- `GET /items/v2/list` - Get user items list
-- `GET /items/v2/item/{itemId}` - Get item information
-- `PUT /items/v1/item/{itemId}/price` - Update item price
-- `POST /items/v1/item/{itemId}/vas` - Apply additional services (VAS)
-- `GET /items/v1/vas/prices` - Get VAS prices
-- `GET /stats/v1/accounts/{userId}/items` - Get items analytics
-- `GET /stats/v1/accounts/{userId}/items/{itemId}/calls` - Get call statistics
-- `GET /stats/v1/accounts/{userId}/items/shallow` - Get shallow statistics
 
-#### 🎯 **Promotions (Продвижение)**
-- `GET /promotion/v1/items/bids` - Get promotion bids
-- `GET /promotion/v1/items` - Get promotions by item IDs
-- `DELETE /promotion/v1/items` - Remove promotions
-- `PUT /promotion/v1/items/auto` - Set auto promotion
-- `PUT /promotion/v1/items/manual` - Set manual promotion
+- Items list, item information, price update
+- Current VAS prices and current VAS application method
+- Calls statistics, shallow counters, profile analytics
+- Profile spendings via `POST /stats/v2/accounts/{user_id}/spendings`
+- Deprecated old Item VAS endpoints are intentionally not added
 
-#### ⭐ **Ratings & Reviews (Рейтинги и отзывы)**
-- `GET /ratings/v1/info` - Get rating information
-- `GET /ratings/v1/reviews` - Get reviews list with pagination
-- `POST /ratings/v1/answers` - Create review answer
-- `DELETE /ratings/v1/answers/{answerId}` - Remove review answer
+#### 👤 **User (Пользователь)**
+
+- `GET /core/v1/accounts/self` - authorized user information
+- `GET /core/v1/accounts/{user_id}/balance/` - wallet balance
+- `POST /core/v1/accounts/operations_history/` - wallet operations history
+- Local validation: max 1 week, not older than 1 year, `dateTimeFrom <= dateTimeTo`
+
+#### 🎯 **Promotion v1 (Продвижение)**
+
+- `POST /promotion/v1/items/services/dict` - service type dictionary
+- `POST /promotion/v1/items/services/get` - active services by item IDs
+- `POST /promotion/v1/items/services/orders/get` - orders list
+- `POST /promotion/v1/items/services/orders/status` - order status
+- `POST /promotion/v1/items/services/bbip/suggests/get` - BBIP budget suggestions
+- `POST /promotion/v1/items/services/bbip/forecasts/get` - BBIP forecast
+- `PUT /promotion/v1/items/services/bbip/orders/create` - create BBIP order
+
+#### 🎯 **CPXPromo Legacy**
+
+- Existing `/cpxpromo/1/*` operations are available in a separate `CPXPromo Legacy` resource
+- They are not mixed with the current Promotion v1 API
+
+#### 💬 **Messenger**
+
+- Chats, chat by ID, V3 messages
+- Send text and image messages
+- Delete messages and mark chats as read
+- Upload images from n8n binary data
+- Voice file links, blacklist, webhook subscriptions
+- Dedicated `Avito Messenger Trigger` for incoming webhook V3 events
 
 #### 📤 **Autoload (Автозагрузка)**
-- `GET /autoload/v1/user-docs/tree` - Get category tree
-- `GET /autoload/v1/user-docs/node/{nodeSlug}/fields` - Get category fields
-- `GET /autoload/v2/profile` - Get profile settings
-- `PUT /autoload/v2/profile` - Create/update profile
-- `GET /autoload/v3/reports` - Get reports list
-- `GET /autoload/v3/reports/last_completed_report` - Get last report
-- `GET /autoload/v3/reports/{reportId}` - Get specific report
-- `GET /autoload/v2/reports/{reportId}/items` - Get report items
-- `GET /autoload/v2/reports/{reportId}/items/fees` - Get report items fees
-- `POST /autoload/v1/upload` - Upload file
-- `GET /autoload/v2/items` - Get autoload items info
-- `GET /autoload/v2/items/avito_ids` - Get Avito IDs by ad IDs
-- `GET /autoload/v2/ads` - Get ad IDs by Avito IDs
+
+- Category tree and category fields
+- Profile get/update
+- Reports, last report, report by ID
+- Report items and fees
+- File upload
+- Avito ID / file ID conversion
+
+#### 📞 **CPA**
+
+- `POST /cpa/v3/balanceInfo`
+- Calls and chats by time
+- Chat by `actionId`
+- Phones from target chats
+- Complaints by call or `actionId`
+- Required `X-Source` header is exposed in the UI
+
+#### ☎️ **CallTracking**
+
+- Call by ID
+- Calls by time
+- Call recording as binary `audio/mpeg`
+
+#### ⭐ **Ratings & Reviews (Рейтинги и отзывы)**
+
+- Rating info
+- Reviews list with pagination
+- Create review answer using documented `message`
+- Remove review answer
+
+#### 💼 **Tariff (Тарифы)**
+
+- `GET /tariff/info/1` - current and scheduled Transport tariff info
+- CPA tariffs are excluded by Avito documentation
+
+#### 💌 **Special Offers (Рассылка скидок и спецпредложений)**
+
+Beta API:
+
+- `POST /special-offers/v1/available`
+- `POST /special-offers/v1/multiCreate`
+- `POST /special-offers/v1/multiConfirm`
+- `POST /special-offers/v1/stats`
+- `POST /special-offers/v1/tariffInfo`
+
+Scope: `special_offers:sending`.
 
 ### 🛠️ Installation
 
-1. Copy the node files to your n8n custom nodes directory
-2. Restart your n8n instance
-3. The "Avito" node will appear in your n8n nodes palette
+1. Install the package as an n8n community node or place the built package in your custom nodes directory.
+2. Restart n8n.
+3. The `Avito` node and `Avito Messenger Trigger` will appear in n8n.
 
 ### ⚙️ Configuration
 
 1. **Create Avito OAuth2 Credentials**:
    - Go to n8n Settings → Credentials
-   - Add new "Avito OAuth2 API" credential
-   - Choose grant type (Client Credentials recommended for testing)
-   - Enter your `client_id` and `client_secret` from [Avito Developers](https://www.avito.ru/professionals/api)
+   - Add `Avito OAuth2 API`
+   - Choose Client Credentials or Authorization Code
+   - Enter `client_id` and `client_secret` from Avito
 
 2. **Configure the Node**:
-   - Select resource (Items, Promotions, Ratings, Autoload)
+   - Select resource
    - Choose operation
    - Fill in required parameters
    - The node handles authentication automatically
 
+### 🧪 Development
+
+```bash
+npm run build
+npm run lint
+npm run dev
+npm run format
+```
+
+Minimum verification before release:
+
+```bash
+npx tsc -p tsconfig.json --noEmit
+npm run lint
+npm run build
+```
+
+`n8n-node` may print Node.js `[DEP0190]`; this is not a node code error.
+
 ### 💡 Development Note
 
-**95% of this code was written using Claude AI assistant**, demonstrating the power of AI-assisted development for creating complex integrations.
+This project was built with extensive AI assistance from Claude and Codex (GPT-5.5), plus manual review against Avito API documentation.
 
 ### ⚠️ Disclaimer
 
-- **The author is not responsible** for any issues or consequences arising from the use of this application
-- **The author has no affiliation** with Avito or n8n developers
-- **The author owes nothing to anyone** - this project was created purely out of enthusiasm for personal purposes
-- **Users can request new features and bug fixes**, however this does not obligate the author to implement them
-- **Use at your own risk** - always test thoroughly in development environment first
+- This is an independent community node and is not officially affiliated with Avito or n8n
+- The software is provided as-is, without warranties
+- Use at your own risk and test workflows before production
+- Feature requests and bug reports are welcome, but implementation is not guaranteed
 
 ### 📄 License
 
-This project is provided as-is under MIT license. See LICENSE file for details.
+MIT.
 
 ### 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit issues and enhancement requests.
+Issues and pull requests are welcome.
 
 ---
 
@@ -113,116 +204,198 @@ Contributions are welcome! Please feel free to submit issues and enhancement req
 
 ### 🚀 Обзор
 
-**Avito n8n Custom Node** — это мощная кастомная нода для платформы автоматизации n8n, которая обеспечивает бесшовную интеграцию с API Авито для бизнеса. Эта нода добавляет удобный функционал для работы с API Авито прямо в интерфейсе n8n, решая критические проблемы аутентификации и управления токенами.
+**Avito n8n Custom Node** — community-нода для n8n, которая интегрируется с Avito API for Business. Она добавляет готовые ресурсы Авито прямо в интерфейс n8n: объявления, продвижение, мессенджер, отзывы, автозагрузка, CPA, CallTracking, пользовательские финансы, тарифы и рассылки спецпредложений.
 
 ### ✨ Ключевые особенности
 
-- **🔧 Удобная интеграция с API**: Прямой доступ к функциональности API Авито в интерфейсе n8n
-- **🔑 Автоматическое управление токенами**: Решает проблему обновления токенов при 403 Forbidden, которую стандартная HTTP Request нода не может обработать
-- **📊 Полное покрытие API**: Поддержка ресурсов Объявлений, Продвижения, Рейтингов и отзывов, Автозагрузки
-- **⚡ Встроенное ограничение запросов**: Умное регулирование запросов для соблюдения лимитов API
-- **🛡️ Надежная обработка ошибок**: Подробные сообщения об ошибках и автоматические механизмы повтора
+- **🔧 Удобная интеграция с API**: Прямой доступ к Avito API из workflow n8n
+- **🔑 OAuth2 Token Management**: Истечение токена Avito через `403 Forbidden` обрабатывается на уровне credential
+- **📊 Широкое покрытие API**: Объявления, Пользователь, Promotion v1, CPXPromo Legacy, Мессенджер, CPA, CallTracking, Рейтинги и отзывы, Автозагрузка, Тарифы, Рассылка скидок
+- **🧩 Актуальная структура n8n**: Исходники находятся в `src/`, сборка идет через `@n8n/node-cli`
+- **🛡️ Валидация и ошибки**: Локальная проверка документированных лимитов и понятные ошибки Avito API
 
-### 🎯 Решаемая проблема
+### 🎯 Решаемая Проблема
 
-Эта нода специально решает критическое ограничение в стандартной реализации OAuth2 в n8n:
+Avito возвращает `403 Forbidden`, когда access token истек. Раньше для refresh по `403` приходилось отдельно прописывать неудобную логику. В актуальных версиях n8n это намного проще: credential содержит скрытый `tokenExpiredStatusCode: 403`, поэтому refresh обрабатывается на уровне credential.
 
-- **В стандартной HTTP Request ноде** нельзя выбрать кастомный код ошибки для обновления токена
-- **API Авито возвращает 403 Forbidden** при истечении токенов, а n8n по умолчанию обрабатывает только 401 Unauthorized
-- Хотя технически можно создать credentials для Авито с HTTP Request нодой, **токены приходится вручную пересоздавать каждые 24 часа**, что крайне неудобно
-- **Эта нода полностью решает эту проблему** автоматическим обновлением токенов при получении 403 статуса
+Authorization Code scopes задаются через запятую:
 
-### 📋 Поддерживаемые методы API Авито
+```text
+items:info,stats:read,user:read
+```
+
+Для Client Credentials scope обычно не нужен. Если конкретный API Авито явно требует scope, например Special Offers, используйте документированный scope, когда сценарий подключения это поддерживает.
+
+Версия `2.0.0` может быть несовместима с n8n ранее `2.12.0`, потому что реализация OAuth2 credential была существенно изменена. По возможности используйте `n8n >= 2.19.2`: начиная с этой ветки, предположительно закрыта проблема с Authorization Code scopes из [#1](https://github.com/b1zya/n8n-nodes-avito-api/issues/1). После обновления может потребоваться пересоздать Avito OAuth2 credentials.
+
+### 🗂️ Текущая Структура Проекта
+
+Старая корневая структура `nodes/` и `credentials/` перенесена в `src/`.
+
+- `src/credentials/avitoOAuth2Api.credentials.ts` - OAuth2 credential
+- `src/nodes/Avito/Avito.node.ts` - основная нода Avito
+- `src/nodes/Avito/AvitoMessengerTrigger.node.ts` - Messenger webhook trigger
+- `src/nodes/Avito/Descriptions/*` - UI-поля ноды
+- `src/nodes/Avito/router/RouterUtils.ts` - роутинг операций
+- `src/nodes/Avito/<Resource>/*` - реализации API-методов
+
+В `package.json` n8n указывает на собранные файлы в `dist/src/...`.
+
+### 📋 Поддерживаемые Методы API Авито
 
 #### 🏠 **Объявления (Items)**
-- `GET /items/v2/list` - Получить список объявлений пользователя
-- `GET /items/v2/item/{itemId}` - Получить информацию об объявлении
-- `PUT /items/v1/item/{itemId}/price` - Обновить цену объявления
-- `POST /items/v1/item/{itemId}/vas` - Применить дополнительные услуги (VAS)
-- `GET /items/v1/vas/prices` - Получить цены VAS
-- `GET /stats/v1/accounts/{userId}/items` - Получить аналитику объявлений
-- `GET /stats/v1/accounts/{userId}/items/{itemId}/calls` - Получить статистику звонков
-- `GET /stats/v1/accounts/{userId}/items/shallow` - Получить поверхностную статистику
 
-#### 🎯 **Продвижение (Promotions)**
-- `GET /promotion/v1/items/bids` - Получить ставки продвижения
-- `GET /promotion/v1/items` - Получить продвижения по ID объявлений
-- `DELETE /promotion/v1/items` - Удалить продвижения
-- `PUT /promotion/v1/items/auto` - Установить автопродвижение
-- `PUT /promotion/v1/items/manual` - Установить ручное продвижение
+- список объявлений, информация по объявлению, обновление цены
+- актуальная стоимость VAS и актуальный метод применения VAS
+- статистика звонков, счетчики объявлений, аналитика профиля
+- расходы профиля через `POST /stats/v2/accounts/{user_id}/spendings`
+- deprecated VAS endpoints из старого Item API намеренно не добавляются
 
-#### ⭐ **Рейтинги и отзывы (Ratings & Reviews)**
-- `GET /ratings/v1/info` - Получить информацию о рейтинге
-- `GET /ratings/v1/reviews` - Получить список отзывов с пагинацией
-- `POST /ratings/v1/answers` - Создать ответ на отзыв
-- `DELETE /ratings/v1/answers/{answerId}` - Удалить ответ на отзыв
+#### 👤 **Пользователь (User)**
+
+- `GET /core/v1/accounts/self` - информация об авторизованном пользователе
+- `GET /core/v1/accounts/{user_id}/balance/` - баланс кошелька
+- `POST /core/v1/accounts/operations_history/` - история операций кошелька
+- локальная проверка: максимум 1 неделя, не дальше 1 года, `dateTimeFrom <= dateTimeTo`
+
+#### 🎯 **Продвижение (Promotion v1)**
+
+- `POST /promotion/v1/items/services/dict` - словарь типов услуг
+- `POST /promotion/v1/items/services/get` - активные услуги по объявлениям
+- `POST /promotion/v1/items/services/orders/get` - список заявок
+- `POST /promotion/v1/items/services/orders/status` - статус заявки
+- `POST /promotion/v1/items/services/bbip/suggests/get` - варианты бюджета BBIP
+- `POST /promotion/v1/items/services/bbip/forecasts/get` - прогноз BBIP
+- `PUT /promotion/v1/items/services/bbip/orders/create` - создание BBIP-заявки
+
+#### 🎯 **CPXPromo Legacy**
+
+- существующие операции `/cpxpromo/1/*` доступны в отдельном ресурсе `CPXPromo Legacy`
+- они не смешиваются с актуальным Promotion v1 API
+
+#### 💬 **Мессенджер**
+
+- чаты, чат по ID, сообщения V3
+- отправка текста и изображений
+- удаление сообщений и отметка чата прочитанным
+- загрузка изображений из binary data n8n
+- ссылки на голосовые файлы, blacklist, webhook-подписки
+- отдельный `Avito Messenger Trigger` для входящих webhook V3 событий
 
 #### 📤 **Автозагрузка (Autoload)**
-- `GET /autoload/v1/user-docs/tree` - Получить дерево категорий
-- `GET /autoload/v1/user-docs/node/{nodeSlug}/fields` - Получить поля категории
-- `GET /autoload/v2/profile` - Получить настройки профиля
-- `PUT /autoload/v2/profile` - Создать/обновить профиль
-- `GET /autoload/v3/reports` - Получить список отчетов
-- `GET /autoload/v3/reports/last_completed_report` - Получить последний отчет
-- `GET /autoload/v3/reports/{reportId}` - Получить конкретный отчет
-- `GET /autoload/v2/reports/{reportId}/items` - Получить элементы отчета
-- `GET /autoload/v2/reports/{reportId}/items/fees` - Получить комиссии элементов отчета
-- `POST /autoload/v1/upload` - Загрузить файл
-- `GET /autoload/v2/items` - Получить информацию об элементах автозагрузки
-- `GET /autoload/v2/items/avito_ids` - Получить ID Авито по ID объявлений
-- `GET /autoload/v2/ads` - Получить ID объявлений по ID Авито
+
+- дерево категорий и поля категории
+- получение и обновление профиля
+- отчеты, последний отчет, отчет по ID
+- элементы отчета и списания
+- загрузка файла
+- конвертация Avito ID / file ID
+
+#### 📞 **CPA**
+
+- `POST /cpa/v3/balanceInfo`
+- звонки и чаты по времени
+- чат по `actionId`
+- телефоны из целевых чатов
+- жалобы по звонку или `actionId`
+- обязательный заголовок `X-Source` вынесен в UI
+
+#### ☎️ **CallTracking**
+
+- звонок по ID
+- звонки по времени
+- аудиозапись звонка как binary `audio/mpeg`
+
+#### ⭐ **Рейтинги И Отзывы (Ratings & Reviews)**
+
+- информация о рейтинге
+- список отзывов с пагинацией
+- создание ответа на отзыв с документированным полем `message`
+- удаление ответа на отзыв
+
+#### 💼 **Тарифы (Tariff)**
+
+- `GET /tariff/info/1` - информация о текущем и запланированном тарифе в категории Транспорт
+- CPA-тарифы исключены по документации Авито
+
+#### 💌 **Рассылка Скидок И Спецпредложений (Special Offers)**
+
+Beta API:
+
+- `POST /special-offers/v1/available`
+- `POST /special-offers/v1/multiCreate`
+- `POST /special-offers/v1/multiConfirm`
+- `POST /special-offers/v1/stats`
+- `POST /special-offers/v1/tariffInfo`
+
+Scope: `special_offers:sending`.
+
+### 🛠️ Установка
+
+1. Установите пакет как n8n community node или поместите собранный пакет в директорию custom nodes.
+2. Перезапустите n8n.
+3. В n8n появятся `Avito` и `Avito Messenger Trigger`.
 
 ### ⚙️ Настройка
 
 1. **Создайте Avito OAuth2 Credentials**:
-   - Перейдите в Настройки n8n → Credentials
-   - Добавьте новую учетную запись "Avito OAuth2 API"
-   - Выберите тип авторизации (Client Credentials рекомендуется для тестирования)
-   - Введите ваши `client_id` и `client_secret` из [Авито для разработчиков](https://www.avito.ru/professionals/api)
+   - Перейдите в n8n Settings → Credentials
+   - Добавьте `Avito OAuth2 API`
+   - Выберите Client Credentials или Authorization Code
+   - Укажите `client_id` и `client_secret` из Авито
 
 2. **Настройте ноду**:
-   - Выберите ресурс (Объявления, Продвижение, Рейтинги, Автозагрузка)
+   - Выберите ресурс
    - Выберите операцию
    - Заполните обязательные параметры
-   - Нода автоматически обрабатывает аутентификацию
+   - Нода автоматически обрабатывает авторизацию
 
-### 💡 Заметка о разработке
+### 🧪 Разработка
 
-**Этот проект был разработан с обширной помощью ИИ (95% Claude AI)**, демонстрируя современные подходы к разработке с помощью ИИ.
+```bash
+npm run build
+npm run lint
+npm run dev
+npm run format
+```
 
-### ⚠️ Отказ от ответственности
+Минимальная проверка перед релизом:
 
-- Это независимая community нода, не имеющий официальной связи с платформой Авито или n8n
-- **Данное программное обеспечение предоставляется "КАК ЕСТЬ" без каких-либо гарантий, явных или подразумеваемых**
-- **Автор отказывается от любой ответственности за ущерб, потерю данных или иные последствия**, возникающие в результате использования данного программного обеспечения
-- Как и в любом проекте с открытым исходным кодом, могут существовать ошибки и критические проблемы - **пользователи несут полную ответственность** за тестирование и валидацию
-- Используйте на свое усмотрение и тщательно тестируйте перед использованием в продакшене
-- Запросы на новые функции и сообщения об ошибках приветствуются, хотя время ответа может варьироваться
-- Проект предоставляется на условиях лицензии MIT
+```bash
+npx tsc -p tsconfig.json --noEmit
+npm run lint
+npm run build
+```
+
+`n8n-node` может выводить предупреждение Node.js `[DEP0190]`; это не ошибка кода ноды.
+
+### 💡 Заметка О Разработке
+
+Проект разрабатывался с активной помощью Claude и Codex (GPT-5.5), а также ручной сверкой с документацией Avito API.
+
+### ⚠️ Отказ От Ответственности
+
+- Это независимая community-нода без официальной связи с Avito или n8n
+- ПО предоставляется как есть, без гарантий
+- Используйте на свой риск и тестируйте workflow перед production
+- Feature requests и bug reports приветствуются, но реализация не гарантируется
 
 ### 📄 Лицензия
 
-Этот проект предоставляется как есть под лицензией MIT. См. файл LICENSE для подробностей.
+MIT.
 
-### 📝 Примечание о требованиях верификации n8n
+### 📝 Примечание О Верификации n8n
 
-Эта нода намеренно отклоняется от рекомендации n8n использовать **только английский язык** для интерфейсов и документации нод. Это решение принято по следующим причинам:
+Нода намеренно использует русский язык в интерфейсе, потому что ориентирована на пользователей Авито. Если n8n добавит полноценную локализацию, интерфейс можно будет адаптировать под многоязычный формат.
 
-- Нода ориентирована преимущественно на **русскоязычную аудиторию**, работающую с Авито (российская торговая площадка)
-- n8n в настоящее время **не поддерживает мультиязычные интерфейсы**, что делает невозможной реализацию правильной локализации
-- Использование русского языка значительно улучшает **пользовательский опыт** для целевой аудитории
-- Это может препятствовать официальной верификации ноды n8n, но **удобство использования приоритетнее верификации**
+### 🤝 Вклад В Проект
 
-Если n8n добавит поддержку мультиязычности в будущем, нода может быть обновлена для поддержки обоих языков с целью потенциальной верификации.
-
-### 🤝 Вклад в проект
-
-Вклады приветствуются! Пожалуйста, не стесняйтесь отправлять issues и запросы на улучшения.
+Issues и pull requests приветствуются.
 
 ---
 
-### 🔗 Полезные ссылки
+### 🔗 Полезные Ссылки
 
 - [Авито API для разработчиков](https://developers.avito.ru/)
 - [Документация n8n](https://docs.n8n.io/)
-- [Рекомендации по деплою приложения](https://docs.n8n.io/integrations/creating-nodes/deploy/)
+- [Рекомендации по деплою community nodes](https://docs.n8n.io/integrations/creating-nodes/deploy/)
