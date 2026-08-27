@@ -36,7 +36,6 @@ ehthumbs.db
 
 # Package manager files
 yarn.lock
-package-lock.json
 
 # Environment files
 .env
