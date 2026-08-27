@@ -8,6 +8,11 @@ import type { PaginatedQueryParams, ReportItemsFilters, ReportItemsResponse } fr
  * Детализированные результаты выгрузки объявлений с пагинацией
  * API: GET /autoload/v2/reports/{report_id}/items
  * Scope: autoload:reports
+ *
+ * @deprecated Avito выводит метод из эксплуатации (getReportItemsById).
+ * 08.09.2026 данные старше 7 дней станут неполными, 08.03.2027 метод удаляют (410 Gone).
+ * Замена: getLastSuccessfulUploadItems, параметр report_id там не нужен.
+ * В v4 не будет поля applied_vas — применённые услуги смотрите через getItemInfo.
  * Пагинация: page/per_page (page с 0)
  */
 export async function getReportItems(this: IExecuteFunctions, itemIndex: number) {

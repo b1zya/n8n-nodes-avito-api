@@ -10,6 +10,7 @@ export const baseProperties: INodeProperties[] = [
 		options: [
 			{ name: 'Объявление', value: 'item' },
 			{ name: 'Пользователь', value: 'user' },
+			{ name: 'Иерархия Аккаунтов', value: 'accountHierarchy' },
 			{ name: 'Продвижение', value: 'promotion' },
 			{ name: 'Продвижение CPXPromo (Legacy)', value: 'cpxPromoLegacy' },
 			{ name: 'Рейтинги и Отзывы', value: 'ratings' },

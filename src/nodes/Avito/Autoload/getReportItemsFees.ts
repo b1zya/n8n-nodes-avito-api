@@ -8,6 +8,11 @@ import type { PaginatedQueryParams, ReportItemsFeesFilters, ReportItemsResponse 
  * Информация о списаниях за размещение объявлений с пагинацией
  * API: GET /autoload/v2/reports/{report_id}/items/fees
  * Scope: autoload:reports
+ *
+ * @deprecated Avito выводит метод из эксплуатации (getReportItemsFeesById).
+ * 08.09.2026 данные старше 7 дней станут неполными, 08.03.2027 метод удаляют (410 Gone).
+ * Прямой замены нет: данных о списаниях (fee_info, listing_fees) в v4 не будет.
+ * История операций по кошельку доступна через postOperationsHistory.
  * Пагинация: page/per_page (ОСОБЕННОСТЬ: page с 0!)
  */
 export async function getReportItemsFees(this: IExecuteFunctions, itemIndex: number) {

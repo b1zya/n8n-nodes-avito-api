@@ -17,7 +17,7 @@ export async function promotionApiRequest<T = IDataObject>(
 	endpoint: string,
 	body: IDataObject | undefined,
 	itemIndex: number,
-	xIsEmployee: boolean = false,
+	employeeOf: number = 0,
 ): Promise<T> {
 	return await avitoApiRequest.call(
 		context,
@@ -26,12 +26,31 @@ export async function promotionApiRequest<T = IDataObject>(
 		body,
 		undefined,
 		itemIndex,
-		xIsEmployee ? { 'X-Is-Employee': 'true' } : undefined,
+		employeeOf ? { 'X-Employee-Of': String(employeeOf) } : undefined,
 	) as unknown as T;
 }
 
-export function getXIsEmployee(context: IExecuteFunctions, itemIndex: number): boolean {
-	return context.getNodeParameter('promotionXIsEmployee', itemIndex, false) as boolean;
+/**
+ * Идентификатор компании для заголовка X-Employee-Of.
+ * Устаревший X-Is-Employee (булев флаг) не используется: с 26.05.2026 Avito помечает его
+ * deprecated и требует передавать конкретный ID компании, от имени которой работает сотрудник.
+ * 0 означает, что запрос идёт от личного аккаунта и заголовок не отправляется.
+ */
+export function getPromotionEmployeeOf(context: IExecuteFunctions, itemIndex: number): number {
+	const employeeOf = context.getNodeParameter('promotionEmployeeOf', itemIndex, 0) as number;
+
+	if (!employeeOf) {
+		return 0;
+	}
+
+	if (!Number.isInteger(employeeOf) || employeeOf < 1) {
+		throw new NodeOperationError(context.getNode(), 'X-Employee-Of must be a positive integer', {
+			itemIndex,
+			description: 'По документации Avito минимальное значение X-Employee-Of равно 1. Оставьте 0, чтобы работать от личного аккаунта.',
+		});
+	}
+
+	return employeeOf;
 }
 
 export function validatePromotionItemIds(

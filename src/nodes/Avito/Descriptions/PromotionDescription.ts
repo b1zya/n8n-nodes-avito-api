@@ -70,12 +70,15 @@ export const promotionOperations: INodeProperties[] = [
 
 export const promotionFields: INodeProperties[] = [
 	{
-		displayName: 'Работать От Имени Сотрудника',
-		name: 'promotionXIsEmployee',
-		type: 'boolean',
-		default: false,
-		description: 'Whether to send X-Is-Employee: true for company employee hierarchy scenarios',
-		hint: 'Если включено, запрос выполняется от имени сотрудника компании. Для работы с иерархией аккаунтов может понадобиться scope ah:access.',
+		displayName: 'ID Компании (X-Employee-Of)',
+		name: 'promotionEmployeeOf',
+		type: 'number',
+		default: 0,
+		description: 'Идентификатор компании, от имени которой работает сотрудник. Оставьте 0, чтобы работать от личного аккаунта.',
+		hint: 'Пришёл на смену устаревшему X-Is-Employee. Сотруднику, авторизованному под своим аккаунтом, Avito по умолчанию не даёт доступа к объявлениям компании. Для подключения услуг от имени сотрудника нужен достаточный баланс «Лимит на продвижение», может понадобиться scope ah:access.',
+		typeOptions: {
+			minValue: 0,
+		},
 		displayOptions: { show: { resource: promotionResource, operation: employeeHeaderOperations } },
 	},
 	{

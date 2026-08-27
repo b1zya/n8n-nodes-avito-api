@@ -1,10 +1,47 @@
 import type { IExecuteFunctions, IDataObject, IHttpRequestOptions, JsonObject } from 'n8n-workflow';
 import { NodeApiError, NodeOperationError } from 'n8n-workflow';
-import FormData from 'form-data';
+import { randomBytes } from 'node:crypto';
 import { avitoApiRequest } from '../GenericFunctions';
 import { getErrorStatus } from '../types/AvitoTypes';
 
 const MAX_UPLOAD_IMAGE_SIZE_BYTES = 24 * 1024 * 1024;
+
+const CRLF = '\r\n';
+
+/**
+ * Убирает CR, LF и кавычки из значений заголовков multipart.
+ * Без этого имя файла из бинарных данных может разорвать тело запроса (CRLF-инъекция).
+ */
+function sanitizeMultipartHeaderValue(value: string): string {
+	return value.replace(/[\r\n"]/g, '');
+}
+
+/**
+ * Собирает тело multipart/form-data с одним файлом.
+ * Пакет form-data намеренно не используется: community-ноды не должны тянуть runtime-зависимости
+ * (правило @n8n/community-nodes/no-runtime-dependencies).
+ */
+function buildSingleFileMultipartBody(
+	fieldName: string,
+	fileBuffer: Buffer,
+	fileName: string,
+	mimeType: string,
+): { body: Buffer; contentType: string } {
+	const boundary = `----n8nAvitoBoundary${randomBytes(16).toString('hex')}`;
+	const head = Buffer.from(
+		`--${boundary}${CRLF}` +
+			`Content-Disposition: form-data; name="${sanitizeMultipartHeaderValue(fieldName)}"; ` +
+			`filename="${sanitizeMultipartHeaderValue(fileName)}"${CRLF}` +
+			`Content-Type: ${sanitizeMultipartHeaderValue(mimeType)}${CRLF}${CRLF}`,
+		'utf8',
+	);
+	const tail = Buffer.from(`${CRLF}--${boundary}--${CRLF}`, 'utf8');
+
+	return {
+		body: Buffer.concat([head, fileBuffer, tail]),
+		contentType: `multipart/form-data; boundary=${boundary}`,
+	};
+}
 
 export async function messengerApiRequest<T = IDataObject>(
 	context: IExecuteFunctions,
@@ -41,17 +78,18 @@ export async function messengerUploadImageRequest(
 		});
 	}
 
-	const formData = new FormData();
-	formData.append('uploadfile[]', buffer, {
-		filename: binaryData.fileName ?? 'image',
-		contentType: binaryData.mimeType ?? 'application/octet-stream',
-	});
+	const { body, contentType } = buildSingleFileMultipartBody(
+		'uploadfile[]',
+		buffer,
+		binaryData.fileName ?? 'image',
+		binaryData.mimeType ?? 'application/octet-stream',
+	);
 
 	const options: IHttpRequestOptions = {
 		method: 'POST',
 		url: `https://api.avito.ru/messenger/v1/accounts/${userId}/uploadImages`,
-		headers: formData.getHeaders() as IDataObject,
-		body: formData,
+		headers: { 'Content-Type': contentType },
+		body,
 		json: true,
 	};
 

@@ -2,7 +2,11 @@
 
 [English](#english) | [Русский](#русский)
 
-> **✨ Update:** The project was migrated to the current `src/` layout, `@n8n/node-cli`, and recommended runtime `n8n >= 2.19.2`.
+> **✨ Update:** v3.0.0 adds the Account Hierarchy API and migrates Autoload to the v4 uploads API. See [CHANGELOG.md](CHANGELOG.md).
+>
+> **⚠️ Upgrading to v3.0.0:** the Promotion `Работать От Имени Сотрудника` toggle became the numeric `ID Компании (X-Employee-Of)` field and must be filled in again — otherwise requests run under the personal account instead of the company. Autoload v4 numbers pages from `1` and renames `report_id` to `upload_id`.
+>
+> **⚠️ Обновление до v3.0.0:** переключатель Продвижения «Работать От Имени Сотрудника» стал числовым полем «ID Компании (X-Employee-Of)» и требует заполнения заново — иначе запросы пойдут от личного аккаунта, а не от компании. Автозагрузка v4 нумерует страницы с `1` и переименовывает `report_id` в `upload_id`.
 >
 > **Compatibility:** v2.0.0 may be incompatible with n8n versions earlier than `2.12.0` because OAuth2 credential handling was fundamentally changed. Recommended runtime is `n8n >= 2.19.2`; starting from this line, the Authorization Code scope issue from [#1](https://github.com/b1zya/n8n-nodes-avito-api/issues/1) is presumed to be fixed. If authentication fails after updating, recreate Avito OAuth2 credentials.
 >
@@ -14,13 +18,13 @@
 
 ### 🚀 Overview
 
-**Avito n8n Custom Node** is a community node for n8n that integrates with Avito API for Business. It provides ready-to-use Avito resources in the n8n UI, including items, promotion, messenger, ratings, autoload, CPA, CallTracking, user finance, tariffs, and special offers.
+**Avito n8n Custom Node** is a community node for n8n that integrates with Avito API for Business. It provides ready-to-use Avito resources in the n8n UI, including items, account hierarchy, promotion, messenger, ratings, autoload, CPA, CallTracking, user finance, tariffs, and special offers.
 
 ### ✨ Key Features
 
 - **🔧 Convenient API Integration**: Direct access to Avito API functionality from n8n workflows
 - **🔑 OAuth2 Token Management**: Avito `403 Forbidden` token expiry is handled through credential-level refresh
-- **📊 Broad API Coverage**: Items, User, Promotion v1, CPXPromo Legacy, Messenger, CPA, CallTracking, Ratings & Reviews, Autoload, Tariff, and Special Offers
+- **📊 Broad API Coverage**: Items, User, Account Hierarchy, Promotion v1, CPXPromo Legacy, Messenger, CPA, CallTracking, Ratings & Reviews, Autoload v4, Tariff, and Special Offers
 - **🧩 Current n8n Layout**: Source code lives in `src/` and builds through `@n8n/node-cli`
 - **🛡️ Validation & Error Handling**: Local validation for documented limits and clearer Avito API errors
 
@@ -37,6 +41,8 @@ items:info,stats:read,user:read
 Client Credentials usually does not require scope. If a specific Avito API explicitly requires one, for example Special Offers, use the documented scope when the connection flow supports it.
 
 Version `2.0.0` may be incompatible with n8n versions earlier than `2.12.0` because the OAuth2 credential implementation changed significantly. Use `n8n >= 2.19.2` where possible; this is the recommended line because the Authorization Code scope handling issue reported in [#1](https://github.com/b1zya/n8n-nodes-avito-api/issues/1) is presumed to be resolved there. Existing Avito OAuth2 credentials may need to be recreated after upgrading.
+
+Version `3.0.0` does not change credential handling, but it does break two things in existing workflows. Promotion replaced the employee toggle with a company ID field, and Autoload v4 renamed response fields and changed pagination. Both are listed in [CHANGELOG.md](CHANGELOG.md#300---2026-08-27).
 
 ### 🗂️ Current Project Structure
 
@@ -68,6 +74,19 @@ The package configuration points n8n to built files under `dist/src/...`.
 - `POST /core/v1/accounts/operations_history/` - wallet operations history
 - Local validation: max 1 week, not older than 1 year, `dateTimeFrom <= dateTimeTo`
 
+#### 🏢 **Account Hierarchy (Иерархия аккаунтов)**
+
+[Documentation](https://www.avito.ru/developers/api-catalog/accounts-hierarchy/documentation). Scope: `ah:access`.
+
+- `GET /checkAhUserV2` - company / chief / employee status
+- `GET /getAhInfoV1` - full status with the list of companies the user belongs to
+- `GET /getEmployeesV1` - employees with names, emails, and phones
+- `POST /linkItemsV1` - link or relink up to 50 items to an employee
+- `GET /listCompanyPhonesV1` - company phones with cursor pagination
+- `POST /listItemsByEmployeeIdV1` - employee items filtered by category
+- `X-Employee-Of` is exposed for the four operations that accept it
+- Deprecated `checkAhUserV1` is intentionally not added
+
 #### 🎯 **Promotion v1 (Продвижение)**
 
 - `POST /promotion/v1/items/services/dict` - service type dictionary
@@ -77,6 +96,7 @@ The package configuration points n8n to built files under `dist/src/...`.
 - `POST /promotion/v1/items/services/bbip/suggests/get` - BBIP budget suggestions
 - `POST /promotion/v1/items/services/bbip/forecasts/get` - BBIP forecast
 - `PUT /promotion/v1/items/services/bbip/orders/create` - create BBIP order
+- `X-Employee-Of` is sent on the six operations that accept it; the deprecated `X-Is-Employee` is no longer used
 
 #### 🎯 **CPXPromo Legacy**
 
@@ -94,12 +114,29 @@ The package configuration points n8n to built files under `dist/src/...`.
 
 #### 📤 **Autoload (Автозагрузка)**
 
+[Documentation](https://www.avito.ru/developers/api-catalog/autoload/documentation).
+
+Current v4 uploads API:
+
+- [`GET /autoload/v4/uploads`](https://www.avito.ru/developers/api-catalog/autoload/documentation#operation/getUploads) - upload history with `dateFrom` / `dateTo` filters
+- [`GET /autoload/v4/uploads/current`](https://www.avito.ru/developers/api-catalog/autoload/documentation#operation/getCurrentUpload) - current upload, freshest data, changes while running
+- [`GET /autoload/v4/uploads/last_successful`](https://www.avito.ru/developers/api-catalog/autoload/documentation#operation/getLastSuccessfulUpload) - last fully processed upload, stable data
+- [`GET /autoload/v4/uploads/current/items`](https://www.avito.ru/developers/api-catalog/autoload/documentation#operation/getCurrentUploadItems) and [`.../last_successful/items`](https://www.avito.ru/developers/api-catalog/autoload/documentation#operation/getLastSuccessfulUploadItems) - upload items with `query` and `sections` filters
+- Pages start at `1`, `perPage` is capped at `50`
+
+Other operations:
+
 - Category tree and category fields
-- Profile get/update
-- Reports, last report, report by ID
-- Report items and fees
+- Profile get/update (v2 profile, not the deprecated v1 one)
 - File upload
 - Avito ID / file ID conversion
+
+Deprecated reports API, kept until Avito removes it — see the [migration plan](https://www.avito.ru/developers/api-catalog/autoload/documentation#migration-v4):
+
+- `/autoload/v2/reports`, `/autoload/v3/reports/{report_id}`, `/autoload/v3/reports/last_completed_report`
+- `/autoload/v2/reports/items`, `/autoload/v2/reports/{report_id}/items`, `/autoload/v2/reports/{report_id}/items/fees`
+- **2026-09-08** — data older than 7 days becomes incomplete; **2027-03-08** — the endpoints return `410 Gone`
+- Item fees have no v4 replacement; use User wallet operations history instead
 
 #### 📞 **CPA**
 
@@ -204,13 +241,13 @@ Issues and pull requests are welcome.
 
 ### 🚀 Обзор
 
-**Avito n8n Custom Node** — community-нода для n8n, которая интегрируется с Avito API for Business. Она добавляет готовые ресурсы Авито прямо в интерфейс n8n: объявления, продвижение, мессенджер, отзывы, автозагрузка, CPA, CallTracking, пользовательские финансы, тарифы и рассылки спецпредложений.
+**Avito n8n Custom Node** — community-нода для n8n, которая интегрируется с Avito API for Business. Она добавляет готовые ресурсы Авито прямо в интерфейс n8n: объявления, иерархия аккаунтов, продвижение, мессенджер, отзывы, автозагрузка, CPA, CallTracking, пользовательские финансы, тарифы и рассылки спецпредложений.
 
 ### ✨ Ключевые особенности
 
 - **🔧 Удобная интеграция с API**: Прямой доступ к Avito API из workflow n8n
 - **🔑 OAuth2 Token Management**: Истечение токена Avito через `403 Forbidden` обрабатывается на уровне credential
-- **📊 Широкое покрытие API**: Объявления, Пользователь, Promotion v1, CPXPromo Legacy, Мессенджер, CPA, CallTracking, Рейтинги и отзывы, Автозагрузка, Тарифы, Рассылка скидок
+- **📊 Широкое покрытие API**: Объявления, Пользователь, Иерархия аккаунтов, Promotion v1, CPXPromo Legacy, Мессенджер, CPA, CallTracking, Рейтинги и отзывы, Автозагрузка v4, Тарифы, Рассылка скидок
 - **🧩 Актуальная структура n8n**: Исходники находятся в `src/`, сборка идет через `@n8n/node-cli`
 - **🛡️ Валидация и ошибки**: Локальная проверка документированных лимитов и понятные ошибки Avito API
 
@@ -227,6 +264,8 @@ items:info,stats:read,user:read
 Для Client Credentials scope обычно не нужен. Если конкретный API Авито явно требует scope, например Special Offers, используйте документированный scope, когда сценарий подключения это поддерживает.
 
 Версия `2.0.0` может быть несовместима с n8n ранее `2.12.0`, потому что реализация OAuth2 credential была существенно изменена. По возможности используйте `n8n >= 2.19.2`: начиная с этой ветки, предположительно закрыта проблема с Authorization Code scopes из [#1](https://github.com/b1zya/n8n-nodes-avito-api/issues/1). После обновления может потребоваться пересоздать Avito OAuth2 credentials.
+
+Версия `3.0.0` не меняет работу с credentials, но ломает две вещи в существующих workflow. В Продвижении переключатель «от имени сотрудника» заменён полем с ID компании, а Автозагрузка v4 переименовала поля ответа и изменила пагинацию. Оба пункта перечислены в [CHANGELOG.md](CHANGELOG.md#300---2026-08-27).
 
 ### 🗂️ Текущая Структура Проекта
 
@@ -258,6 +297,19 @@ items:info,stats:read,user:read
 - `POST /core/v1/accounts/operations_history/` - история операций кошелька
 - локальная проверка: максимум 1 неделя, не дальше 1 года, `dateTimeFrom <= dateTimeTo`
 
+#### 🏢 **Иерархия Аккаунтов (Account Hierarchy)**
+
+[Документация](https://www.avito.ru/developers/api-catalog/accounts-hierarchy/documentation). Scope: `ah:access`.
+
+- `GET /checkAhUserV2` - статус компании / руководителя / сотрудника
+- `GET /getAhInfoV1` - полный статус со списком компаний, которым принадлежит пользователь
+- `GET /getEmployeesV1` - сотрудники с именами, email и телефонами
+- `POST /linkItemsV1` - прикрепление или перезакрепление до 50 объявлений на сотрудника
+- `GET /listCompanyPhonesV1` - телефоны компании с курсорной пагинацией
+- `POST /listItemsByEmployeeIdV1` - объявления сотрудника с фильтром по категории
+- `X-Employee-Of` вынесен в UI для тех четырёх операций, которые его принимают
+- deprecated `checkAhUserV1` намеренно не добавлен
+
 #### 🎯 **Продвижение (Promotion v1)**
 
 - `POST /promotion/v1/items/services/dict` - словарь типов услуг
@@ -267,6 +319,7 @@ items:info,stats:read,user:read
 - `POST /promotion/v1/items/services/bbip/suggests/get` - варианты бюджета BBIP
 - `POST /promotion/v1/items/services/bbip/forecasts/get` - прогноз BBIP
 - `PUT /promotion/v1/items/services/bbip/orders/create` - создание BBIP-заявки
+- `X-Employee-Of` отправляется в шести операциях, которые его принимают; устаревший `X-Is-Employee` больше не используется
 
 #### 🎯 **CPXPromo Legacy**
 
@@ -284,12 +337,29 @@ items:info,stats:read,user:read
 
 #### 📤 **Автозагрузка (Autoload)**
 
+[Документация](https://www.avito.ru/developers/api-catalog/autoload/documentation).
+
+Актуальный API загрузок v4:
+
+- [`GET /autoload/v4/uploads`](https://www.avito.ru/developers/api-catalog/autoload/documentation#operation/getUploads) - история загрузок с фильтрами `dateFrom` / `dateTo`
+- [`GET /autoload/v4/uploads/current`](https://www.avito.ru/developers/api-catalog/autoload/documentation#operation/getCurrentUpload) - текущая загрузка, самые свежие данные, меняются в процессе
+- [`GET /autoload/v4/uploads/last_successful`](https://www.avito.ru/developers/api-catalog/autoload/documentation#operation/getLastSuccessfulUpload) - последняя полностью обработанная загрузка, стабильные данные
+- [`GET /autoload/v4/uploads/current/items`](https://www.avito.ru/developers/api-catalog/autoload/documentation#operation/getCurrentUploadItems) и [`.../last_successful/items`](https://www.avito.ru/developers/api-catalog/autoload/documentation#operation/getLastSuccessfulUploadItems) - объявления загрузки с фильтрами `query` и `sections`
+- страницы нумеруются с `1`, `perPage` ограничен `50`
+
+Остальные операции:
+
 - дерево категорий и поля категории
-- получение и обновление профиля
-- отчеты, последний отчет, отчет по ID
-- элементы отчета и списания
+- получение и обновление профиля (профиль v2, а не устаревший v1)
 - загрузка файла
 - конвертация Avito ID / file ID
+
+Устаревающий API отчётов, оставлен до отключения на стороне Авито — см. [план миграции](https://www.avito.ru/developers/api-catalog/autoload/documentation#migration-v4):
+
+- `/autoload/v2/reports`, `/autoload/v3/reports/{report_id}`, `/autoload/v3/reports/last_completed_report`
+- `/autoload/v2/reports/items`, `/autoload/v2/reports/{report_id}/items`, `/autoload/v2/reports/{report_id}/items/fees`
+- **08.09.2026** — данные старше 7 дней становятся неполными; **08.03.2027** — ручки начинают возвращать `410 Gone`
+- списаниям по объявлениям замены в v4 нет, используйте историю операций кошелька в ресурсе «Пользователь»
 
 #### 📞 **CPA**
 

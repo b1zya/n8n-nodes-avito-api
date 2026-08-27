@@ -5,7 +5,7 @@ export class avitoOAuth2Api implements ICredentialType {
 	extends = ['oAuth2Api'];
 	displayName = 'Avito OAuth2 API';
 	documentationUrl = 'https://developers.avito.ru/api-catalog/auth';
-	icon: Icon = 'file:../../icons/avito.svg';
+	icon: Icon = { light: 'file:../../icons/avito.svg', dark: 'file:../../icons/avito.dark.svg' };
 
 	properties: INodeProperties[] = [
 		// Выбор типа авторизации

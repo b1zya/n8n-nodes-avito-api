@@ -6,6 +6,10 @@ import { avitoApiRequest } from '../GenericFunctions';
  * Получение данных по конкретным объявлениям по ID из файла
  * API: GET /autoload/v2/reports/items
  * Scope: autoload:reports
+ *
+ * @deprecated Avito выводит метод из эксплуатации (getAutoloadItemsInfoV2).
+ * 08.09.2026 данные старше 7 дней станут неполными, 08.03.2027 метод удаляют (410 Gone).
+ * Замена: getLastSuccessfulUploadItems с фильтром query.
  */
 export async function getAutoloadItemsInfoV2(this: IExecuteFunctions, itemIndex: number) {
 	const autoloadItemsQuery = this.getNodeParameter('autoloadItemsQuery', itemIndex) as string;

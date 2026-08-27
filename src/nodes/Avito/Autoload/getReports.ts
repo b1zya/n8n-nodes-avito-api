@@ -8,6 +8,10 @@ import type { PaginatedQueryParams, ReportsFilters, ReportsResponse } from '../t
  * Получение списка отчетов автозагрузки с пагинацией
  * API: GET /autoload/v2/reports
  * Scope: autoload:reports
+ *
+ * @deprecated Avito выводит метод из эксплуатации (getReportsV2).
+ * 08.09.2026 данные старше 7 дней станут неполными, 08.03.2027 метод удаляют (410 Gone).
+ * Замена: getUploads (GET /autoload/v4/uploads).
  * Пагинация: page/per_page (page с 0)
  */
 export async function getReports(this: IExecuteFunctions, itemIndex: number) {

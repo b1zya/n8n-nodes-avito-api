@@ -23,12 +23,17 @@ import {
 	routeUserOperation,
 	routeTariffOperation,
 	routeSpecialOffersOperation,
+	routeAccountHierarchyOperation,
 } from './router/RouterUtils';
 
 // Импортируем описания для всех ресурсов
 import { baseProperties } from './Descriptions/BaseProperties';
 import { itemOperations, itemFields } from './Descriptions/ItemDescription';
 import { userOperations, userFields } from './Descriptions/UserDescription';
+import {
+	accountHierarchyOperations,
+	accountHierarchyFields,
+} from './Descriptions/AccountHierarchyDescription';
 import { promotionOperations, promotionFields } from './Descriptions/PromotionDescription';
 import { cpxPromoLegacyOperations, cpxPromoLegacyFields } from './Descriptions/CpxPromoLegacyDescription';
 import { ratingsOperations, ratingsFields } from './Descriptions/RatingsDescription';
@@ -43,7 +48,7 @@ export class Avito implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Avito',
 		name: 'avito',
-		icon: 'file:../../../icons/avito.svg',
+		icon: { light: 'file:../../../icons/avito.svg', dark: 'file:../../../icons/avito.dark.svg' },
 		group: ['transform'],
 		version: [1],
 		subtitle: '={{$parameter["operation"] + ": " + $parameter["resource"]}}',
@@ -64,6 +69,7 @@ export class Avito implements INodeType {
 			...baseProperties,
 			...itemOperations,
 			...userOperations,
+			...accountHierarchyOperations,
 			...promotionOperations,
 			...cpxPromoLegacyOperations,
 			...ratingsOperations,
@@ -75,6 +81,7 @@ export class Avito implements INodeType {
 			...messengerOperations,
 			...itemFields,
 			...userFields,
+			...accountHierarchyFields,
 			...promotionFields,
 			...cpxPromoLegacyFields,
 			...ratingsFields,
@@ -103,6 +110,8 @@ export class Avito implements INodeType {
 					responseData = await routeItemOperation.call(this, operation, i);
 				} else if (resource === 'user') {
 					responseData = await routeUserOperation.call(this, operation, i);
+				} else if (resource === 'accountHierarchy') {
+					responseData = await routeAccountHierarchyOperation.call(this, operation, i);
 				} else if (resource === 'promotion') {
 					responseData = await routePromotionOperation.call(this, operation, i);
 				} else if (resource === 'cpxPromoLegacy') {

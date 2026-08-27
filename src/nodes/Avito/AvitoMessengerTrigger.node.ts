@@ -61,7 +61,7 @@ export class AvitoMessengerTrigger implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Avito Messenger Trigger',
 		name: 'avitoTrigger',
-		icon: 'file:../../../icons/avito.svg',
+		icon: { light: 'file:../../../icons/avito.svg', dark: 'file:../../../icons/avito.dark.svg' },
 		group: ['trigger'],
 		version: 1,
 		subtitle: '={{"Webhook V3"}}',

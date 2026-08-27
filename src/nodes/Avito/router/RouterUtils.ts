@@ -17,6 +17,14 @@ import { getUserBalance } from '../User/getUserBalance';
 import { getUserInfoSelf } from '../User/getUserInfoSelf';
 import { postOperationsHistory } from '../User/postOperationsHistory';
 
+// Импорт операций иерархии аккаунтов
+import { checkAhUser } from '../AccountHierarchy/checkAhUser';
+import { getAhInfo } from '../AccountHierarchy/getAhInfo';
+import { getEmployees } from '../AccountHierarchy/getEmployees';
+import { linkItems } from '../AccountHierarchy/linkItems';
+import { listCompanyPhones } from '../AccountHierarchy/listCompanyPhones';
+import { listItemsByEmployee } from '../AccountHierarchy/listItemsByEmployee';
+
 // Импорт операций продвижения
 import { createBbipOrder } from '../Promotion/createBbipOrder';
 import { getBbipForecasts } from '../Promotion/getBbipForecasts';
@@ -52,6 +60,9 @@ import { getReportItemsFees } from '../Autoload/getReportItemsFees';
 import { uploadFile } from '../Autoload/uploadFile';
 import { getAutoloadItemsInfoV2 } from '../Autoload/getAutoloadItemsInfoV2';
 import { getAdIdsByAvitoIds } from '../Autoload/getAdIdsByAvitoIds';
+import { getUploads } from '../Autoload/getUploads';
+import { getUpload } from '../Autoload/getUpload';
+import { getUploadItems } from '../Autoload/getUploadItems';
 import { getAvitoIdsByAdIds } from '../Autoload/getAvitoIdsByAdIds';
 
 // Импорт операций тарифов
@@ -176,6 +187,36 @@ export async function routeUserOperation(
 	}
 }
 
+/**
+ * Роутер для операций иерархии аккаунтов
+ */
+export async function routeAccountHierarchyOperation(
+	this: IExecuteFunctions,
+	operation: string,
+	itemIndex: number,
+): Promise<IDataObject | IDataObject[]> {
+	switch (operation) {
+		case 'checkAhUser':
+			return await checkAhUser.call(this, itemIndex);
+		case 'getAhInfo':
+			return await getAhInfo.call(this, itemIndex);
+		case 'getEmployees':
+			return await getEmployees.call(this, itemIndex);
+		case 'linkItems':
+			return await linkItems.call(this, itemIndex);
+		case 'listCompanyPhones':
+			return await listCompanyPhones.call(this, itemIndex);
+		case 'listItemsByEmployee':
+			return await listItemsByEmployee.call(this, itemIndex);
+		default:
+			throw new NodeOperationError(
+				this.getNode(),
+				`Unknown account hierarchy operation: ${operation}`,
+				{ itemIndex },
+			);
+	}
+}
+
 export async function routeCpxPromoLegacyOperation(
 	this: IExecuteFunctions,
 	operation: string,
@@ -258,6 +299,12 @@ export async function routeAutoloadOperation(
 			return await getCategoryFields.call(this, itemIndex);
 		case 'getAutoloadItemsInfoV2':
 			return await getAutoloadItemsInfoV2.call(this, itemIndex);
+		case 'getUploads':
+			return await getUploads.call(this, itemIndex);
+		case 'getUpload':
+			return await getUpload.call(this, itemIndex);
+		case 'getUploadItems':
+			return await getUploadItems.call(this, itemIndex);
 		case 'getAdIdsByAvitoIds':
 			return await getAdIdsByAvitoIds.call(this, itemIndex);
 		case 'getAvitoIdsByAdIds':
