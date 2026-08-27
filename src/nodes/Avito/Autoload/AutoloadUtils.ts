@@ -2,8 +2,14 @@ import type { IDataObject, IExecuteFunctions, JsonObject } from 'n8n-workflow';
 import { NodeApiError, NodeOperationError, sleep } from 'n8n-workflow';
 import { avitoApiRequest } from '../GenericFunctions';
 
-/** По спецификации v4 perPage ограничен 50 (в устаревших v2/v3 было 200). */
+/**
+ * Лимиты perPage у ручек v4 разные, одной константой их покрывать нельзя:
+ * /autoload/v4/uploads — максимум 50 (история загрузок),
+ * /autoload/v4/uploads/{target}/items — максимум 100 (объявления загрузки).
+ * В устаревших v2/v3 в обоих случаях было 200.
+ */
 export const UPLOADS_MAX_PER_PAGE = 50;
+export const UPLOAD_ITEMS_MAX_PER_PAGE = 100;
 
 /** Жёсткий предел на число страниц, чтобы режим "собрать все" не ушёл в бесконечный цикл. */
 const HARD_PAGE_LIMIT = 1000;
@@ -94,6 +100,7 @@ export function validateUploadPaging(
 	itemIndex: number,
 	page: number,
 	perPage: number,
+	maxPerPage: number = UPLOADS_MAX_PER_PAGE,
 ): void {
 	// В v4 нумерация страниц начинается с 1, а не с 0 как в устаревших v2/v3.
 	if (!Number.isInteger(page) || page < 1) {
@@ -103,13 +110,13 @@ export function validateUploadPaging(
 		});
 	}
 
-	if (!Number.isInteger(perPage) || perPage < 1 || perPage > UPLOADS_MAX_PER_PAGE) {
+	if (!Number.isInteger(perPage) || perPage < 1 || perPage > maxPerPage) {
 		throw new NodeOperationError(
 			context.getNode(),
-			`Количество на странице должно быть от 1 до ${UPLOADS_MAX_PER_PAGE}`,
+			`Количество на странице должно быть от 1 до ${maxPerPage}`,
 			{
 				itemIndex,
-				description: `В Autoload API v4 максимум ${UPLOADS_MAX_PER_PAGE} записей на странице (в устаревших v2/v3 было 200).`,
+				description: `В Autoload API v4 максимум ${maxPerPage} записей на странице (в устаревших v2/v3 было 200).`,
 			},
 		);
 	}

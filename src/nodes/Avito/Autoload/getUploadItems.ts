@@ -1,5 +1,6 @@
 import type { IDataObject, IExecuteFunctions } from 'n8n-workflow';
 import {
+	UPLOAD_ITEMS_MAX_PER_PAGE,
 	fetchUploadPages,
 	getUploadPaginationOptions,
 	resolveUploadEndpoint,
@@ -25,10 +26,15 @@ export async function getUploadItems(this: IExecuteFunctions, itemIndex: number)
 	const endpoint = resolveUploadEndpoint(this, itemIndex, '/items');
 
 	const page = this.getNodeParameter('uploadItemsPage', itemIndex, 1) as number;
-	const perPage = this.getNodeParameter('uploadItemsPerPage', itemIndex, 50) as number;
+	const perPage = this.getNodeParameter(
+		'uploadItemsPerPage',
+		itemIndex,
+		UPLOAD_ITEMS_MAX_PER_PAGE,
+	) as number;
 	const filters = this.getNodeParameter('uploadItemsFilters', itemIndex, {}) as UploadItemsFilters;
 
-	validateUploadPaging(this, itemIndex, page, perPage);
+	// У этой ручки свой потолок: 100, а не 50 как у истории загрузок.
+	validateUploadPaging(this, itemIndex, page, perPage, UPLOAD_ITEMS_MAX_PER_PAGE);
 
 	const qs: IDataObject = { page, perPage };
 	if (filters.query?.trim()) qs.query = filters.query.trim();

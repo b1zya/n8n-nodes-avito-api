@@ -810,9 +810,9 @@ export const autoloadFields: INodeProperties[] = [
 		displayName: 'Количество На Странице',
 		name: 'uploadItemsPerPage',
 		type: 'number',
-		default: 50,
-		description: 'Количество объявлений на странице. По документации Avito максимум 50.',
-		typeOptions: { minValue: 1, maxValue: 50 },
+		default: 100,
+		description: 'Количество объявлений на странице. По документации Avito максимум 100 (у истории загрузок — 50).',
+		typeOptions: { minValue: 1, maxValue: 100 },
 		displayOptions: { show: { resource: ['autoload'], operation: ['getUploadItems'] } },
 	},
 	{
