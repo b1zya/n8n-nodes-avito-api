@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-avito-api",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "n8n node для интеграции с API Авито для бизнеса",
   "keywords": [
     "n8n-community-node-package",

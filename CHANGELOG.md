@@ -1,5 +1,27 @@
 # Changelog
 
+## 3.0.1 - 2026-08-27
+
+Fixes the `perPage` ceiling for Autoload v4 upload items, which 3.0.0 set from the wrong endpoint.
+
+Исправлен потолок `perPage` для объявлений загрузки Autoload v4 — в 3.0.0 он был взят от другой ручки.
+
+### English
+
+#### Fixed
+
+- **Autoload v4**: `perPage` for `📃 Загрузки V4: Объявления Загрузки` was capped at `50`, but that is the limit of the uploads history endpoint. The [items endpoints](https://www.avito.ru/developers/api-catalog/autoload/documentation#operation/getLastSuccessfulUploadItems) allow `100`. The cap is now `100` and the field default moves from `50` to `100`.
+  - This was never an API error — requests at `50` were accepted — but it forced twice the pages needed. A 100-id `query` took two round trips where one suffices.
+  - `UPLOADS_MAX_PER_PAGE` (50) and `UPLOAD_ITEMS_MAX_PER_PAGE` (100) are now separate constants, so the uploads history keeps its own limit and the validation error quotes whichever ceiling actually applies.
+
+### Русский
+
+#### Исправлено
+
+- **Автозагрузка v4**: `perPage` у операции «📃 Загрузки V4: Объявления Загрузки» был ограничен `50`, хотя это лимит ручки истории загрузок. [Ручки объявлений](https://www.avito.ru/developers/api-catalog/autoload/documentation#operation/getLastSuccessfulUploadItems) допускают `100`. Потолок поднят до `100`, дефолт поля — с `50` на `100`.
+  - Ошибкой API это не было: запросы с `50` проходили, но страниц запрашивалось вдвое больше необходимого. На чанке в 100 идентификаторов в `query` уходило два запроса вместо одного.
+  - `UPLOADS_MAX_PER_PAGE` (50) и `UPLOAD_ITEMS_MAX_PER_PAGE` (100) разведены в отдельные константы, поэтому история загрузок сохраняет свой лимит, а в тексте ошибки валидации называется тот потолок, который действительно применён.
+
 ## 3.0.0 - 2026-08-27
 
 Adds the Avito Account Hierarchy API, migrates Autoload to the new v4 uploads API, and replaces the deprecated `X-Is-Employee` header in Promotion.
