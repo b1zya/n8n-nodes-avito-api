@@ -1,5 +1,5 @@
 {
-	"node": "n8n-nodes-base.avitoMessengerTrigger",
+	"node": "n8n-nodes-avito-api.avitoTrigger",
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
 	"categories": ["Communication"],
