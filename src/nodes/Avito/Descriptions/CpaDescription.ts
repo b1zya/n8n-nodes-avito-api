@@ -16,24 +16,6 @@ export const cpaOperations: INodeProperties[] = [
 				action: 'Get CPA balance',
 			},
 			{
-				name: 'Звонки По Времени',
-				value: 'getCallsByTime',
-				description: 'Получение списка CPA-звонков по времени создания',
-				action: 'Get CPA calls by time',
-			},
-			{
-				name: 'Чат По Action ID',
-				value: 'getChatByActionId',
-				description: 'Получение CPA-чата по идентификатору целевого действия',
-				action: 'Get CPA chat by action ID',
-			},
-			{
-				name: 'Чаты По Времени',
-				value: 'getChatsByTime',
-				description: 'Получение списка CPA-чатов по времени создания',
-				action: 'Get CPA chats by time',
-			},
-			{
 				name: 'Жалоба На Звонок',
 				value: 'createCallComplaint',
 				description: 'Создание жалобы на CPA-звонок по callId',
@@ -46,10 +28,28 @@ export const cpaOperations: INodeProperties[] = [
 				action: 'Create CPA action complaint',
 			},
 			{
+				name: 'Звонки По Времени',
+				value: 'getCallsByTime',
+				description: 'Получение списка CPA-звонков по времени создания',
+				action: 'Get CPA calls by time',
+			},
+			{
 				name: 'Телефоны Из Целевых Чатов',
 				value: 'getPhonesInfoFromChats',
 				description: 'Получение информации по номерам телефонов из целевых чатов',
 				action: 'Get phones info from CPA chats',
+			},
+			{
+				name: 'Чат По Action ID',
+				value: 'getChatByActionId',
+				description: 'Получение CPA-чата по идентификатору целевого действия',
+				action: 'Get CPA chat by action ID',
+			},
+			{
+				name: 'Чаты По Времени',
+				value: 'getChatsByTime',
+				description: 'Получение списка CPA-чатов по времени создания',
+				action: 'Get CPA chats by time',
 			},
 		],
 	},
@@ -83,11 +83,16 @@ export const cpaFields: INodeProperties[] = [
 		},
 	},
 	{
+		// This is the API's required page size, not n8n's "Return All / Limit" pattern the two
+		// rules below target. n8n does not store values equal to the default, so changing it
+		// to 50 would silently change the page size of existing workflows.
 		displayName: 'Лимит',
 		name: 'limit',
 		type: 'number',
 		required: true,
+		// eslint-disable-next-line n8n-nodes-base/node-param-default-wrong-for-limit
 		default: 100,
+		// eslint-disable-next-line n8n-nodes-base/node-param-description-wrong-for-limit
 		description: 'Размер выборки',
 		typeOptions: {
 			minValue: 1,

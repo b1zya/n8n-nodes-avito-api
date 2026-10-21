@@ -37,6 +37,13 @@ export const autoloadOperations: INodeProperties[] = [
 				action: 'Get autoload report items fees',
 			},
 			{
+				name: '📃 Загрузки V4: Объявления Загрузки',
+				value: 'getUploadItems',
+				description:
+					'Объявления текущей или последней успешно завершённой загрузки с фильтрами по строке и разделам',
+				action: 'Get autoload upload items',
+			},
+			{
 				name: '📄 Объявления V2: Список Из Отчета (Устарело)',
 				value: 'getReportItems',
 				description:
@@ -64,6 +71,13 @@ export const autoloadOperations: INodeProperties[] = [
 				action: 'Get autoload report by ID',
 			},
 			{
+				name: '📝 Справочник: Поля Категории',
+				value: 'getCategoryFields',
+				description:
+					'Получение всех полей для категории: обязательные/необязательные, типы данных, возможные значения',
+				action: 'Get category fields',
+			},
+			{
 				name: '📥 Загрузки V4: История Загрузок',
 				value: 'getUploads',
 				description:
@@ -74,22 +88,8 @@ export const autoloadOperations: INodeProperties[] = [
 				name: '📦 Загрузки V4: Одна Загрузка',
 				value: 'getUpload',
 				description:
-					'Статистика по текущей или по последней успешно завершённой загрузке: статус, разделы, события, файлы фида.',
+					'Статистика по текущей или по последней успешно завершённой загрузке: статус, разделы, события, файлы фида',
 				action: 'Get autoload upload',
-			},
-			{
-				name: '📃 Загрузки V4: Объявления Загрузки',
-				value: 'getUploadItems',
-				description:
-					'Объявления текущей или последней успешно завершённой загрузки с фильтрами по строке и разделам',
-				action: 'Get autoload upload items',
-			},
-			{
-				name: '📝 Справочник: Поля Категории',
-				value: 'getCategoryFields',
-				description:
-					'Получение всех полей для категории: обязательные/необязательные, типы данных, возможные значения',
-				action: 'Get category fields',
 			},
 			{
 				name: '🔄 Конвертация: Avito ID → Файл ID',

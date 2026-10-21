@@ -44,7 +44,7 @@
     ],
     "nodes": [
       "dist/src/nodes/Avito/Avito.node.js",
-      "dist/src/nodes/Avito/AvitoMessengerTrigger.node.js"
+      "dist/src/nodes/Avito/AvitoTrigger.node.js"
     ],
     "strict": false
   },

@@ -24,24 +24,6 @@ export const promotionOperations: INodeProperties[] = [
 		default: 'getServicesDict',
 		options: [
 			{
-				name: 'BBIP. Варианты Бюджета',
-				value: 'getBbipSuggests',
-				description: 'Получение доступных вариантов бюджета для продвижения',
-				action: 'Get BBIP promotion suggests',
-			},
-			{
-				name: 'BBIP. Подключить Услугу',
-				value: 'createBbipOrder',
-				description: 'Создать заявку на подключение BBIP',
-				action: 'Create BBIP promotion order',
-			},
-			{
-				name: 'BBIP. Прогноз Продвижения',
-				value: 'getBbipForecasts',
-				description: 'Получение прогноза продвижения по объявлениям',
-				action: 'Get BBIP promotion forecasts',
-			},
-			{
 				name: 'Активные Услуги По Объявлениям',
 				value: 'getServicesByItems',
 				description:
@@ -66,13 +48,31 @@ export const promotionOperations: INodeProperties[] = [
 				description: 'Получение статуса заявки на подключение услуг продвижения',
 				action: 'Get promotion order status',
 			},
+			{
+				name: 'BBIP. Варианты Бюджета',
+				value: 'getBbipSuggests',
+				description: 'Получение доступных вариантов бюджета для продвижения',
+				action: 'Get BBIP promotion suggests',
+			},
+			{
+				name: 'BBIP. Подключить Услугу',
+				value: 'createBbipOrder',
+				description: 'Создать заявку на подключение BBIP',
+				action: 'Create BBIP promotion order',
+			},
+			{
+				name: 'BBIP. Прогноз Продвижения',
+				value: 'getBbipForecasts',
+				description: 'Получение прогноза продвижения по объявлениям',
+				action: 'Get BBIP promotion forecasts',
+			},
 		],
 	},
 ];
 
 export const promotionFields: INodeProperties[] = [
 	{
-		displayName: 'ID Сотрудника (X-Ah-Employee-Id)',
+		displayName: 'ID Сотрудника',
 		name: 'promotionAhEmployeeId',
 		type: 'number',
 		default: 0,

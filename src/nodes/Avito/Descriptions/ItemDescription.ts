@@ -16,12 +16,6 @@ export const itemOperations: INodeProperties[] = [
 				action: 'Get profile analytics',
 			},
 			{
-				name: 'Расходы Профиля',
-				value: 'accountSpendings',
-				description: 'Получить статистику расходов профиля',
-				action: 'Get account spendings',
-			},
-			{
 				name: 'Информация Об Объявлении',
 				value: 'getItemInfo',
 				description: 'Данные по конкретному объявлению',
@@ -38,6 +32,12 @@ export const itemOperations: INodeProperties[] = [
 				value: 'applyVas',
 				description: 'Применить услугу продвижения',
 				action: 'Apply a service',
+			},
+			{
+				name: 'Расходы Профиля',
+				value: 'accountSpendings',
+				description: 'Получить статистику расходов профиля',
+				action: 'Get account spendings',
 			},
 			{
 				name: 'Список Объявлений',
@@ -132,7 +132,6 @@ export const itemFields: INodeProperties[] = [
 		description:
 			'Необязательный список ID объявлений через запятую. Если не указано, Avito вернет агрегированную статистику по пользователю.',
 		default: '',
-		required: false,
 		placeholder: '123456,789012,345678',
 		displayOptions: {
 			show: {
@@ -459,8 +458,8 @@ export const itemFields: INodeProperties[] = [
 		default: ['all'],
 		description: 'Набор необходимых типов расходов',
 		options: [
-			{ name: 'Все Расходы', value: 'all', description: 'Все расходы' },
-			{ name: 'Комиссия', value: 'commission', description: 'Комиссия' },
+			{ name: 'Все Расходы', value: 'all' },
+			{ name: 'Комиссия', value: 'commission' },
 			{ name: 'Остальные', value: 'rest', description: 'Остальные расходы' },
 			{ name: 'Продвижение', value: 'promotion', description: 'Расходы на продвижение' },
 			{
@@ -824,7 +823,7 @@ export const itemFields: INodeProperties[] = [
 				type: 'json',
 				default: '{}',
 				description:
-					'Фильтрация данных<br><br><b>Документированные поля фильтра:</b><br>• <b>categoryIDs</b> - массив ID категорий<br>• <b>employeeIDs</b> - массив ID сотрудников<br><br>Можно передать и другие поля, если Avito поддерживает их вне документации.',
+					'Фильтрация данных<br><br><b>Документированные поля фильтра:</b><br>• <b>categoryIDs</b> - массив ID категорий<br>• <b>employeeIDs</b> - массив ID сотрудников<br><br>Можно передать и другие поля, если Avito поддерживает их вне документации',
 				placeholder: '{\n  "categoryIDs": [24, 88, 109],\n  "employeeIDs": [41042142, 41042143]\n}',
 				hint: '<b>Примеры документированных фильтров:</b><br><br><b>По категориям (Авто + Недвижимость):</b><br>{"categoryIDs": [9, 24]}<br><br><b>По сотрудникам:</b><br>{"employeeIDs": [41042142, 41042143]}<br><br><b>Комбинированный:</b><br>{"categoryIDs": [24], "employeeIDs": [41042142]}<br><br><b>Справочники:</b><br>• Категории: avito.st/s/openapi/catalog-categories.xml<br>• Сотрудники: через API accounts-hierarchy<br><br><b>Важно:</b> ID должны быть числами в массивах. Нода отправляет JSON как есть.',
 			},

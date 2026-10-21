@@ -10,22 +10,16 @@ export const accountHierarchyOperations: INodeProperties[] = [
 		default: 'getAhInfo',
 		options: [
 			{
+				name: 'Объявления Сотрудника',
+				value: 'listItemsByEmployee',
+				description: 'Список объявлений сотрудника с фильтром по категории',
+				action: 'List account hierarchy items by employee',
+			},
+			{
 				name: 'Полная Информация О Статусе',
 				value: 'getAhInfo',
 				description: 'Сведения о компании и список сотрудников, к которым принадлежит пользователь',
 				action: 'Get complete account hierarchy info',
-			},
-			{
-				name: 'Статус Пользователя',
-				value: 'checkAhUser',
-				description: 'Проверка, является ли пользователь компанией, руководителем или сотрудником',
-				action: 'Check account hierarchy user status',
-			},
-			{
-				name: 'Сотрудники Иерархии',
-				value: 'getEmployees',
-				description: 'Список сотрудников компании с именами, email и телефонами',
-				action: 'Get account hierarchy employees',
 			},
 			{
 				name: 'Прикрепить Объявления К Сотруднику',
@@ -34,16 +28,22 @@ export const accountHierarchyOperations: INodeProperties[] = [
 				action: 'Link items to an account hierarchy employee',
 			},
 			{
+				name: 'Сотрудники Иерархии',
+				value: 'getEmployees',
+				description: 'Список сотрудников компании с именами, email и телефонами',
+				action: 'Get account hierarchy employees',
+			},
+			{
+				name: 'Статус Пользователя',
+				value: 'checkAhUser',
+				description: 'Проверка, является ли пользователь компанией, руководителем или сотрудником',
+				action: 'Check account hierarchy user status',
+			},
+			{
 				name: 'Телефоны Компании',
 				value: 'listCompanyPhones',
 				description: 'Список телефонов компании с курсорной пагинацией',
 				action: 'List account hierarchy company phones',
-			},
-			{
-				name: 'Объявления Сотрудника',
-				value: 'listItemsByEmployee',
-				description: 'Список объявлений сотрудника с фильтром по категории',
-				action: 'List account hierarchy items by employee',
 			},
 		],
 	},

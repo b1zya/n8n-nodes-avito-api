@@ -4,11 +4,11 @@
 
 > **✨ Update:** v3.0.0 adds the Account Hierarchy API and migrates Autoload to the v4 uploads API. See [CHANGELOG.md](CHANGELOG.md).
 >
-> **⚠️ Upgrading to v3.1.0:** Promotion now sends `X-Ah-Employee-Id` (an employee ID) instead of `X-Employee-Of` (a company ID). The old `ID Компании (X-Employee-Of)` field is gone; fill in `ID Сотрудника (X-Ah-Employee-Id)` with the `employeeId` from Account Hierarchy → `Сотрудники Иерархии`.
+> **⚠️ Upgrading to v3.1.0:** Promotion now sends `X-Ah-Employee-Id` (an employee ID) instead of `X-Employee-Of` (a company ID). The old `ID Компании (X-Employee-Of)` field is gone; fill in `ID Сотрудника` with the `employeeId` from Account Hierarchy → `Сотрудники Иерархии`.
 >
 > **⚠️ Upgrading to v3.0.0:** the Promotion `Работать От Имени Сотрудника` toggle became the numeric `ID Компании (X-Employee-Of)` field and must be filled in again — otherwise requests run under the personal account instead of the company. Autoload v4 numbers pages from `1` and renames `report_id` to `upload_id`.
 >
-> **⚠️ Обновление до v3.1.0:** Продвижение отправляет `X-Ah-Employee-Id` (ID сотрудника) вместо `X-Employee-Of` (ID компании). Поля «ID Компании (X-Employee-Of)» больше нет: укажите в «ID Сотрудника (X-Ah-Employee-Id)» значение `employeeId` из Иерархия Аккаунтов → «Сотрудники Иерархии».
+> **⚠️ Обновление до v3.1.0:** Продвижение отправляет `X-Ah-Employee-Id` (ID сотрудника) вместо `X-Employee-Of` (ID компании). Поля «ID Компании (X-Employee-Of)» больше нет: укажите в «ID Сотрудника» значение `employeeId` из Иерархия Аккаунтов → «Сотрудники Иерархии».
 >
 > **⚠️ Обновление до v3.0.0:** переключатель Продвижения «Работать От Имени Сотрудника» стал числовым полем «ID Компании (X-Employee-Of)» и требует заполнения заново — иначе запросы пойдут от личного аккаунта, а не от компании. Автозагрузка v4 нумерует страницы с `1` и переименовывает `report_id` в `upload_id`.
 >
@@ -54,7 +54,7 @@ The old root-level `nodes/` and `credentials/` layout was refactored into `src/`
 
 - `src/credentials/avitoOAuth2Api.credentials.ts` - OAuth2 credential
 - `src/nodes/Avito/Avito.node.ts` - main Avito node
-- `src/nodes/Avito/AvitoMessengerTrigger.node.ts` - Messenger webhook trigger
+- `src/nodes/Avito/AvitoTrigger.node.ts` - Messenger webhook trigger
 - `src/nodes/Avito/Descriptions/*` - node UI fields
 - `src/nodes/Avito/router/RouterUtils.ts` - operation routing
 - `src/nodes/Avito/<Resource>/*` - API operation implementations
@@ -277,7 +277,7 @@ items:info,stats:read,user:read
 
 - `src/credentials/avitoOAuth2Api.credentials.ts` - OAuth2 credential
 - `src/nodes/Avito/Avito.node.ts` - основная нода Avito
-- `src/nodes/Avito/AvitoMessengerTrigger.node.ts` - Messenger webhook trigger
+- `src/nodes/Avito/AvitoTrigger.node.ts` - Messenger webhook trigger
 - `src/nodes/Avito/Descriptions/*` - UI-поля ноды
 - `src/nodes/Avito/router/RouterUtils.ts` - роутинг операций
 - `src/nodes/Avito/<Resource>/*` - реализации API-методов

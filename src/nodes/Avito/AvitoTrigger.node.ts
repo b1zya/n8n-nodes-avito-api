@@ -57,7 +57,7 @@ function getWebhookUrl(context: IHookFunctions): string {
 	return webhookUrl;
 }
 
-export class AvitoMessengerTrigger implements INodeType {
+export class AvitoTrigger implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'Avito Messenger Trigger',
 		name: 'avitoTrigger',

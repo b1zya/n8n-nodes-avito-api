@@ -10,7 +10,7 @@ Switches Promotion to the `X-Ah-Employee-Id` header and moves the active service
 
 #### Upgrade Notes
 
-- **Promotion**: the `ID Компании (X-Employee-Of)` field was replaced by `ID Сотрудника (X-Ah-Employee-Id)`. Avito's [Promotion API](https://www.avito.ru/developers/api-catalog/promotion/documentation) now accepts only `X-Ah-Employee-Id` for requests on behalf of an employee; `X-Employee-Of` is no longer used there, so since 2026-09-29 a node configured in 3.x silently ran under the personal account.
+- **Promotion**: the `ID Компании (X-Employee-Of)` field was replaced by `ID Сотрудника` (`X-Ah-Employee-Id`). Avito's [Promotion API](https://www.avito.ru/developers/api-catalog/promotion/documentation) now accepts only `X-Ah-Employee-Id` for requests on behalf of an employee; `X-Employee-Of` is no longer used there, so since 2026-09-29 a node configured in 3.x silently ran under the personal account.
   - The new header takes the **employee** ID, not the company ID. The old value cannot be carried over, so the field was renamed rather than reused — a stale company ID is never sent as an employee ID.
   - After upgrading, enter the `employeeId` from Account Hierarchy → `Сотрудники Иерархии` (`getEmployeesV1`) in every Promotion node that used the old field. Leave `0` to work under the personal account.
 - **Promotion**: `Активные Услуги По Объявлениям` now calls [`POST /promotion/v2/items/services/get`](https://www.avito.ru/developers/api-catalog/promotion/documentation#operation/get_services_by_items_v2). The request is unchanged; the response adds a required `degraded` boolean — when `true`, the services list may be incomplete.
@@ -28,7 +28,7 @@ Switches Promotion to the `X-Ah-Employee-Id` header and moves the active service
 
 #### Важно При Обновлении
 
-- **Продвижение**: поле `ID Компании (X-Employee-Of)` заменено на `ID Сотрудника (X-Ah-Employee-Id)`. [API Продвижения](https://www.avito.ru/developers/api-catalog/promotion/documentation) для запросов от имени сотрудника теперь принимает только `X-Ah-Employee-Id`; `X-Employee-Of` там больше не используется, поэтому с 29.09.2026 ноды, настроенные в 3.x, молча работали от личного аккаунта.
+- **Продвижение**: поле `ID Компании (X-Employee-Of)` заменено на `ID Сотрудника` (`X-Ah-Employee-Id`). [API Продвижения](https://www.avito.ru/developers/api-catalog/promotion/documentation) для запросов от имени сотрудника теперь принимает только `X-Ah-Employee-Id`; `X-Employee-Of` там больше не используется, поэтому с 29.09.2026 ноды, настроенные в 3.x, молча работали от личного аккаунта.
   - Новый заголовок принимает ID **сотрудника**, а не компании. Перенести старое значение нельзя, поэтому поле переименовано, а не переиспользовано — устаревший ID компании никогда не уйдёт под видом ID сотрудника.
   - После обновления укажите `employeeId` из Иерархия Аккаунтов → «Сотрудники Иерархии» (`getEmployeesV1`) во всех нодах Продвижения, где было заполнено старое поле. Оставьте `0`, чтобы работать от личного аккаунта.
 - **Продвижение**: «Активные Услуги По Объявлениям» вызывает [`POST /promotion/v2/items/services/get`](https://www.avito.ru/developers/api-catalog/promotion/documentation#operation/get_services_by_items_v2). Запрос не изменился; в ответе появилось обязательное поле `degraded` — при `true` список услуг может быть неполным.

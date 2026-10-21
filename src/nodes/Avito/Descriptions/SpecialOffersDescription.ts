@@ -24,6 +24,12 @@ export const specialOffersOperations: INodeProperties[] = [
 				action: 'Get special offers tariff information',
 			},
 			{
+				name: 'Подтвердить И Оплатить Рассылку',
+				value: 'openApiMultiConfirm',
+				description: 'Подтвердить отправку рассылки и оплатить ее из кошелька Авито',
+				action: 'Confirm and pay special offers dispatches',
+			},
+			{
 				name: 'Создать Рассылку',
 				value: 'openApiMultiCreate',
 				description: 'Создать рассылку по нескольким объявлениям с фиксацией аудитории',
@@ -34,12 +40,6 @@ export const specialOffersOperations: INodeProperties[] = [
 				value: 'openApiStats',
 				description: 'Получить статистику по отправленным рассылкам за период',
 				action: 'Get special offers statistics',
-			},
-			{
-				name: 'Подтвердить И Оплатить Рассылку',
-				value: 'openApiMultiConfirm',
-				description: 'Подтвердить отправку рассылки и оплатить ее из кошелька Авито',
-				action: 'Confirm and pay special offers dispatches',
 			},
 		],
 	},
@@ -89,7 +89,6 @@ export const specialOffersFields: INodeProperties[] = [
 						required: true,
 						default: 0,
 						typeOptions: { minValue: 1 },
-						description: 'ID рассылки',
 					},
 					{
 						displayName: 'Slug Предложения',
