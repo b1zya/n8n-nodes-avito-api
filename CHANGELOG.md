@@ -1,6 +1,26 @@
 # Changelog
 
-## 3.1.0 - 2026-10-21
+## 3.1.1 - 2026-10-21
+
+Republishes 3.1.0, which never reached npm: its publish run failed at lint because the option-order check depends on the machine's locale.
+
+Повторный выпуск 3.1.0, которая не попала в npm: публикация упала на lint, потому что проверка порядка опций зависит от локали машины.
+
+### English
+
+#### Fixed
+
+- **Release**: the `v3.1.0` publish run failed at `n8n-node lint`, before `npm publish`, so 3.1.0 was never published. Everything listed under 3.1.0 below ships in 3.1.1; when upgrading from 3.0.1, follow the 3.1.0 upgrade notes.
+- **Lint**: `node-param-options-type-unsorted-items` sorts with `String#localeCompare` in the runtime's default locale. On a ru-RU machine Cyrillic names sort before Latin ones, on the en-US CI runner after them. The resource list (`CallTracking`, `CPA`) and the Promotion operations (`BBIP. …`) mix both scripts, so no order passes in both locales. They are now in en-US order, as in CI, with the rule disabled inline for these two lists only. Only their order in the UI changes.
+
+### Русский
+
+#### Исправлено
+
+- **Выпуск**: публикация по тегу `v3.1.0` упала на `n8n-node lint`, до `npm publish`, поэтому 3.1.0 в npm не попала. Всё, что описано ниже в разделе 3.1.0, выходит в 3.1.1; при обновлении с 3.0.1 следуйте указаниям из 3.1.0.
+- **Lint**: `node-param-options-type-unsorted-items` сортирует через `String#localeCompare` в локали системы по умолчанию. В русской локали кириллица идёт перед латиницей, на сервере CI с английской локалью — после неё. В списке ресурсов (`CallTracking`, `CPA`) и операций Продвижения (`BBIP. …`) смешаны оба алфавита, поэтому порядка, проходящего в обеих локалях, нет. Эти списки выстроены в порядке en-US, как в CI, а правило отключено только для них. Меняется лишь их порядок в интерфейсе.
+
+## 3.1.0 - 2026-10-21 (not published to npm)
 
 Switches Promotion to the `X-Ah-Employee-Id` header and moves the active services list to `/promotion/v2/items/services/get`, following the Avito Promotion API changes of 2026-09-29.
 
