@@ -22,7 +22,29 @@ export const promotionOperations: INodeProperties[] = [
 		noDataExpression: true,
 		displayOptions: { show: { resource: promotionResource } },
 		default: 'getServicesDict',
+		// The rule sorts with String#localeCompare in the runtime's default locale, and this list
+		// mixes Latin and Cyrillic names: en-US puts Latin first, ru-RU puts it last, so no
+		// order passes on both. Kept in en-US order (as in CI) with the rule off for this list.
+		// eslint-disable-next-line n8n-nodes-base/node-param-options-type-unsorted-items
 		options: [
+			{
+				name: 'BBIP. Варианты Бюджета',
+				value: 'getBbipSuggests',
+				description: 'Получение доступных вариантов бюджета для продвижения',
+				action: 'Get BBIP promotion suggests',
+			},
+			{
+				name: 'BBIP. Подключить Услугу',
+				value: 'createBbipOrder',
+				description: 'Создать заявку на подключение BBIP',
+				action: 'Create BBIP promotion order',
+			},
+			{
+				name: 'BBIP. Прогноз Продвижения',
+				value: 'getBbipForecasts',
+				description: 'Получение прогноза продвижения по объявлениям',
+				action: 'Get BBIP promotion forecasts',
+			},
 			{
 				name: 'Активные Услуги По Объявлениям',
 				value: 'getServicesByItems',
@@ -47,24 +69,6 @@ export const promotionOperations: INodeProperties[] = [
 				value: 'getOrderStatus',
 				description: 'Получение статуса заявки на подключение услуг продвижения',
 				action: 'Get promotion order status',
-			},
-			{
-				name: 'BBIP. Варианты Бюджета',
-				value: 'getBbipSuggests',
-				description: 'Получение доступных вариантов бюджета для продвижения',
-				action: 'Get BBIP promotion suggests',
-			},
-			{
-				name: 'BBIP. Подключить Услугу',
-				value: 'createBbipOrder',
-				description: 'Создать заявку на подключение BBIP',
-				action: 'Create BBIP promotion order',
-			},
-			{
-				name: 'BBIP. Прогноз Продвижения',
-				value: 'getBbipForecasts',
-				description: 'Получение прогноза продвижения по объявлениям',
-				action: 'Get BBIP promotion forecasts',
 			},
 		],
 	},
