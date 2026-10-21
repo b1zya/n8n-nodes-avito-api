@@ -10,5 +10,11 @@ export async function getChatByActionId(this: IExecuteFunctions, itemIndex: numb
 	const actionId = this.getNodeParameter('actionId', itemIndex) as number;
 	validatePositiveInteger(this, itemIndex, 'actionId', actionId);
 
-	return await cpaApiRequest.call(this, 'GET', `/cpa/v1/chatByActionId/${actionId}`, undefined, itemIndex);
+	return await cpaApiRequest.call(
+		this,
+		'GET',
+		`/cpa/v1/chatByActionId/${actionId}`,
+		undefined,
+		itemIndex,
+	);
 }

@@ -12,11 +12,9 @@ export async function getItemInfo(this: IExecuteFunctions, itemIndex: number) {
 
 	// ✅ ИСПРАВЛЕНО: Проверка типов параметров ПЕРЕД валидацией
 	if (typeof itemId !== 'number' || isNaN(itemId) || itemId <= 0) {
-		throw new NodeOperationError(
-			this.getNode(),
-			'Item ID must be a valid positive number',
-			{ itemIndex }
-		);
+		throw new NodeOperationError(this.getNode(), 'Item ID must be a valid positive number', {
+			itemIndex,
+		});
 	}
 
 	// ✅ ИСПРАВЛЕНО: Валидация через стандартные функции с дополнительными проверками
@@ -27,17 +25,15 @@ export async function getItemInfo(this: IExecuteFunctions, itemIndex: number) {
 		throw new NodeOperationError(
 			this.getNode(),
 			`Parameter validation failed: ${getErrorMessage(error)}`,
-			{ itemIndex }
+			{ itemIndex },
 		);
 	}
 
 	// ✅ ИСПРАВЛЕНО: Дополнительная валидация userId если указан
 	if (typeof userId !== 'number' || isNaN(userId) || userId <= 0) {
-		throw new NodeOperationError(
-			this.getNode(),
-			'User ID must be a valid positive number',
-			{ itemIndex }
-		);
+		throw new NodeOperationError(this.getNode(), 'User ID must be a valid positive number', {
+			itemIndex,
+		});
 	}
 
 	const endpoint = `/core/v1/accounts/${userId}/items/${itemId}/`;

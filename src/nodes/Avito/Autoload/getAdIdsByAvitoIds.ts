@@ -12,23 +12,20 @@ export async function getAdIdsByAvitoIds(this: IExecuteFunctions, itemIndex: num
 
 	// Валидация обязательного параметра
 	if (!avitoIdsQuery || !avitoIdsQuery.trim()) {
-		throw new NodeOperationError(
-			this.getNode(),
-			'Укажите ID объявлений на Авито',
-			{ itemIndex }
-		);
+		throw new NodeOperationError(this.getNode(), 'Укажите ID объявлений на Авито', { itemIndex });
 	}
 
 	// Дополнительная валидация - проверим что есть хотя бы один ID
 	const cleanQuery = avitoIdsQuery.trim();
-	const idsArray = cleanQuery.split(/[,|]/).map(id => id.trim()).filter(Boolean);
-	
+	const idsArray = cleanQuery
+		.split(/[,|]/)
+		.map((id) => id.trim())
+		.filter(Boolean);
+
 	if (idsArray.length === 0) {
-		throw new NodeOperationError(
-			this.getNode(),
-			'Укажите хотя бы один ID объявления на Авито',
-			{ itemIndex }
-		);
+		throw new NodeOperationError(this.getNode(), 'Укажите хотя бы один ID объявления на Авито', {
+			itemIndex,
+		});
 	}
 
 	// Выполняем запрос к API

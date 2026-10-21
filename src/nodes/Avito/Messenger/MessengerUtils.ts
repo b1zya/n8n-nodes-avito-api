@@ -51,7 +51,14 @@ export async function messengerApiRequest<T = IDataObject>(
 	itemIndex: number,
 	qs?: IDataObject,
 ): Promise<T> {
-	return await avitoApiRequest.call(context, method, endpoint, body, qs, itemIndex) as unknown as T;
+	return (await avitoApiRequest.call(
+		context,
+		method,
+		endpoint,
+		body,
+		qs,
+		itemIndex,
+	)) as unknown as T;
 }
 
 export async function messengerUploadImageRequest(
@@ -64,9 +71,13 @@ export async function messengerUploadImageRequest(
 	const binaryData = item.binary?.[binaryPropertyName];
 
 	if (!binaryData) {
-		throw new NodeOperationError(this.getNode(), `Binary property '${binaryPropertyName}' was not found`, {
-			itemIndex,
-		});
+		throw new NodeOperationError(
+			this.getNode(),
+			`Binary property '${binaryPropertyName}' was not found`,
+			{
+				itemIndex,
+			},
+		);
 	}
 
 	const buffer = await this.helpers.getBinaryDataBuffer(itemIndex, binaryPropertyName);
@@ -94,18 +105,13 @@ export async function messengerUploadImageRequest(
 	};
 
 	try {
-		return await this.helpers.httpRequestWithAuthentication.call(
-			this,
-			'avitoOAuth2Api',
-			options,
-			{
-				oauth2: {
-					includeCredentialsOnRefreshOnBody: true,
-					tokenType: 'Bearer',
-					keepBearer: true,
-				},
+		return (await this.helpers.httpRequestWithAuthentication.call(this, 'avitoOAuth2Api', options, {
+			oauth2: {
+				includeCredentialsOnRefreshOnBody: true,
+				tokenType: 'Bearer',
+				keepBearer: true,
 			},
-		) as IDataObject;
+		})) as IDataObject;
 	} catch (error: unknown) {
 		const errorStatus = getErrorStatus(error);
 
@@ -113,7 +119,8 @@ export async function messengerUploadImageRequest(
 			throw new NodeApiError(this.getNode(), error as JsonObject, {
 				itemIndex,
 				message: 'Bad image upload request',
-				description: 'Check that the binary input is a single JPEG, HEIC, GIF, BMP, or PNG image within Avito limits.',
+				description:
+					'Check that the binary input is a single JPEG, HEIC, GIF, BMP, or PNG image within Avito limits.',
 			});
 		}
 
@@ -150,9 +157,13 @@ export function validatePositiveInteger(
 	}
 
 	if (maxValue !== undefined && value > maxValue) {
-		throw new NodeOperationError(context.getNode(), `${fieldName} must be less than or equal to ${maxValue}`, {
-			itemIndex,
-		});
+		throw new NodeOperationError(
+			context.getNode(),
+			`${fieldName} must be less than or equal to ${maxValue}`,
+			{
+				itemIndex,
+			},
+		);
 	}
 }
 
@@ -170,9 +181,13 @@ export function validateNonNegativeInteger(
 	}
 
 	if (maxValue !== undefined && value > maxValue) {
-		throw new NodeOperationError(context.getNode(), `${fieldName} must be less than or equal to ${maxValue}`, {
-			itemIndex,
-		});
+		throw new NodeOperationError(
+			context.getNode(),
+			`${fieldName} must be less than or equal to ${maxValue}`,
+			{
+				itemIndex,
+			},
+		);
 	}
 }
 
@@ -193,20 +208,31 @@ export function parseCommaSeparatedIntegerList(
 		return undefined;
 	}
 
-	const values = trimmedValue.split(',').map((entry) => entry.trim()).filter(Boolean);
+	const values = trimmedValue
+		.split(',')
+		.map((entry) => entry.trim())
+		.filter(Boolean);
 
 	if (values.length === 0) {
-		throw new NodeOperationError(context.getNode(), `${fieldName} must contain at least one value`, {
-			itemIndex,
-		});
+		throw new NodeOperationError(
+			context.getNode(),
+			`${fieldName} must contain at least one value`,
+			{
+				itemIndex,
+			},
+		);
 	}
 
 	for (const entry of values) {
 		const id = Number(entry);
 		if (!Number.isInteger(id) || id <= 0) {
-			throw new NodeOperationError(context.getNode(), `${fieldName} contains invalid ID: ${entry}`, {
-				itemIndex,
-			});
+			throw new NodeOperationError(
+				context.getNode(),
+				`${fieldName} contains invalid ID: ${entry}`,
+				{
+					itemIndex,
+				},
+			);
 		}
 	}
 
@@ -219,12 +245,19 @@ export function parseCommaSeparatedStringList(
 	fieldName: string,
 	value: string,
 ): string {
-	const values = value.split(',').map((entry) => entry.trim()).filter(Boolean);
+	const values = value
+		.split(',')
+		.map((entry) => entry.trim())
+		.filter(Boolean);
 
 	if (values.length === 0) {
-		throw new NodeOperationError(context.getNode(), `${fieldName} must contain at least one value`, {
-			itemIndex,
-		});
+		throw new NodeOperationError(
+			context.getNode(),
+			`${fieldName} must contain at least one value`,
+			{
+				itemIndex,
+			},
+		);
 	}
 
 	return values.join(',');
@@ -249,10 +282,14 @@ export function parseJsonArray(
 
 		return parsed;
 	} catch (error: unknown) {
-		throw new NodeOperationError(context.getNode(), `${fieldName} must be a valid non-empty JSON array`, {
-			itemIndex,
-			description: error instanceof Error ? error.message : undefined,
-		});
+		throw new NodeOperationError(
+			context.getNode(),
+			`${fieldName} must be a valid non-empty JSON array`,
+			{
+				itemIndex,
+				description: error instanceof Error ? error.message : undefined,
+			},
+		);
 	}
 }
 
@@ -267,7 +304,9 @@ export function validateUrl(
 	try {
 		new URL(normalizedValue);
 	} catch {
-		throw new NodeOperationError(context.getNode(), `${fieldName} must be a valid URL`, { itemIndex });
+		throw new NodeOperationError(context.getNode(), `${fieldName} must be a valid URL`, {
+			itemIndex,
+		});
 	}
 
 	return normalizedValue;

@@ -8,10 +8,15 @@ export function parsePositiveIntegerList(
 	fieldName: string,
 ): number[] {
 	if (!rawValue || typeof rawValue !== 'string' || rawValue.trim() === '') {
-		throw new NodeOperationError(context.getNode(), `Поле "${fieldName}" обязательно`, { itemIndex });
+		throw new NodeOperationError(context.getNode(), `Поле "${fieldName}" обязательно`, {
+			itemIndex,
+		});
 	}
 
-	const rawIds = rawValue.split(',').map((value) => value.trim()).filter(Boolean);
+	const rawIds = rawValue
+		.split(',')
+		.map((value) => value.trim())
+		.filter(Boolean);
 	const ids = rawIds.map((value) => Number(value));
 	const invalid = rawIds.filter((value, index) => !Number.isInteger(ids[index]) || ids[index] <= 0);
 
@@ -24,9 +29,13 @@ export function parsePositiveIntegerList(
 	}
 
 	if (ids.length === 0) {
-		throw new NodeOperationError(context.getNode(), `Укажите хотя бы один ID в поле "${fieldName}"`, {
-			itemIndex,
-		});
+		throw new NodeOperationError(
+			context.getNode(),
+			`Укажите хотя бы один ID в поле "${fieldName}"`,
+			{
+				itemIndex,
+			},
+		);
 	}
 
 	return ids;
@@ -76,9 +85,13 @@ export function getDispatches(context: IExecuteFunctions, itemIndex: number): ID
 	const dispatches = collection.dispatches ?? [];
 
 	if (!Array.isArray(dispatches) || dispatches.length === 0) {
-		throw new NodeOperationError(context.getNode(), 'Добавьте хотя бы одну рассылку для подтверждения', {
-			itemIndex,
-		});
+		throw new NodeOperationError(
+			context.getNode(),
+			'Добавьте хотя бы одну рассылку для подтверждения',
+			{
+				itemIndex,
+			},
+		);
 	}
 
 	return dispatches.map((dispatch, index) => {
@@ -88,9 +101,13 @@ export function getDispatches(context: IExecuteFunctions, itemIndex: number): ID
 		const discountValue = Number(dispatch.discountValue ?? 0);
 
 		if (!Number.isInteger(dispatchId) || dispatchId <= 0) {
-			throw new NodeOperationError(context.getNode(), `Некорректный ID рассылки в строке ${index + 1}`, {
-				itemIndex,
-			});
+			throw new NodeOperationError(
+				context.getNode(),
+				`Некорректный ID рассылки в строке ${index + 1}`,
+				{
+					itemIndex,
+				},
+			);
 		}
 		if (!Number.isInteger(recipientsCount) || recipientsCount <= 0) {
 			throw new NodeOperationError(
@@ -100,14 +117,22 @@ export function getDispatches(context: IExecuteFunctions, itemIndex: number): ID
 			);
 		}
 		if (!offerSlug) {
-			throw new NodeOperationError(context.getNode(), `Укажите slug предложения в строке ${index + 1}`, {
-				itemIndex,
-			});
+			throw new NodeOperationError(
+				context.getNode(),
+				`Укажите slug предложения в строке ${index + 1}`,
+				{
+					itemIndex,
+				},
+			);
 		}
 		if (!Number.isInteger(discountValue) || discountValue < 0) {
-			throw new NodeOperationError(context.getNode(), `Некорректный размер скидки в строке ${index + 1}`, {
-				itemIndex,
-			});
+			throw new NodeOperationError(
+				context.getNode(),
+				`Некорректный размер скидки в строке ${index + 1}`,
+				{
+					itemIndex,
+				},
+			);
 		}
 
 		const normalized: IDataObject = {

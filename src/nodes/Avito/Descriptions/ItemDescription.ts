@@ -16,12 +16,6 @@ export const itemOperations: INodeProperties[] = [
 				action: 'Get profile analytics',
 			},
 			{
-				name: 'Расходы Профиля',
-				value: 'accountSpendings',
-				description: 'Получить статистику расходов профиля',
-				action: 'Get account spendings',
-			},
-			{
 				name: 'Информация Об Объявлении',
 				value: 'getItemInfo',
 				description: 'Данные по конкретному объявлению',
@@ -38,6 +32,12 @@ export const itemOperations: INodeProperties[] = [
 				value: 'applyVas',
 				description: 'Применить услугу продвижения',
 				action: 'Apply a service',
+			},
+			{
+				name: 'Расходы Профиля',
+				value: 'accountSpendings',
+				description: 'Получить статистику расходов профиля',
+				action: 'Get account spendings',
 			},
 			{
 				name: 'Список Объявлений',
@@ -69,7 +69,7 @@ export const itemOperations: INodeProperties[] = [
 
 export const itemFields: INodeProperties[] = [
 	// ===== ОБЩИЕ ПОЛЯ =====
-	
+
 	// ID пользователя - используется в нескольких операциях
 	{
 		displayName: 'ID Пользователя',
@@ -78,11 +78,18 @@ export const itemFields: INodeProperties[] = [
 		description: 'ID пользователя Авито',
 		default: 0,
 		required: true,
-		displayOptions: { 
-			show: { 
-				resource: ['item'], 
-				operation: ['getItemInfo', 'getVasPrices', 'callsStats', 'statsShallow', 'analytics', 'accountSpendings']
-			} 
+		displayOptions: {
+			show: {
+				resource: ['item'],
+				operation: [
+					'getItemInfo',
+					'getVasPrices',
+					'callsStats',
+					'statsShallow',
+					'analytics',
+					'accountSpendings',
+				],
+			},
 		},
 	},
 
@@ -94,11 +101,11 @@ export const itemFields: INodeProperties[] = [
 		description: 'Уникальный ID объявления',
 		default: 0,
 		required: true,
-		displayOptions: { 
-			show: { 
-				resource: ['item'], 
-				operation: ['getItemInfo', 'updatePrice', 'applyVas'] 
-			} 
+		displayOptions: {
+			show: {
+				resource: ['item'],
+				operation: ['getItemInfo', 'updatePrice', 'applyVas'],
+			},
 		},
 	},
 
@@ -111,26 +118,26 @@ export const itemFields: INodeProperties[] = [
 		default: '',
 		required: true,
 		placeholder: '123456,789012,345678',
-		displayOptions: { 
-			show: { 
-				resource: ['item'], 
-				operation: ['getVasPrices', 'statsShallow'] 
-			} 
+		displayOptions: {
+			show: {
+				resource: ['item'],
+				operation: ['getVasPrices', 'statsShallow'],
+			},
 		},
 	},
 	{
 		displayName: 'ID Объявлений',
 		name: 'itemIds',
 		type: 'string',
-		description: 'Необязательный список ID объявлений через запятую. Если не указано, Avito вернет агрегированную статистику по пользователю.',
+		description:
+			'Необязательный список ID объявлений через запятую. Если не указано, Avito вернет агрегированную статистику по пользователю.',
 		default: '',
-		required: false,
 		placeholder: '123456,789012,345678',
 		displayOptions: {
 			show: {
 				resource: ['item'],
 				operation: ['callsStats'],
-			}
+			},
 		},
 	},
 
@@ -142,11 +149,11 @@ export const itemFields: INodeProperties[] = [
 		description: 'Начальная дата периода (включительно)',
 		default: '',
 		required: true,
-		displayOptions: { 
-			show: { 
-				resource: ['item'], 
-				operation: ['callsStats', 'statsShallow'] 
-			} 
+		displayOptions: {
+			show: {
+				resource: ['item'],
+				operation: ['callsStats', 'statsShallow'],
+			},
 		},
 	},
 	{
@@ -157,11 +164,11 @@ export const itemFields: INodeProperties[] = [
 		default: '',
 		required: true,
 		hint: 'Максимальная глубина запроса - 270 дней',
-		displayOptions: { 
-			show: { 
-				resource: ['item'], 
-				operation: ['callsStats', 'statsShallow'] 
-			} 
+		displayOptions: {
+			show: {
+				resource: ['item'],
+				operation: ['callsStats', 'statsShallow'],
+			},
 		},
 	},
 
@@ -178,7 +185,8 @@ export const itemFields: INodeProperties[] = [
 			{ name: 'Устаревшие', value: 'old' },
 		],
 		default: ['active'],
-		description: 'Статусы объявлений для фильтрации. Avito принимает несколько значений через запятую.',
+		description:
+			'Статусы объявлений для фильтрации. Avito принимает несколько значений через запятую.',
 		displayOptions: { show: { resource: ['item'], operation: ['getItems'] } },
 	},
 	{
@@ -186,7 +194,8 @@ export const itemFields: INodeProperties[] = [
 		name: 'updatedAtFrom',
 		type: 'dateTime',
 		default: '',
-		description: 'Фильтр по дате обновления/редактирования. Перед отправкой преобразуется в YYYY-MM-DD.',
+		description:
+			'Фильтр по дате обновления/редактирования. Перед отправкой преобразуется в YYYY-MM-DD.',
 		displayOptions: { show: { resource: ['item'], operation: ['getItems'] } },
 	},
 	{
@@ -410,7 +419,8 @@ export const itemFields: INodeProperties[] = [
 		name: 'spendingsDateFrom',
 		type: 'dateTime',
 		required: true,
-		description: 'Дата начала периода статистики расходов. Перед отправкой преобразуется в YYYY-MM-DD.',
+		description:
+			'Дата начала периода статистики расходов. Перед отправкой преобразуется в YYYY-MM-DD.',
 		default: '',
 		hint: 'Максимальная глубина запроса - 270 дней',
 		displayOptions: { show: { resource: ['item'], operation: ['accountSpendings'] } },
@@ -420,7 +430,8 @@ export const itemFields: INodeProperties[] = [
 		name: 'spendingsDateTo',
 		type: 'dateTime',
 		required: true,
-		description: 'Дата конца периода статистики расходов. Перед отправкой преобразуется в YYYY-MM-DD.',
+		description:
+			'Дата конца периода статистики расходов. Перед отправкой преобразуется в YYYY-MM-DD.',
 		default: '',
 		hint: 'Максимальная глубина запроса - 270 дней',
 		displayOptions: { show: { resource: ['item'], operation: ['accountSpendings'] } },
@@ -447,11 +458,15 @@ export const itemFields: INodeProperties[] = [
 		default: ['all'],
 		description: 'Набор необходимых типов расходов',
 		options: [
-			{ name: 'Все Расходы', value: 'all', description: 'Все расходы' },
-			{ name: 'Комиссия', value: 'commission', description: 'Комиссия' },
+			{ name: 'Все Расходы', value: 'all' },
+			{ name: 'Комиссия', value: 'commission' },
 			{ name: 'Остальные', value: 'rest', description: 'Остальные расходы' },
 			{ name: 'Продвижение', value: 'promotion', description: 'Расходы на продвижение' },
-			{ name: 'Размещение И Целевые Действия', value: 'presence', description: 'Расходы на размещение и целевые действия' },
+			{
+				name: 'Размещение И Целевые Действия',
+				value: 'presence',
+				description: 'Расходы на размещение и целевые действия',
+			},
 		],
 		displayOptions: { show: { resource: ['item'], operation: ['accountSpendings'] } },
 	},
@@ -469,14 +484,17 @@ export const itemFields: INodeProperties[] = [
 				name: 'filter',
 				type: 'json',
 				default: '{}',
-				description: 'Документированные поля фильтра: categoryIDs, itemIDs, locationIDs. Можно передать и другие поля, если Avito поддерживает их вне документации.',
-				placeholder: '{\n  "categoryIDs": [11, 12],\n  "itemIDs": [534353, 534354],\n  "locationIDs": [554353]\n}',
+				description:
+					'Документированные поля фильтра: categoryIDs, itemIDs, locationIDs. Можно передать и другие поля, если Avito поддерживает их вне документации.',
+				placeholder:
+					'{\n  "categoryIDs": [11, 12],\n  "itemIDs": [534353, 534354],\n  "locationIDs": [554353]\n}',
 				hint: 'ID должны быть числами в массивах. Документированные поля перечислены в подсказке, но JSON не ограничивается только ими.',
 			},
 		],
 	},
 	{
-		displayName: '<b>Статистика Расходов Профиля</b><br><br>Endpoint: <code>POST /stats/v2/accounts/{user_id}/spendings</code><br><br><b>Ограничения Avito:</b><br>• Глубина данных - не более 270 дней<br>• Лимит - 1 запрос в минуту<br><br><b>Типы расходов:</b> all, promotion, presence, commission, rest',
+		displayName:
+			'<b>Статистика Расходов Профиля</b><br><br>Endpoint: <code>POST /stats/v2/accounts/{user_id}/spendings</code><br><br><b>Ограничения Avito:</b><br>• Глубина данных - не более 270 дней<br>• Лимит - 1 запрос в минуту<br><br><b>Типы расходов:</b> all, promotion, presence, commission, rest',
 		name: 'spendingsInfoNotice',
 		type: 'notice',
 		default: '',
@@ -696,12 +714,12 @@ export const itemFields: INodeProperties[] = [
 		default: false,
 		description: 'Whether to enable pagination',
 		hint: 'При включении будет выполнено несколько запросов для получения всех записей. Учтите ограничения API Авито.',
-		displayOptions: { 
-			show: { 
-				resource: ['item'], 
+		displayOptions: {
+			show: {
+				resource: ['item'],
 				operation: ['analytics'],
-				analyticsGrouping: ['day', 'week', 'month', 'item']
-			} 
+				analyticsGrouping: ['day', 'week', 'month', 'item'],
+			},
 		},
 	},
 	{
@@ -712,7 +730,8 @@ export const itemFields: INodeProperties[] = [
 			{
 				name: 'Получить Все Записи',
 				value: 'all',
-				description: 'Автоматически получить все доступные записи до конца (используется dataTotalCount)',
+				description:
+					'Автоматически получить все доступные записи до конца (используется dataTotalCount)',
 			},
 			{
 				name: 'Лимит Запросов',
@@ -762,12 +781,12 @@ export const itemFields: INodeProperties[] = [
 			minValue: 1,
 			maxValue: 10000,
 		},
-		displayOptions: { 
-			show: { 
-				resource: ['item'], 
+		displayOptions: {
+			show: {
+				resource: ['item'],
 				operation: ['analytics'],
-				analyticsGrouping: ['day', 'week', 'month', 'item']
-			} 
+				analyticsGrouping: ['day', 'week', 'month', 'item'],
+			},
 		},
 	},
 	{
@@ -780,50 +799,54 @@ export const itemFields: INodeProperties[] = [
 		typeOptions: {
 			minValue: 0,
 		},
-		displayOptions: { 
-			show: { 
-				resource: ['item'], 
+		displayOptions: {
+			show: {
+				resource: ['item'],
 				operation: ['analytics'],
-				analyticsGrouping: ['day', 'week', 'month', 'item']
-			} 
+				analyticsGrouping: ['day', 'week', 'month', 'item'],
+			},
 		},
 	},
-{
-	displayName: 'Дополнительные Параметры',
-	name: 'analyticsAdditionalFields',
-	type: 'collection',
-	placeholder: 'Добавить Поле',
-	default: {},
-	description: 'Фильтрация и сортировка результатов Analytics по категориям, сотрудникам и показателям',
-	displayOptions: { show: { resource: ['item'], operation: ['analytics'] } },
-	options: [
-		{
-			displayName: 'Фильтр',
-			name: 'filter',
-			type: 'json',
-			default: '{}',
-			description: 'Фильтрация данных<br><br><b>Документированные поля фильтра:</b><br>• <b>categoryIDs</b> - массив ID категорий<br>• <b>employeeIDs</b> - массив ID сотрудников<br><br>Можно передать и другие поля, если Avito поддерживает их вне документации.',
-			placeholder: '{\n  "categoryIDs": [24, 88, 109],\n  "employeeIDs": [41042142, 41042143]\n}',
-			hint: '<b>Примеры документированных фильтров:</b><br><br><b>По категориям (Авто + Недвижимость):</b><br>{"categoryIDs": [9, 24]}<br><br><b>По сотрудникам:</b><br>{"employeeIDs": [41042142, 41042143]}<br><br><b>Комбинированный:</b><br>{"categoryIDs": [24], "employeeIDs": [41042142]}<br><br><b>Справочники:</b><br>• Категории: avito.st/s/openapi/catalog-categories.xml<br>• Сотрудники: через API accounts-hierarchy<br><br><b>Важно:</b> ID должны быть числами в массивах. Нода отправляет JSON как есть.',
-		},
-		{
-			displayName: 'Сортировка',
-			name: 'sort',
-			type: 'json',
-			default: '{}',
-			description: 'Сортировка результатов по выбранным показателям<br><br>🔧 <b>Обязательные поля:</b><br>• <b>key</b> - показатель для сортировки (из выбранных метрик)<br>• <b>order</b> - порядок: "asc" или "desc"<br><br>⚠️ <b>Важно:</b> можно сортировать только по показателям из "Показатели Для Анализа"',
-			placeholder: '{\n  "key": "views",\n  "order": "desc"\n}',
-			hint: '📊 <b>Примеры сортировки:</b><br><br><b>По просмотрам (убывание):</b><br>{"key": "views", "order": "desc"}<br><br><b>По контактам (возрастание):</b><br>{"key": "contacts", "order": "asc"}<br><br><b>По общим расходам:</b><br>{"key": "allSpending", "order": "desc"}<br><br><b>По просмотрам телефона:</b><br>{"key": "contactsShowPhone", "order": "desc"}<br><br><b>По заявкам аренды:</b><br>{"key": "bookingPlacedCount", "order": "desc"}<br><br>💡 <b>Популярные показатели:</b><br>• views - просмотры объявлений<br>• contacts - общие контакты<br>• contactsShowPhone - просмотры телефона<br>• allSpending - все расходы<br>• presenceSpending - расходы на размещение<br>• promoSpending - расходы на продвижение',
-		},
-	],
-},
+	{
+		displayName: 'Дополнительные Параметры',
+		name: 'analyticsAdditionalFields',
+		type: 'collection',
+		placeholder: 'Добавить Поле',
+		default: {},
+		description:
+			'Фильтрация и сортировка результатов Analytics по категориям, сотрудникам и показателям',
+		displayOptions: { show: { resource: ['item'], operation: ['analytics'] } },
+		options: [
+			{
+				displayName: 'Фильтр',
+				name: 'filter',
+				type: 'json',
+				default: '{}',
+				description:
+					'Фильтрация данных<br><br><b>Документированные поля фильтра:</b><br>• <b>categoryIDs</b> - массив ID категорий<br>• <b>employeeIDs</b> - массив ID сотрудников<br><br>Можно передать и другие поля, если Avito поддерживает их вне документации',
+				placeholder: '{\n  "categoryIDs": [24, 88, 109],\n  "employeeIDs": [41042142, 41042143]\n}',
+				hint: '<b>Примеры документированных фильтров:</b><br><br><b>По категориям (Авто + Недвижимость):</b><br>{"categoryIDs": [9, 24]}<br><br><b>По сотрудникам:</b><br>{"employeeIDs": [41042142, 41042143]}<br><br><b>Комбинированный:</b><br>{"categoryIDs": [24], "employeeIDs": [41042142]}<br><br><b>Справочники:</b><br>• Категории: avito.st/s/openapi/catalog-categories.xml<br>• Сотрудники: через API accounts-hierarchy<br><br><b>Важно:</b> ID должны быть числами в массивах. Нода отправляет JSON как есть.',
+			},
+			{
+				displayName: 'Сортировка',
+				name: 'sort',
+				type: 'json',
+				default: '{}',
+				description:
+					'Сортировка результатов по выбранным показателям<br><br>🔧 <b>Обязательные поля:</b><br>• <b>key</b> - показатель для сортировки (из выбранных метрик)<br>• <b>order</b> - порядок: "asc" или "desc"<br><br>⚠️ <b>Важно:</b> можно сортировать только по показателям из "Показатели Для Анализа"',
+				placeholder: '{\n  "key": "views",\n  "order": "desc"\n}',
+				hint: '📊 <b>Примеры сортировки:</b><br><br><b>По просмотрам (убывание):</b><br>{"key": "views", "order": "desc"}<br><br><b>По контактам (возрастание):</b><br>{"key": "contacts", "order": "asc"}<br><br><b>По общим расходам:</b><br>{"key": "allSpending", "order": "desc"}<br><br><b>По просмотрам телефона:</b><br>{"key": "contactsShowPhone", "order": "desc"}<br><br><b>По заявкам аренды:</b><br>{"key": "bookingPlacedCount", "order": "desc"}<br><br>💡 <b>Популярные показатели:</b><br>• views - просмотры объявлений<br>• contacts - общие контакты<br>• contactsShowPhone - просмотры телефона<br>• allSpending - все расходы<br>• presenceSpending - расходы на размещение<br>• promoSpending - расходы на продвижение',
+			},
+		],
+	},
 
-// Информационное поле с примерами комбинаций
-{
-	displayName: '<b>Quick Reference - Быстрые примеры</b><br><br><b>Популярные комбинации:</b><br><br><b>Топ категорий по просмотрам:</b><br>• Фильтр: {"categoryIDs": [24]}<br>• Сортировка: {"key": "views", "order": "desc"}<br><br><b>Эффективность сотрудников:</b><br>• Фильтр: {"employeeIDs": [41042142, 41042143]}<br>• Сортировка: {"key": "contacts", "order": "desc"}<br><br><b>Анализ расходов по категориям:</b><br>• Фильтр: {"categoryIDs": [9, 24, 88]}<br>• Сортировка: {"key": "allSpending", "order": "desc"}<br><br><b>Полезные ссылки:</b><br>• <a href="https://www.avito.st/s/openapi/catalog-categories.xml">Категории Avito</a><br>• <a href="https://developers.avito.ru/api-catalog/accounts-hierarchy/">API Сотрудников</a><br><br><b>Совет:</b> Начните с пустых полей {}, затем добавляйте фильтры по мере необходимости',
-	name: 'analyticsHelpNotice',
-	type: 'notice',
-	default: '',
-	displayOptions: { show: { resource: ['item'], operation: ['analytics'] } },
-},
+	// Информационное поле с примерами комбинаций
+	{
+		displayName:
+			'<b>Quick Reference - Быстрые примеры</b><br><br><b>Популярные комбинации:</b><br><br><b>Топ категорий по просмотрам:</b><br>• Фильтр: {"categoryIDs": [24]}<br>• Сортировка: {"key": "views", "order": "desc"}<br><br><b>Эффективность сотрудников:</b><br>• Фильтр: {"employeeIDs": [41042142, 41042143]}<br>• Сортировка: {"key": "contacts", "order": "desc"}<br><br><b>Анализ расходов по категориям:</b><br>• Фильтр: {"categoryIDs": [9, 24, 88]}<br>• Сортировка: {"key": "allSpending", "order": "desc"}<br><br><b>Полезные ссылки:</b><br>• <a href="https://www.avito.st/s/openapi/catalog-categories.xml">Категории Avito</a><br>• <a href="https://developers.avito.ru/api-catalog/accounts-hierarchy/">API Сотрудников</a><br><br><b>Совет:</b> Начните с пустых полей {}, затем добавляйте фильтры по мере необходимости',
+		name: 'analyticsHelpNotice',
+		type: 'notice',
+		default: '',
+		displayOptions: { show: { resource: ['item'], operation: ['analytics'] } },
+	},
 ];

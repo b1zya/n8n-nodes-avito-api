@@ -24,17 +24,22 @@ export async function getReports(this: IExecuteFunctions, itemIndex: number) {
 
 	// Параметры пагинации
 	const enablePagination = this.getNodeParameter('enablePagination', itemIndex, false) as boolean;
-	const paginationType = this.getNodeParameter('paginationType', itemIndex, 'all') as 'all' | 'limit';
+	const paginationType = this.getNodeParameter('paginationType', itemIndex, 'all') as
+		'all' | 'limit';
 	const maxPages = this.getNodeParameter('maxPages', itemIndex, 10) as number;
 	const enableDelay = this.getNodeParameter('enableDelay', itemIndex, false) as boolean;
 	const requestDelay = this.getNodeParameter('requestDelay', itemIndex, 200) as number;
 
 	// Валидация параметров
 	if (page < 0) {
-		throw new NodeOperationError(this.getNode(), 'Номер страницы должен быть больше или равен 0', { itemIndex });
+		throw new NodeOperationError(this.getNode(), 'Номер страницы должен быть больше или равен 0', {
+			itemIndex,
+		});
 	}
 	if (perPage < 1 || perPage > 200) {
-		throw new NodeOperationError(this.getNode(), 'Количество на странице должно быть от 1 до 200', { itemIndex });
+		throw new NodeOperationError(this.getNode(), 'Количество на странице должно быть от 1 до 200', {
+			itemIndex,
+		});
 	}
 
 	const queryParams: PaginatedQueryParams = { page, per_page: perPage };
@@ -68,14 +73,14 @@ async function executeSingleReportsRequest(
 	itemIndex: number,
 	startTime: number,
 ): Promise<IDataObject> {
-	const response = await avitoApiRequest.call(
+	const response = (await avitoApiRequest.call(
 		context,
 		'GET',
 		'/autoload/v2/reports',
 		undefined,
 		queryParams,
 		itemIndex,
-	) as ReportsResponse;
+	)) as ReportsResponse;
 
 	if (!response || !Array.isArray(response.reports)) {
 		throw new NodeOperationError(context.getNode(), 'Получен некорректный ответ от Avito API', {
@@ -88,7 +93,7 @@ async function executeSingleReportsRequest(
 	return {
 		...(response as Record<string, unknown>),
 		meta: {
-			...(response.meta as Record<string, unknown> || {}),
+			...((response.meta as Record<string, unknown>) || {}),
 			pagination_enabled: false,
 			execution_time_ms: executionTime,
 			single_request: true,
@@ -125,14 +130,14 @@ async function executePaginatedReportsRequest(
 				await sleep(requestDelay);
 			}
 
-			const response = await avitoApiRequest.call(
+			const response = (await avitoApiRequest.call(
 				context,
 				'GET',
 				'/autoload/v2/reports',
 				undefined,
 				{ ...baseQueryParams, page: currentPage },
 				itemIndex,
-			) as ReportsResponse;
+			)) as ReportsResponse;
 
 			if (!response || !Array.isArray(response.reports)) {
 				break;
@@ -151,7 +156,7 @@ async function executePaginatedReportsRequest(
 			// Проверяем условия остановки
 			const receivedCount = response.reports.length;
 			const isLastPage = receivedCount < (baseQueryParams.per_page ?? 50);
-			
+
 			// Останавливаемся если получили меньше записей чем лимит
 			if (isLastPage) {
 				break;

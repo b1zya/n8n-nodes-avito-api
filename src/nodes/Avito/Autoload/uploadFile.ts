@@ -5,7 +5,7 @@ import { avitoApiRequest } from '../GenericFunctions';
  * Загрузка файла автозагрузки по ссылке из настроек профиля
  * API: POST /autoload/v1/upload
  * Scope: autoload:reports
- * 
+ *
  * Использует URL, который уже указан в настройках автозагрузки профиля Авито.
  * Не требует передачи дополнительных параметров.
  */

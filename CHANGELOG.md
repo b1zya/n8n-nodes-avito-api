@@ -1,5 +1,65 @@
 # Changelog
 
+## 3.1.0 - 2026-10-21
+
+Switches Promotion to the `X-Ah-Employee-Id` header and moves the active services list to `/promotion/v2/items/services/get`, following the Avito Promotion API changes of 2026-09-29.
+
+Продвижение переведено на заголовок `X-Ah-Employee-Id`, а список активных услуг — на `/promotion/v2/items/services/get` вслед за изменениями API Продвижения Авито от 29.09.2026.
+
+### English
+
+#### Upgrade Notes
+
+- **Promotion**: the `ID Компании (X-Employee-Of)` field was replaced by `ID Сотрудника` (`X-Ah-Employee-Id`). Avito's [Promotion API](https://www.avito.ru/developers/api-catalog/promotion/documentation) now accepts only `X-Ah-Employee-Id` for requests on behalf of an employee; `X-Employee-Of` is no longer used there, so since 2026-09-29 a node configured in 3.x silently ran under the personal account.
+  - The new header takes the **employee** ID, not the company ID. The old value cannot be carried over, so the field was renamed rather than reused — a stale company ID is never sent as an employee ID.
+  - After upgrading, enter the `employeeId` from Account Hierarchy → `Сотрудники Иерархии` (`getEmployeesV1`) in every Promotion node that used the old field. Leave `0` to work under the personal account.
+- **Promotion**: `Активные Услуги По Объявлениям` now calls [`POST /promotion/v2/items/services/get`](https://www.avito.ru/developers/api-catalog/promotion/documentation#operation/get_services_by_items_v2). The request is unchanged; the response adds a required `degraded` boolean — when `true`, the services list may be incomplete.
+
+#### Changed
+
+- `Словарь Типов Услуг` (`/promotion/v1/items/services/dict`) now accepts and sends the employee header too, since the specification declares it on all Promotion operations.
+- Operation and resource lists are now sorted alphabetically, as the n8n linter requires. Only the order in the UI changes; values and defaults are the same.
+- The Messenger trigger's source files and class were renamed from `AvitoMessengerTrigger` to `AvitoTrigger` to match the node name. The node type `avitoTrigger` is unchanged, so saved workflows keep working.
+- Updated `@n8n/node-cli` from `0.45.4` to `0.54.0` (pinned: it is still tagged `beta` on npm). It brings `@n8n/eslint-plugin-community-nodes` `0.37.0`, adding `no-unsafe-connection-type-cast` and `valid-node-categories`, and `eslint-plugin-n8n-nodes-base` `2.0.0`. Also updated `prettier` from `3.9.6` to `3.9.10` and `release-it` from `20.0.1` to `21.1.1` (requires Node `^22.22.2 || ^24.15.0 || >=26`).
+- The n8n-nodes-base lint rules now actually run on `src/`: `@n8n/node-cli` enables them only for `./nodes` and `./credentials`. The 23 findings they surfaced are fixed.
+- Prettier now uses the `@n8n/node-cli` template config (`.prettierrc.js`) and `src` was reformatted with it. The previous config had no `singleQuote`, so `npm run format` would have switched every string to double quotes.
+
+#### Fixed
+
+- Errors raised inside an operation are no longer rebuilt from their message when the node rethrows them: the description and HTTP details from Avito now reach the n8n UI. Errors that do not come from the API (for example a `TypeError`) are reported as `NodeOperationError` instead of being presented as API errors.
+- Codex files used the `n8n-nodes-base.` prefix reserved for built-in nodes. The node IDs are now `n8n-nodes-avito-api.avito` and `n8n-nodes-avito-api.avitoTrigger` (the trigger's ID also named the wrong node, `avitoMessengerTrigger`).
+
+#### Deprecated
+
+- `POST /promotion/v1/items/services/get` is deprecated by Avito and is no longer called by the node.
+
+### Русский
+
+#### Важно При Обновлении
+
+- **Продвижение**: поле `ID Компании (X-Employee-Of)` заменено на `ID Сотрудника` (`X-Ah-Employee-Id`). [API Продвижения](https://www.avito.ru/developers/api-catalog/promotion/documentation) для запросов от имени сотрудника теперь принимает только `X-Ah-Employee-Id`; `X-Employee-Of` там больше не используется, поэтому с 29.09.2026 ноды, настроенные в 3.x, молча работали от личного аккаунта.
+  - Новый заголовок принимает ID **сотрудника**, а не компании. Перенести старое значение нельзя, поэтому поле переименовано, а не переиспользовано — устаревший ID компании никогда не уйдёт под видом ID сотрудника.
+  - После обновления укажите `employeeId` из Иерархия Аккаунтов → «Сотрудники Иерархии» (`getEmployeesV1`) во всех нодах Продвижения, где было заполнено старое поле. Оставьте `0`, чтобы работать от личного аккаунта.
+- **Продвижение**: «Активные Услуги По Объявлениям» вызывает [`POST /promotion/v2/items/services/get`](https://www.avito.ru/developers/api-catalog/promotion/documentation#operation/get_services_by_items_v2). Запрос не изменился; в ответе появилось обязательное поле `degraded` — при `true` список услуг может быть неполным.
+
+#### Изменено
+
+- «Словарь Типов Услуг» (`/promotion/v1/items/services/dict`) теперь тоже принимает и отправляет заголовок сотрудника: спецификация объявляет его во всех операциях Продвижения.
+- Списки операций и ресурсов отсортированы по алфавиту, как требует линтер n8n. Меняется только порядок в интерфейсе; значения и значения по умолчанию те же.
+- Файлы и класс триггера Мессенджера переименованы с `AvitoMessengerTrigger` на `AvitoTrigger` под имя ноды. Тип ноды `avitoTrigger` не изменился, сохранённые workflow продолжают работать.
+- `@n8n/node-cli` обновлён с `0.45.4` до `0.54.0` (версия закреплена: в npm она пока с тегом `beta`). Вместе с ним приходят `@n8n/eslint-plugin-community-nodes` `0.37.0` с новыми правилами `no-unsafe-connection-type-cast` и `valid-node-categories` и `eslint-plugin-n8n-nodes-base` `2.0.0`. Также обновлены `prettier` с `3.9.6` до `3.9.10` и `release-it` с `20.0.1` до `21.1.1` (требует Node `^22.22.2 || ^24.15.0 || >=26`).
+- Правила n8n-nodes-base теперь действительно проверяют `src/`: `@n8n/node-cli` включает их только для `./nodes` и `./credentials`. Найденные ими 23 замечания исправлены.
+- Prettier использует конфиг из шаблона `@n8n/node-cli` (`.prettierrc.js`), `src` переформатирован по нему. В прежнем конфиге не было `singleQuote`, и `npm run format` перевёл бы все строки на двойные кавычки.
+
+#### Исправлено
+
+- Ошибки внутри операций больше не пересобираются из одного текста при повторном выбросе: описание и HTTP-детали от Авито доходят до интерфейса n8n. Ошибки не от API (например, `TypeError`) теперь показываются как `NodeOperationError`, а не выдаются за ошибки API.
+- Codex-файлы использовали префикс `n8n-nodes-base.`, зарезервированный за встроенными нодами. Теперь идентификаторы — `n8n-nodes-avito-api.avito` и `n8n-nodes-avito-api.avitoTrigger` (у триггера к тому же было указано чужое имя `avitoMessengerTrigger`).
+
+#### Устарело
+
+- `POST /promotion/v1/items/services/get` помечен Авито как устаревший, нода его больше не вызывает.
+
 ## 3.0.1 - 2026-08-27
 
 Fixes the `perPage` ceiling for Autoload v4 upload items, which 3.0.0 set from the wrong endpoint.

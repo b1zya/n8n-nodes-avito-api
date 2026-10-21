@@ -16,10 +16,28 @@ export const cpaOperations: INodeProperties[] = [
 				action: 'Get CPA balance',
 			},
 			{
+				name: 'Жалоба На Звонок',
+				value: 'createCallComplaint',
+				description: 'Создание жалобы на CPA-звонок по callId',
+				action: 'Create CPA call complaint',
+			},
+			{
+				name: 'Жалоба По Action ID',
+				value: 'createActionComplaint',
+				description: 'Создание жалобы на целевое действие по actionId',
+				action: 'Create CPA action complaint',
+			},
+			{
 				name: 'Звонки По Времени',
 				value: 'getCallsByTime',
 				description: 'Получение списка CPA-звонков по времени создания',
 				action: 'Get CPA calls by time',
+			},
+			{
+				name: 'Телефоны Из Целевых Чатов',
+				value: 'getPhonesInfoFromChats',
+				description: 'Получение информации по номерам телефонов из целевых чатов',
+				action: 'Get phones info from CPA chats',
 			},
 			{
 				name: 'Чат По Action ID',
@@ -33,24 +51,6 @@ export const cpaOperations: INodeProperties[] = [
 				description: 'Получение списка CPA-чатов по времени создания',
 				action: 'Get CPA chats by time',
 			},
-			{
-				name: 'Жалоба На Звонок',
-				value: 'createCallComplaint',
-				description: 'Создание жалобы на CPA-звонок по callId',
-				action: 'Create CPA call complaint',
-			},
-			{
-				name: 'Жалоба По Action ID',
-				value: 'createActionComplaint',
-				description: 'Создание жалобы на целевое действие по actionId',
-				action: 'Create CPA action complaint',
-			},
-			{
-				name: 'Телефоны Из Целевых Чатов',
-				value: 'getPhonesInfoFromChats',
-				description: 'Получение информации по номерам телефонов из целевых чатов',
-				action: 'Get phones info from CPA chats',
-			},
 		],
 	},
 ];
@@ -62,7 +62,8 @@ export const cpaFields: INodeProperties[] = [
 		type: 'string',
 		required: true,
 		default: 'n8n-nodes-avito-api',
-		description: 'Имя сервиса, отправляющего запрос в CPA API Avito. Передается в обязательном заголовке X-Source.',
+		description:
+			'Имя сервиса, отправляющего запрос в CPA API Avito. Передается в обязательном заголовке X-Source.',
 		placeholder: 'my-company-n8n',
 		displayOptions: { show: { resource: ['cpa'] } },
 	},
@@ -72,7 +73,8 @@ export const cpaFields: INodeProperties[] = [
 		type: 'dateTime',
 		required: true,
 		default: '',
-		description: 'Время, с которого нужно начинать поиск. Перед отправкой преобразуется в RFC3339 UTC, например 2021-01-02T15:04:05Z.',
+		description:
+			'Время, с которого нужно начинать поиск. Перед отправкой преобразуется в RFC3339 UTC, например 2021-01-02T15:04:05Z.',
 		displayOptions: {
 			show: {
 				resource: ['cpa'],
@@ -81,11 +83,16 @@ export const cpaFields: INodeProperties[] = [
 		},
 	},
 	{
+		// This is the API's required page size, not n8n's "Return All / Limit" pattern the two
+		// rules below target. n8n does not store values equal to the default, so changing it
+		// to 50 would silently change the page size of existing workflows.
 		displayName: 'Лимит',
 		name: 'limit',
 		type: 'number',
 		required: true,
+		// eslint-disable-next-line n8n-nodes-base/node-param-default-wrong-for-limit
 		default: 100,
+		// eslint-disable-next-line n8n-nodes-base/node-param-description-wrong-for-limit
 		description: 'Размер выборки',
 		typeOptions: {
 			minValue: 1,
@@ -116,7 +123,8 @@ export const cpaFields: INodeProperties[] = [
 		type: 'number',
 		required: true,
 		default: 0,
-		description: 'Смещение выборки. Для производительности Avito рекомендует использовать максимальное время из предыдущей выборки.',
+		description:
+			'Смещение выборки. Для производительности Avito рекомендует использовать максимальное время из предыдущей выборки.',
 		typeOptions: {
 			minValue: 0,
 		},
@@ -196,7 +204,8 @@ export const cpaFields: INodeProperties[] = [
 		},
 	},
 	{
-		displayName: '<b>CPA API Avito</b><br><br>CPA-методы требуют OAuth Client Credentials и обязательный заголовок <b>X-Source</b> - имя сервиса, отправляющего запрос.<br><br><b>Лимиты по документации:</b><br>• Баланс: 50 запросов/мин<br>• Звонки по времени: 1 запрос/мин<br>• Чат по actionId: 3 запроса/мин<br>• Чаты по времени: 40 запросов/мин<br>• Жалоба на звонок: 1 запрос/мин<br>• Жалоба по actionId: 3 запроса/мин<br>• Телефоны из целевых чатов: 5 запросов/мин<br><br>При пакетной обработке включите задержку между input items. При превышении Avito возвращает 429 и заголовки X-RateLimit-Limit / X-RateLimit-Remaining.',
+		displayName:
+			'<b>CPA API Avito</b><br><br>CPA-методы требуют OAuth Client Credentials и обязательный заголовок <b>X-Source</b> - имя сервиса, отправляющего запрос.<br><br><b>Лимиты по документации:</b><br>• Баланс: 50 запросов/мин<br>• Звонки по времени: 1 запрос/мин<br>• Чат по actionId: 3 запроса/мин<br>• Чаты по времени: 40 запросов/мин<br>• Жалоба на звонок: 1 запрос/мин<br>• Жалоба по actionId: 3 запроса/мин<br>• Телефоны из целевых чатов: 5 запросов/мин<br><br>При пакетной обработке включите задержку между input items. При превышении Avito возвращает 429 и заголовки X-RateLimit-Limit / X-RateLimit-Remaining.',
 		name: 'cpaInfoNotice',
 		type: 'notice',
 		default: '',

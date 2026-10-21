@@ -26,8 +26,13 @@ export async function analytics(this: IExecuteFunctions, itemIndex: number) {
 	const metrics = this.getNodeParameter('analyticsMetrics', itemIndex) as string[];
 
 	// Параметры пагинации
-	const enablePagination = this.getNodeParameter('analyticsEnablePagination', itemIndex, false) as boolean;
-	const paginationType = this.getNodeParameter('analyticsPaginationType', itemIndex, 'all') as 'all' | 'limit';
+	const enablePagination = this.getNodeParameter(
+		'analyticsEnablePagination',
+		itemIndex,
+		false,
+	) as boolean;
+	const paginationType = this.getNodeParameter('analyticsPaginationType', itemIndex, 'all') as
+		'all' | 'limit';
 	const maxRequests = this.getNodeParameter('analyticsMaxRequests', itemIndex, 10) as number;
 	const customLimit = this.getNodeParameter('analyticsLimit', itemIndex, 1000) as number;
 	const startOffset = this.getNodeParameter('analyticsOffset', itemIndex, 0) as number;
@@ -39,7 +44,9 @@ export async function analytics(this: IExecuteFunctions, itemIndex: number) {
 
 	// Базовые проверки
 	if (!userId || typeof userId !== 'number' || !Number.isFinite(userId) || userId <= 0) {
-		throw new NodeOperationError(this.getNode(), 'Укажите корректный ID пользователя (> 0)', { itemIndex });
+		throw new NodeOperationError(this.getNode(), 'Укажите корректный ID пользователя (> 0)', {
+			itemIndex,
+		});
 	}
 	if (!dateFromRaw || !dateToRaw) {
 		throw new NodeOperationError(this.getNode(), 'Укажите дату начала и окончания', { itemIndex });
@@ -114,7 +121,12 @@ export async function analytics(this: IExecuteFunctions, itemIndex: number) {
 	}
 	if (additionalFields?.sort) {
 		try {
-			baseRequestBody.sort = safeJsonParse(additionalFields.sort, 'Некорректный JSON в поле "Сортировка"', this.getNode(), itemIndex);
+			baseRequestBody.sort = safeJsonParse(
+				additionalFields.sort,
+				'Некорректный JSON в поле "Сортировка"',
+				this.getNode(),
+				itemIndex,
+			);
 		} catch (e: unknown) {
 			throw new NodeOperationError(this.getNode(), getErrorMessage(e), { itemIndex });
 		}
@@ -247,14 +259,14 @@ async function executePaginatedAnalyticsRequest(
 
 		while (true) {
 			try {
-				const resp = await avitoApiRequest.call(
+				const resp = (await avitoApiRequest.call(
 					context,
 					'POST',
 					`/stats/v2/accounts/${userId}/items`,
 					body,
 					undefined,
 					itemIndex,
-				) as AnalyticsResponse;
+				)) as AnalyticsResponse;
 				return resp;
 			} catch (error: unknown) {
 				const errorStatus = getErrorStatus(error);
@@ -281,11 +293,9 @@ async function executePaginatedAnalyticsRequest(
 		const firstResponse = await doRequestWith429Retry(firstRequestBody);
 
 		if (!firstResponse || !firstResponse.result) {
-			throw new NodeOperationError(
-				context.getNode(),
-				'Получен некорректный ответ от Avito API',
-				{ itemIndex },
-			);
+			throw new NodeOperationError(context.getNode(), 'Получен некорректный ответ от Avito API', {
+				itemIndex,
+			});
 		}
 
 		const firstResult = firstResponse.result;
@@ -347,11 +357,9 @@ async function executePaginatedAnalyticsRequest(
 			const response: IDataObject = await doRequestWith429Retry(requestBody);
 
 			if (!response || !response.result) {
-				throw new NodeOperationError(
-					context.getNode(),
-					'Получен некорректный ответ от Avito API',
-					{ itemIndex },
-				);
+				throw new NodeOperationError(context.getNode(), 'Получен некорректный ответ от Avito API', {
+					itemIndex,
+				});
 			}
 
 			const result = (response.result as Record<string, unknown>) || {};
@@ -369,9 +377,10 @@ async function executePaginatedAnalyticsRequest(
 					...(result as Record<string, unknown>),
 					groupings,
 					// Выровняем dataTotalCount по первому запросу, если он пропал дальше
-					dataTotalCount: !pageDataTotalCountMissing && resultTyped.dataTotalCount != null
-						? resultTyped.dataTotalCount
-						: totalDataCount,
+					dataTotalCount:
+						!pageDataTotalCountMissing && resultTyped.dataTotalCount != null
+							? resultTyped.dataTotalCount
+							: totalDataCount,
 					meta: {
 						pagination_enabled: true,
 						pagination_needed: true,

@@ -1,5 +1,5 @@
 {
-	"node": "n8n-nodes-base.avito",
+	"node": "n8n-nodes-avito-api.avito",
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
 	"categories": ["Communication", "Marketing & Content"],

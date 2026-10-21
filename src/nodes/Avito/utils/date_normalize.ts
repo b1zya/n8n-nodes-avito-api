@@ -11,7 +11,8 @@ export function normalizeToString(v: unknown): string {
 	if (v == null) return '';
 	if (typeof v === 'string' || typeof v === 'number') return String(v);
 	const resourceLocator = v as { __rl?: boolean; value?: unknown };
-	if (resourceLocator && typeof resourceLocator === 'object' && '__rl' in resourceLocator) return String(resourceLocator.value ?? '');
+	if (resourceLocator && typeof resourceLocator === 'object' && '__rl' in resourceLocator)
+		return String(resourceLocator.value ?? '');
 	return '';
 }
 
@@ -26,7 +27,10 @@ export function normalizeIdsInput(v: unknown): string[] {
 
 	const s = normalizeToString(v).trim();
 	if (!s) return [];
-	return s.split(',').map((p) => p.trim()).filter(Boolean);
+	return s
+		.split(',')
+		.map((p) => p.trim())
+		.filter(Boolean);
 }
 
 /**
@@ -86,7 +90,12 @@ export function isStrictYYYYMMDD(value: string): boolean {
 /**
  * Безопасный JSON.parse с пользовательским сообщением.
  */
-export function safeJsonParse<T = unknown>(raw: unknown, errMsg: string, node: INode, itemIndex: number): T {
+export function safeJsonParse<T = unknown>(
+	raw: unknown,
+	errMsg: string,
+	node: INode,
+	itemIndex: number,
+): T {
 	if (typeof raw !== 'string') {
 		throw new NodeOperationError(node, errMsg, { itemIndex });
 	}

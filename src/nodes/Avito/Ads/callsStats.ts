@@ -2,30 +2,23 @@ import type { IExecuteFunctions } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
 import { getErrorMessage } from '../types/AvitoTypes';
 
-import { 
-	avitoApiRequest, 
-	validateRequiredFields, 
-	validateItemIds 
-} from '../GenericFunctions';
+import { avitoApiRequest, validateRequiredFields, validateItemIds } from '../GenericFunctions';
 
-import {
-	toYYYYMMDD,
-	isStrictYYYYMMDD,
-} from '../utils/date_normalize';
+import { toYYYYMMDD, isStrictYYYYMMDD } from '../utils/date_normalize';
 
 export async function callsStats(this: IExecuteFunctions, itemIndex: number) {
 	const userId = this.getNodeParameter('userId', itemIndex) as number;
 	const itemIdsParam = this.getNodeParameter('itemIds', itemIndex) as string;
-	
+
 	// Получаем «сырые» даты из UI
 	const dateFromRaw = this.getNodeParameter('dateFrom', itemIndex) as string;
 	const dateToRaw = this.getNodeParameter('dateTo', itemIndex) as string;
 
 	// Валидация обязательных полей
-	validateRequiredFields.call(this, this, itemIndex, { 
-		userId, 
-		dateFrom: dateFromRaw, 
-		dateTo: dateToRaw 
+	validateRequiredFields.call(this, this, itemIndex, {
+		userId,
+		dateFrom: dateFromRaw,
+		dateTo: dateToRaw,
 	});
 
 	// Нормализуем даты к YYYY-MM-DD

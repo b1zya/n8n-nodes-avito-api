@@ -12,7 +12,8 @@ export const autoloadOperations: INodeProperties[] = [
 			{
 				name: '⚙️ Настройки Профиля: Создать/Изменить',
 				value: 'createOrUpdateProfile',
-				description: 'Настройка профиля: ссылки на файлы, расписание, email. Обязательно согласие при создании.',
+				description:
+					'Настройка профиля: ссылки на файлы, расписание, email. Обязательно согласие при создании.',
 				action: 'Create or update autoload profile',
 			},
 			{
@@ -24,28 +25,39 @@ export const autoloadOperations: INodeProperties[] = [
 			{
 				name: '👤 Настройки Профиля: Получить',
 				value: 'getProfile',
-				description: 'Просмотр текущих настроек: ссылки на файлы, расписание выгрузок, email для отчетов',
+				description:
+					'Просмотр текущих настроек: ссылки на файлы, расписание выгрузок, email для отчетов',
 				action: 'Get autoload profile',
 			},
 			{
 				name: '💰 Объявления V2: Списания Из Отчета (Устарело)',
 				value: 'getReportItemsFees',
-				description: 'Устарело, удаление 08.03.2027. Прямой замены нет: в v4 данных о списаниях (fee_info, listing_fees) не будет. История операций по кошельку — операция "Пользователь: История Операций".',
+				description:
+					'Устарело, удаление 08.03.2027. Прямой замены нет: в v4 данных о списаниях (fee_info, listing_fees) не будет. История операций по кошельку — операция "Пользователь: История Операций".',
 				action: 'Get autoload report items fees',
+			},
+			{
+				name: '📃 Загрузки V4: Объявления Загрузки',
+				value: 'getUploadItems',
+				description:
+					'Объявления текущей или последней успешно завершённой загрузки с фильтрами по строке и разделам',
+				action: 'Get autoload upload items',
 			},
 			{
 				name: '📄 Объявления V2: Список Из Отчета (Устарело)',
 				value: 'getReportItems',
-				description: 'Устарело, удаление 08.03.2027. Замена — "Загрузки V4: Объявления Загрузки" с целью "Последняя успешно завершённая": параметр report_id там не нужен.',
+				description:
+					'Устарело, удаление 08.03.2027. Замена — "Загрузки V4: Объявления Загрузки" с целью "Последняя успешно завершённая": параметр report_id там не нужен.',
 				action: 'Get autoload report items',
 			},
 			{
 				name: '📈 Отчеты V3: Последний Завершенный (Устарело)',
 				value: 'getLastReport',
-				description: 'Устарело, удаление 08.03.2027. Замена — "Загрузки V4: Одна Загрузка" с целью "Последняя успешно завершённая".',
+				description:
+					'Устарело, удаление 08.03.2027. Замена — "Загрузки V4: Одна Загрузка" с целью "Последняя успешно завершённая".',
 				action: 'Get last autoload report',
 			},
-            {
+			{
 				name: '📊 Отчеты V2: Список Всех (Устарело)',
 				value: 'getReports',
 				description: 'Устарело, удаление 08.03.2027. Замена — "Загрузки V4: История Загрузок".',
@@ -54,32 +66,30 @@ export const autoloadOperations: INodeProperties[] = [
 			{
 				name: '📋 Отчеты V3: Детали По ID (Устарело)',
 				value: 'getReportById',
-				description: 'Устарело, удаление 08.03.2027. Замена — "Загрузки V4: История Загрузок": статистика каждой загрузки приходит прямо в списке, отдельный запрос по ID не нужен.',
+				description:
+					'Устарело, удаление 08.03.2027. Замена — "Загрузки V4: История Загрузок": статистика каждой загрузки приходит прямо в списке, отдельный запрос по ID не нужен.',
 				action: 'Get autoload report by ID',
+			},
+			{
+				name: '📝 Справочник: Поля Категории',
+				value: 'getCategoryFields',
+				description:
+					'Получение всех полей для категории: обязательные/необязательные, типы данных, возможные значения',
+				action: 'Get category fields',
 			},
 			{
 				name: '📥 Загрузки V4: История Загрузок',
 				value: 'getUploads',
-				description: 'Список загрузок с фильтром по датам и пагинацией. Самая свежая загрузка идёт первой.',
+				description:
+					'Список загрузок с фильтром по датам и пагинацией. Самая свежая загрузка идёт первой.',
 				action: 'Get autoload uploads history',
 			},
 			{
 				name: '📦 Загрузки V4: Одна Загрузка',
 				value: 'getUpload',
-				description: 'Статистика по текущей или по последней успешно завершённой загрузке: статус, разделы, события, файлы фида.',
+				description:
+					'Статистика по текущей или по последней успешно завершённой загрузке: статус, разделы, события, файлы фида',
 				action: 'Get autoload upload',
-			},
-			{
-				name: '📃 Загрузки V4: Объявления Загрузки',
-				value: 'getUploadItems',
-				description: 'Объявления текущей или последней успешно завершённой загрузки с фильтрами по строке и разделам',
-				action: 'Get autoload upload items',
-			},
-			{
-				name: '📝 Справочник: Поля Категории',
-				value: 'getCategoryFields',
-				description: 'Получение всех полей для категории: обязательные/необязательные, типы данных, возможные значения',
-				action: 'Get category fields',
 			},
 			{
 				name: '🔄 Конвертация: Avito ID → Файл ID',
@@ -90,7 +100,8 @@ export const autoloadOperations: INodeProperties[] = [
 			{
 				name: '🔍 Поиск V2: Статус По ID Из Файла (Устарело)',
 				value: 'getAutoloadItemsInfoV2',
-				description: 'Устарело, удаление 08.03.2027. Замена — "Загрузки V4: Объявления Загрузки" с целью "Последняя успешно завершённая" и фильтром по поисковому запросу.',
+				description:
+					'Устарело, удаление 08.03.2027. Замена — "Загрузки V4: Объявления Загрузки" с целью "Последняя успешно завершённая" и фильтром по поисковому запросу.',
 				action: 'Get autoload items info by file id',
 			},
 			{
@@ -102,7 +113,8 @@ export const autoloadOperations: INodeProperties[] = [
 			{
 				name: '🚀 Ручная Загрузка Файла',
 				value: 'uploadFile',
-				description: 'Внеочередная загрузка файла. Игнорирует лимиты из настроек. Максимум 1 раз в час.',
+				description:
+					'Внеочередная загрузка файла. Игнорирует лимиты из настроек. Максимум 1 раз в час.',
 				action: 'Upload autoload file',
 			},
 		],
@@ -164,7 +176,8 @@ export const autoloadFields: INodeProperties[] = [
 
 	// ===== ИНФОРМАЦИОННАЯ ПОДСКАЗКА ДЛЯ createOrUpdateProfile =====
 	{
-		displayName: '🔧 <b>Создание и настройка профиля автозагрузки</b><br><br>📋 <b>Обязательные поля:</b><br>• <b>Включить Автозагрузку</b> - включить/выключить автозагрузку<br>• <b>Email Для Отчетов</b> - email для отчетов о выгрузках<br>• <b>Данные Фидов</b> - данные о фидах (файлах)<br>• <b>Расписание Выгрузок</b> - расписание выгрузок<br><br>🆕 <b>Создание нового профиля:</b><br>• <b>Согласие с Правилами: true</b> - обязательно при первом создании<br>• Согласие с <a href="https://support.avito.ru/articles/203867776">правилами Авито Автозагрузки</a><br><br>📊 <b>Структура Данных Фидов:</b><br>• feed_name - название фида для отчетов<br>• feed_url - ссылка на XML/CSV файл (http/https)<br>• Можно передать null для очистки настроек<br><br>⏰ <b>Структура Расписания:</b><br>• <b>rate</b> - количество объявлений за период<br>• <b>weekdays</b> - дни недели: [0,1,2,3,4,5,6] где 0=Понедельник<br>• <b>time_slots</b> - часы: [0,1,2...23] когда запускать выгрузку<br>• Время указывается по Москве<br><br>💡 <b>Примеры расписания:</b><br>• Рабочие дни 9-11 утра: [{"rate": 100, "weekdays": [0,1,2,3,4], "time_slots": [9,10,11]}]<br>• Ежедневно в полночь: [{"rate": 50, "weekdays": [0,1,2,3,4,5,6], "time_slots": [0]}]<br>• Выходные днем: [{"rate": 200, "weekdays": [5,6], "time_slots": [12,13,14,15,16]}]',
+		displayName:
+			'🔧 <b>Создание и настройка профиля автозагрузки</b><br><br>📋 <b>Обязательные поля:</b><br>• <b>Включить Автозагрузку</b> - включить/выключить автозагрузку<br>• <b>Email Для Отчетов</b> - email для отчетов о выгрузках<br>• <b>Данные Фидов</b> - данные о фидах (файлах)<br>• <b>Расписание Выгрузок</b> - расписание выгрузок<br><br>🆕 <b>Создание нового профиля:</b><br>• <b>Согласие с Правилами: true</b> - обязательно при первом создании<br>• Согласие с <a href="https://support.avito.ru/articles/203867776">правилами Авито Автозагрузки</a><br><br>📊 <b>Структура Данных Фидов:</b><br>• feed_name - название фида для отчетов<br>• feed_url - ссылка на XML/CSV файл (http/https)<br>• Можно передать null для очистки настроек<br><br>⏰ <b>Структура Расписания:</b><br>• <b>rate</b> - количество объявлений за период<br>• <b>weekdays</b> - дни недели: [0,1,2,3,4,5,6] где 0=Понедельник<br>• <b>time_slots</b> - часы: [0,1,2...23] когда запускать выгрузку<br>• Время указывается по Москве<br><br>💡 <b>Примеры расписания:</b><br>• Рабочие дни 9-11 утра: [{"rate": 100, "weekdays": [0,1,2,3,4], "time_slots": [9,10,11]}]<br>• Ежедневно в полночь: [{"rate": 50, "weekdays": [0,1,2,3,4,5,6], "time_slots": [0]}]<br>• Выходные днем: [{"rate": 200, "weekdays": [5,6], "time_slots": [12,13,14,15,16]}]',
 		name: 'createProfileNotice',
 		type: 'notice',
 		default: '',
@@ -211,14 +224,16 @@ export const autoloadFields: INodeProperties[] = [
 				name: 'date_from',
 				type: 'dateTime',
 				default: '',
-				description: 'Фильтр по дате создания отчета от указанного момента. Avito ожидает формат RFC3339.',
+				description:
+					'Фильтр по дате создания отчета от указанного момента. Avito ожидает формат RFC3339.',
 			},
 			{
 				displayName: 'Дата Создания До',
 				name: 'date_to',
 				type: 'dateTime',
 				default: '',
-				description: 'Фильтр по дате создания отчета до указанного момента. Avito ожидает формат RFC3339.',
+				description:
+					'Фильтр по дате создания отчета до указанного момента. Avito ожидает формат RFC3339.',
 			},
 		],
 	},
@@ -324,11 +339,11 @@ export const autoloadFields: INodeProperties[] = [
 		typeOptions: {
 			minValue: 1,
 		},
-		displayOptions: { 
-			show: { 
-				resource: ['autoload'], 
-				operation: ['getReportById', 'getReportItems', 'getReportItemsFees'] 
-			} 
+		displayOptions: {
+			show: {
+				resource: ['autoload'],
+				operation: ['getReportById', 'getReportItems', 'getReportItemsFees'],
+			},
 		},
 	},
 
@@ -374,7 +389,8 @@ export const autoloadFields: INodeProperties[] = [
 				name: 'query',
 				type: 'string',
 				default: '',
-				description: 'Фильтр по ID объявлений из файла или ID объявлений на Авито, через запятую или |',
+				description:
+					'Фильтр по ID объявлений из файла или ID объявлений на Авито, через запятую или |',
 				placeholder: 'item1,item2 или 12345|67890',
 			},
 			{
@@ -519,7 +535,9 @@ export const autoloadFields: INodeProperties[] = [
 		placeholder: 'Добавить Заголовок',
 		default: {},
 		description: 'Дополнительный HTTP заголовок для запроса (If-Modified-Since - опционально)',
-		displayOptions: { show: { resource: ['autoload'], operation: ['getCategoryTree', 'getCategoryFields'] } },
+		displayOptions: {
+			show: { resource: ['autoload'], operation: ['getCategoryTree', 'getCategoryFields'] },
+		},
 		options: [
 			{
 				name: 'parameter',
@@ -539,7 +557,8 @@ export const autoloadFields: INodeProperties[] = [
 						type: 'string',
 						default: '',
 						placeholder: 'Mon, 01 Jan 2025 00:00:00 UTC',
-						description: 'Значение HTTP заголовка. Дата и время последней полученной версии в формате RFC1123 в UTC.',
+						description:
+							'Значение HTTP заголовка. Дата и время последней полученной версии в формате RFC1123 в UTC.',
 					},
 				],
 			},
@@ -599,73 +618,81 @@ export const autoloadFields: INodeProperties[] = [
 
 	// ===== ИНФОРМАЦИОННЫЕ ПОДСКАЗКИ =====
 	{
-		displayName: '📂 <b>Получение категорий и полей</b><br><br>🌲 <b>Дерево категорий:</b><br>• Получите полный список всех доступных категорий<br>• Найдите нужный slug в структуре категорий<br>• Используйте slug для получения полей конкретной категории<br><br>📋 <b>Поля категории:</b><br>• Получение всех полей для конкретной категории<br>• Информация о зависимостях полей<br>• Возможные значения и их типы<br>• Ссылки на каталоги значений<br><br>⚠️ <b>Важно:</b><br>• <b>Сначала используйте "Дерево Категорий"</b> для получения актуальных slug<br>• Slug категорий могут изменяться со временем<br>• Не используйте примеры slug без проверки их актуальности<br><br>🔍 <b>Как найти slug:</b><br>1. Выполните операцию "Дерево Категорий"<br>2. Найдите нужную категорию в ответе<br>3. Скопируйте значение поля "slug"<br>4. Используйте его в операции "Поля Категории"',
+		displayName:
+			'📂 <b>Получение категорий и полей</b><br><br>🌲 <b>Дерево категорий:</b><br>• Получите полный список всех доступных категорий<br>• Найдите нужный slug в структуре категорий<br>• Используйте slug для получения полей конкретной категории<br><br>📋 <b>Поля категории:</b><br>• Получение всех полей для конкретной категории<br>• Информация о зависимостях полей<br>• Возможные значения и их типы<br>• Ссылки на каталоги значений<br><br>⚠️ <b>Важно:</b><br>• <b>Сначала используйте "Дерево Категорий"</b> для получения актуальных slug<br>• Slug категорий могут изменяться со временем<br>• Не используйте примеры slug без проверки их актуальности<br><br>🔍 <b>Как найти slug:</b><br>1. Выполните операцию "Дерево Категорий"<br>2. Найдите нужную категорию в ответе<br>3. Скопируйте значение поля "slug"<br>4. Используйте его в операции "Поля Категории"',
 		name: 'categoryInfoNotice',
 		type: 'notice',
 		default: '',
-		displayOptions: { 
-			show: { 
-				resource: ['autoload'], 
-				operation: ['getCategoryTree', 'getCategoryFields'] 
-			} 
+		displayOptions: {
+			show: {
+				resource: ['autoload'],
+				operation: ['getCategoryTree', 'getCategoryFields'],
+			},
 		},
 	},
 	{
-		displayName: '📊 <b>Информация об отчетах автозагрузки</b><br><br>📄 <b>Пагинация отчетов:</b><br>• Максимум 200 отчетов за запрос<br>• page начинается с 0<br>• total показывает общее количество отчетов<br>• Можно фильтровать по date_from и date_to в формате RFC3339<br><br>📈 <b>Структура отчета:</b><br>• <b>report_id</b> - уникальный ID отчета<br>• <b>started_at</b> - дата начала выгрузки<br>• <b>finished_at</b> - дата окончания выгрузки<br>• <b>status</b> - статус выгрузки<br>• <b>section_stats</b> - статистика по разделам<br>• <b>listing_fees</b> - информация о списаниях<br><br>📋 <b>Статусы выгрузки:</b><br>• processing - отчет в процессе<br>• success - загрузка прошла без ошибок<br>• success_warning - в части объявлений есть ошибки<br>• error - загрузка не удалась<br><br>🔗 <b>Дополнительно:</b><br>• feeds_urls - ссылки на файлы выгрузки в v3 отчетах<br>• section_stats - количество объявлений в каждом разделе',
+		displayName:
+			'📊 <b>Информация об отчетах автозагрузки</b><br><br>📄 <b>Пагинация отчетов:</b><br>• Максимум 200 отчетов за запрос<br>• page начинается с 0<br>• total показывает общее количество отчетов<br>• Можно фильтровать по date_from и date_to в формате RFC3339<br><br>📈 <b>Структура отчета:</b><br>• <b>report_id</b> - уникальный ID отчета<br>• <b>started_at</b> - дата начала выгрузки<br>• <b>finished_at</b> - дата окончания выгрузки<br>• <b>status</b> - статус выгрузки<br>• <b>section_stats</b> - статистика по разделам<br>• <b>listing_fees</b> - информация о списаниях<br><br>📋 <b>Статусы выгрузки:</b><br>• processing - отчет в процессе<br>• success - загрузка прошла без ошибок<br>• success_warning - в части объявлений есть ошибки<br>• error - загрузка не удалась<br><br>🔗 <b>Дополнительно:</b><br>• feeds_urls - ссылки на файлы выгрузки в v3 отчетах<br>• section_stats - количество объявлений в каждом разделе',
 		name: 'reportsInfoNotice',
 		type: 'notice',
 		default: '',
-		displayOptions: { 
-			show: { 
-				resource: ['autoload'], 
-				operation: ['getReports', 'getLastReport', 'getReportById'] 
-			} 
+		displayOptions: {
+			show: {
+				resource: ['autoload'],
+				operation: ['getReports', 'getLastReport', 'getReportById'],
+			},
 		},
 	},
 	{
-		displayName: '📝 <b>Информация об объявлениях в выгрузке</b><br><br>📄 <b>Пагинация объявлений:</b><br>• Максимум 200 объявлений за запрос<br>• page начинается с 0<br>• Поддерживаются фильтры query и sections<br><br>📊 <b>Структура объявления в отчете:</b><br>• <b>ad_id</b> - ID объявления из файла<br>• <b>avito_id</b> - ID объявления на Avito<br>• <b>avito_status</b> - статус объявления на Avito<br>• <b>section</b> - раздел отчета<br>• <b>messages</b> - ошибки или предупреждения<br>• <b>applied_vas</b> - примененные услуги продвижения<br><br>🎯 <b>Статусы Avito:</b><br>• active - объявление активно<br>• old - срок размещения истек<br>• blocked - объявление заблокировано<br>• rejected - объявление отклонено<br>• archived - объявление в архиве<br>• removed - объявление удалено<br><br>🔍 <b>Фильтрация:</b><br>• query - ID из файла или Avito ID<br>• sections - идентификаторы разделов отчета<br>• Разделители: запятая или символ |',
+		displayName:
+			'📝 <b>Информация об объявлениях в выгрузке</b><br><br>📄 <b>Пагинация объявлений:</b><br>• Максимум 200 объявлений за запрос<br>• page начинается с 0<br>• Поддерживаются фильтры query и sections<br><br>📊 <b>Структура объявления в отчете:</b><br>• <b>ad_id</b> - ID объявления из файла<br>• <b>avito_id</b> - ID объявления на Avito<br>• <b>avito_status</b> - статус объявления на Avito<br>• <b>section</b> - раздел отчета<br>• <b>messages</b> - ошибки или предупреждения<br>• <b>applied_vas</b> - примененные услуги продвижения<br><br>🎯 <b>Статусы Avito:</b><br>• active - объявление активно<br>• old - срок размещения истек<br>• blocked - объявление заблокировано<br>• rejected - объявление отклонено<br>• archived - объявление в архиве<br>• removed - объявление удалено<br><br>🔍 <b>Фильтрация:</b><br>• query - ID из файла или Avito ID<br>• sections - идентификаторы разделов отчета<br>• Разделители: запятая или символ |',
 		name: 'itemsInfoNotice',
 		type: 'notice',
 		default: '',
 		displayOptions: { show: { resource: ['autoload'], operation: ['getReportItems'] } },
 	},
 	{
-		displayName: '💰 <b>Информация о списаниях за объявления</b><br><br>⚠️ <b>Особенность пагинации:</b><br>• page начинается с 0<br>• Максимум 200 записей за запрос<br>• Используйте правильную нумерацию страниц<br><br>📊 <b>Структура списания:</b><br>• <b>ad_id</b> - ID объявления из файла<br>• <b>avito_id</b> - ID объявления на Avito<br>• <b>fees_amount</b> - сумма списания или количество размещений из пакета<br>• <b>fees_package_id</b> - ID пакета размещений, если списание было из пакета<br>• <b>fees_type</b> - тип списания<br><br>💳 <b>Типы списания:</b><br>• <b>single</b> - разовая оплата<br>• <b>package</b> - списание из пакета размещений<br><br>🔍 <b>Фильтрация:</b><br>• По ad_ids - ID из XML файла<br>• По avito_ids - ID на сайте Avito<br>• Можно комбинировать фильтры',
+		displayName:
+			'💰 <b>Информация о списаниях за объявления</b><br><br>⚠️ <b>Особенность пагинации:</b><br>• page начинается с 0<br>• Максимум 200 записей за запрос<br>• Используйте правильную нумерацию страниц<br><br>📊 <b>Структура списания:</b><br>• <b>ad_id</b> - ID объявления из файла<br>• <b>avito_id</b> - ID объявления на Avito<br>• <b>fees_amount</b> - сумма списания или количество размещений из пакета<br>• <b>fees_package_id</b> - ID пакета размещений, если списание было из пакета<br>• <b>fees_type</b> - тип списания<br><br>💳 <b>Типы списания:</b><br>• <b>single</b> - разовая оплата<br>• <b>package</b> - списание из пакета размещений<br><br>🔍 <b>Фильтрация:</b><br>• По ad_ids - ID из XML файла<br>• По avito_ids - ID на сайте Avito<br>• Можно комбинировать фильтры',
 		name: 'feesInfoNotice',
 		type: 'notice',
 		default: '',
 		displayOptions: { show: { resource: ['autoload'], operation: ['getReportItemsFees'] } },
 	},
 	{
-		displayName: '📤 <b>Загрузка файла по ссылке привязанной к профилю:</b><br>• Файл должен быть доступен к загрузке в момент запроса.<br>• Формат файла: XLS/XLSX/CSV/XML<br><br>⚠️ <b>ВАЖНЫЕ ОГРАНИЧЕНИЯ:</b><br>• <b>Лимит частоты: МАКСИМУМ 1 ЗАПРОС В ЧАС</b><br>• При превышении лимита API вернет ошибку<br>• Планируйте запуски заранее<br><br>🚀 <b>Особенности загрузки:</b><br>• <b>ИГНОРИРУЕТ лимиты публикаций</b> из настроек профиля<br>• <b>ВСЕ валидные объявления</b> из файла будут опубликованы или активированы<br>• Подходит для полной загрузки больших каталогов<br><br>🔧 <b>Предварительная настройка:</b><br>1. Настройте URL файла через "Создать/Обновить Профиль"<br>2. Убедитесь что файл доступен по HTTP/HTTPS<br>3. Проверьте настройки через "Получить Профиль Автозагрузки"<br>4. Запустите загрузку (помните об ограничении в 1 час)',
+		displayName:
+			'📤 <b>Загрузка файла по ссылке привязанной к профилю:</b><br>• Файл должен быть доступен к загрузке в момент запроса.<br>• Формат файла: XLS/XLSX/CSV/XML<br><br>⚠️ <b>ВАЖНЫЕ ОГРАНИЧЕНИЯ:</b><br>• <b>Лимит частоты: МАКСИМУМ 1 ЗАПРОС В ЧАС</b><br>• При превышении лимита API вернет ошибку<br>• Планируйте запуски заранее<br><br>🚀 <b>Особенности загрузки:</b><br>• <b>ИГНОРИРУЕТ лимиты публикаций</b> из настроек профиля<br>• <b>ВСЕ валидные объявления</b> из файла будут опубликованы или активированы<br>• Подходит для полной загрузки больших каталогов<br><br>🔧 <b>Предварительная настройка:</b><br>1. Настройте URL файла через "Создать/Обновить Профиль"<br>2. Убедитесь что файл доступен по HTTP/HTTPS<br>3. Проверьте настройки через "Получить Профиль Автозагрузки"<br>4. Запустите загрузку (помните об ограничении в 1 час)',
 		name: 'otherInfoNotice',
 		type: 'notice',
 		default: '',
-		displayOptions: { 
-			show: { 
-				resource: ['autoload'], 
-				operation: ['uploadFile'] 
-			} 
+		displayOptions: {
+			show: {
+				resource: ['autoload'],
+				operation: ['uploadFile'],
+			},
 		},
 	},
 
 	// ===== ИНФОРМАЦИОННЫЕ ПОДСКАЗКИ ДЛЯ НОВЫХ МЕТОДОВ =====
 	{
-		displayName: '🔍 <b>Поиск объявлений по ID из файла</b><br><br>📋 <b>Назначение:</b><br>• Получение подробной информации об объявлениях<br>• По ID из XML файла автозагрузки<br>• Текущий статус, ошибки, ссылки на Авито<br><br>📝 <b>Формат ID:</b><br>• ID из параметра &lt;ID&gt; в XML файле<br>• От 1 до 100 ID за запрос<br>• Разделители: запятая (,) или символ (|)<br><br>📊 <b>Что получите:</b><br>• Статус объявления на Авито<br>• Дата окончания размещения<br>• Информация о списаниях<br>• Ошибки и предупреждения<br>• Ссылка на объявление',
+		displayName:
+			'🔍 <b>Поиск объявлений по ID из файла</b><br><br>📋 <b>Назначение:</b><br>• Получение подробной информации об объявлениях<br>• По ID из XML файла автозагрузки<br>• Текущий статус, ошибки, ссылки на Авито<br><br>📝 <b>Формат ID:</b><br>• ID из параметра &lt;ID&gt; в XML файле<br>• От 1 до 100 ID за запрос<br>• Разделители: запятая (,) или символ (|)<br><br>📊 <b>Что получите:</b><br>• Статус объявления на Авито<br>• Дата окончания размещения<br>• Информация о списаниях<br>• Ошибки и предупреждения<br>• Ссылка на объявление',
 		name: 'autoloadItemsInfoNotice',
 		type: 'notice',
 		default: '',
 		displayOptions: { show: { resource: ['autoload'], operation: ['getAutoloadItemsInfoV2'] } },
 	},
 	{
-		displayName: '🔗 <b>Получение ID из файла по Avito ID</b><br><br>📋 <b>Назначение:</b><br>• Связь между ID на Авито и ID в файле<br>• Полезно для синхронизации данных<br>• Обратное сопоставление объявлений<br><br>🔍 <b>Входные данные:</b><br>• ID объявлений на сайте Авито<br>• Например: 1234567890, 9876543210<br>• Разделители: запятая (,) или символ (|)<br><br>📊 <b>Результат:</b><br>• Пары: Avito ID → ID из файла<br>• Null если объявление не найдено в автозагрузке<br>• Полезно для отчетности и аналитики',
+		displayName:
+			'🔗 <b>Получение ID из файла по Avito ID</b><br><br>📋 <b>Назначение:</b><br>• Связь между ID на Авито и ID в файле<br>• Полезно для синхронизации данных<br>• Обратное сопоставление объявлений<br><br>🔍 <b>Входные данные:</b><br>• ID объявлений на сайте Авито<br>• Например: 1234567890, 9876543210<br>• Разделители: запятая (,) или символ (|)<br><br>📊 <b>Результат:</b><br>• Пары: Avito ID → ID из файла<br>• Null если объявление не найдено в автозагрузке<br>• Полезно для отчетности и аналитики',
 		name: 'adIdsByAvitoIdsNotice',
 		type: 'notice',
 		default: '',
 		displayOptions: { show: { resource: ['autoload'], operation: ['getAdIdsByAvitoIds'] } },
 	},
 	{
-		displayName: '🔗 <b>Получение Avito ID по ID из файла</b><br><br>📋 <b>Назначение:</b><br>• Связь между ID в файле и ID на Авито<br>• Поиск опубликованных объявлений<br>• Прямое сопоставление объявлений<br><br>🔍 <b>Входные данные:</b><br>• ID из параметра &lt;ID&gt; в XML файле<br>• Например: item1, item2, item3<br>• Разделители: запятая (,) или символ (|)<br><br>📊 <b>Результат:</b><br>• Пары: ID из файла → Avito ID<br>• Null если объявление не опубликовано<br>• Быстрый поиск статуса публикации',
+		displayName:
+			'🔗 <b>Получение Avito ID по ID из файла</b><br><br>📋 <b>Назначение:</b><br>• Связь между ID в файле и ID на Авито<br>• Поиск опубликованных объявлений<br>• Прямое сопоставление объявлений<br><br>🔍 <b>Входные данные:</b><br>• ID из параметра &lt;ID&gt; в XML файле<br>• Например: item1, item2, item3<br>• Разделители: запятая (,) или символ (|)<br><br>📊 <b>Результат:</b><br>• Пары: ID из файла → Avito ID<br>• Null если объявление не опубликовано<br>• Быстрый поиск статуса публикации',
 		name: 'avitoIdsByAdIdsNotice',
 		type: 'notice',
 		default: '',
@@ -680,7 +707,14 @@ export const autoloadFields: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['autoload'],
-				operation: ['getReports', 'getReportById', 'getLastReport', 'getReportItems', 'getReportItemsFees', 'getAutoloadItemsInfoV2'],
+				operation: [
+					'getReports',
+					'getReportById',
+					'getLastReport',
+					'getReportItems',
+					'getReportItemsFees',
+					'getAutoloadItemsInfoV2',
+				],
 			},
 		},
 	},
@@ -695,12 +729,14 @@ export const autoloadFields: INodeProperties[] = [
 			{
 				name: 'Последняя Успешно Завершённая',
 				value: 'lastSuccessful',
-				description: 'Загрузка, обработавшая весь фид. Данные стабильные, но возможна задержка в определении завершённости.',
+				description:
+					'Загрузка, обработавшая весь фид. Данные стабильные, но возможна задержка в определении завершённости.',
 			},
 			{
 				name: 'Текущая',
 				value: 'current',
-				description: 'Последняя загрузка, обработавшая хотя бы одно объявление. Данные самые свежие, но могут меняться в процессе.',
+				description:
+					'Последняя загрузка, обработавшая хотя бы одно объявление. Данные самые свежие, но могут меняться в процессе.',
 			},
 		],
 		displayOptions: {
@@ -764,7 +800,11 @@ export const autoloadFields: INodeProperties[] = [
 		default: 'all',
 		options: [
 			{ name: 'Все Страницы', value: 'all', description: 'Идти до конца списка' },
-			{ name: 'Лимит Страниц', value: 'limit', description: 'Остановиться после заданного числа страниц' },
+			{
+				name: 'Лимит Страниц',
+				value: 'limit',
+				description: 'Остановиться после заданного числа страниц',
+			},
 		],
 		displayOptions: {
 			show: { resource: ['autoload'], operation: ['getUploads'], uploadsEnablePagination: [true] },
@@ -811,7 +851,8 @@ export const autoloadFields: INodeProperties[] = [
 		name: 'uploadItemsPerPage',
 		type: 'number',
 		default: 100,
-		description: 'Количество объявлений на странице. По документации Avito максимум 100 (у истории загрузок — 50).',
+		description:
+			'Количество объявлений на странице. По документации Avito максимум 100 (у истории загрузок — 50).',
 		typeOptions: { minValue: 1, maxValue: 100 },
 		displayOptions: { show: { resource: ['autoload'], operation: ['getUploadItems'] } },
 	},
@@ -854,10 +895,18 @@ export const autoloadFields: INodeProperties[] = [
 		default: 'all',
 		options: [
 			{ name: 'Все Страницы', value: 'all', description: 'Идти до конца списка' },
-			{ name: 'Лимит Страниц', value: 'limit', description: 'Остановиться после заданного числа страниц' },
+			{
+				name: 'Лимит Страниц',
+				value: 'limit',
+				description: 'Остановиться после заданного числа страниц',
+			},
 		],
 		displayOptions: {
-			show: { resource: ['autoload'], operation: ['getUploadItems'], uploadItemsEnablePagination: [true] },
+			show: {
+				resource: ['autoload'],
+				operation: ['getUploadItems'],
+				uploadItemsEnablePagination: [true],
+			},
 		},
 	},
 	{
@@ -884,7 +933,11 @@ export const autoloadFields: INodeProperties[] = [
 		description: 'Пауза перед каждым следующим запросом, чтобы не упереться в лимиты Avito',
 		typeOptions: { minValue: 0 },
 		displayOptions: {
-			show: { resource: ['autoload'], operation: ['getUploadItems'], uploadItemsEnablePagination: [true] },
+			show: {
+				resource: ['autoload'],
+				operation: ['getUploadItems'],
+				uploadItemsEnablePagination: [true],
+			},
 		},
 	},
 ];

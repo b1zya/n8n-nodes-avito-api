@@ -13,7 +13,7 @@ export async function callTrackingApiRequest<T extends IDataObject = IDataObject
 ): Promise<T> {
 	await applyCallTrackingDelay.call(this, itemIndex);
 
-	return await avitoApiRequest.call(this, method, endpoint, body, qs, itemIndex) as T;
+	return (await avitoApiRequest.call(this, method, endpoint, body, qs, itemIndex)) as T;
 }
 
 export async function callTrackingBinaryRequest(
@@ -56,7 +56,8 @@ export async function callTrackingBinaryRequest(
 			throw new NodeApiError(this.getNode(), error as JsonObject, {
 				itemIndex,
 				message: 'Call record is not ready yet',
-				description: 'Avito says the call record is too early to fetch. Documentation says records usually become available within 30 minutes after the call ends.',
+				description:
+					'Avito says the call record is too early to fetch. Documentation says records usually become available within 30 minutes after the call ends.',
 			});
 		}
 
@@ -64,14 +65,25 @@ export async function callTrackingBinaryRequest(
 	}
 }
 
-export async function applyCallTrackingDelay(this: IExecuteFunctions, itemIndex: number): Promise<void> {
+export async function applyCallTrackingDelay(
+	this: IExecuteFunctions,
+	itemIndex: number,
+): Promise<void> {
 	const enableDelay = this.getNodeParameter('enableCallTrackingDelay', itemIndex, false) as boolean;
-	const requestDelay = this.getNodeParameter('callTrackingRequestDelay', itemIndex, 12000) as number;
+	const requestDelay = this.getNodeParameter(
+		'callTrackingRequestDelay',
+		itemIndex,
+		12000,
+	) as number;
 
 	if (requestDelay < 0) {
-		throw new NodeOperationError(this.getNode(), 'CallTracking request delay must be greater than or equal to 0', {
-			itemIndex,
-		});
+		throw new NodeOperationError(
+			this.getNode(),
+			'CallTracking request delay must be greater than or equal to 0',
+			{
+				itemIndex,
+			},
+		);
 	}
 
 	if (enableDelay && itemIndex > 0 && requestDelay > 0) {
@@ -93,9 +105,13 @@ export function validatePositiveInteger(
 	}
 
 	if (maxValue !== undefined && value > maxValue) {
-		throw new NodeOperationError(context.getNode(), `${fieldName} must be less than or equal to ${maxValue}`, {
-			itemIndex,
-		});
+		throw new NodeOperationError(
+			context.getNode(),
+			`${fieldName} must be less than or equal to ${maxValue}`,
+			{
+				itemIndex,
+			},
+		);
 	}
 }
 
@@ -126,9 +142,13 @@ export function validateDateTime(
 
 	const date = new Date(normalizedValue);
 	if (Number.isNaN(date.getTime())) {
-		throw new NodeOperationError(context.getNode(), `${fieldName} must be a valid RFC3339 date-time string`, {
-			itemIndex,
-		});
+		throw new NodeOperationError(
+			context.getNode(),
+			`${fieldName} must be a valid RFC3339 date-time string`,
+			{
+				itemIndex,
+			},
+		);
 	}
 
 	return date.toISOString().replace('.000Z', 'Z');
@@ -144,20 +164,29 @@ export function validateDateTimeRange(
 	const toDate = new Date(dateTimeTo);
 
 	if (toDate.getTime() < fromDate.getTime()) {
-		throw new NodeOperationError(context.getNode(), 'dateTimeTo must be greater than or equal to dateTimeFrom', {
-			itemIndex,
-			description: 'Дата и время "до" не могут быть раньше даты и времени "от".',
-		});
+		throw new NodeOperationError(
+			context.getNode(),
+			'dateTimeTo must be greater than or equal to dateTimeFrom',
+			{
+				itemIndex,
+				description: 'Дата и время "до" не могут быть раньше даты и времени "от".',
+			},
+		);
 	}
 
 	const maxDateTimeTo = new Date(fromDate);
 	maxDateTimeTo.setMonth(maxDateTimeTo.getMonth() + 3);
 
 	if (toDate.getTime() > maxDateTimeTo.getTime()) {
-		throw new NodeOperationError(context.getNode(), 'dateTimeTo must not be later than dateTimeFrom plus 3 months', {
-			itemIndex,
-			description: 'По документации Avito максимальное значение dateTimeTo - dateTimeFrom + 3 месяца.',
-		});
+		throw new NodeOperationError(
+			context.getNode(),
+			'dateTimeTo must not be later than dateTimeFrom plus 3 months',
+			{
+				itemIndex,
+				description:
+					'По документации Avito максимальное значение dateTimeTo - dateTimeFrom + 3 месяца.',
+			},
+		);
 	}
 }
 

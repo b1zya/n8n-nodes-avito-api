@@ -9,7 +9,8 @@ export function getCpaHeaders(this: IExecuteFunctions, itemIndex: number): IData
 	if (!normalizedXSource) {
 		throw new NodeOperationError(this.getNode(), 'X-Source is required for CPA API requests', {
 			itemIndex,
-			description: 'Укажите имя сервиса, отправляющего запрос. Оно будет передано в заголовке X-Source.',
+			description:
+				'Укажите имя сервиса, отправляющего запрос. Оно будет передано в заголовке X-Source.',
 		});
 	}
 
@@ -27,16 +28,20 @@ export async function cpaApiRequest<T extends IDataObject = IDataObject>(
 	const requestDelay = this.getNodeParameter('cpaRequestDelay', itemIndex, 60000) as number;
 
 	if (requestDelay < 0) {
-		throw new NodeOperationError(this.getNode(), 'CPA request delay must be greater than or equal to 0', {
-			itemIndex,
-		});
+		throw new NodeOperationError(
+			this.getNode(),
+			'CPA request delay must be greater than or equal to 0',
+			{
+				itemIndex,
+			},
+		);
 	}
 
 	if (enableDelay && itemIndex > 0 && requestDelay > 0) {
 		await sleep(requestDelay);
 	}
 
-	return await avitoApiRequest.call(
+	return (await avitoApiRequest.call(
 		this,
 		method,
 		endpoint,
@@ -44,7 +49,7 @@ export async function cpaApiRequest<T extends IDataObject = IDataObject>(
 		undefined,
 		itemIndex,
 		getCpaHeaders.call(this, itemIndex),
-	) as T;
+	)) as T;
 }
 
 export function validatePositiveInteger(
@@ -61,9 +66,13 @@ export function validatePositiveInteger(
 	}
 
 	if (maxValue !== undefined && value > maxValue) {
-		throw new NodeOperationError(context.getNode(), `${fieldName} must be less than or equal to ${maxValue}`, {
-			itemIndex,
-		});
+		throw new NodeOperationError(
+			context.getNode(),
+			`${fieldName} must be less than or equal to ${maxValue}`,
+			{
+				itemIndex,
+			},
+		);
 	}
 }
 
@@ -105,9 +114,13 @@ export function validateDateTime(
 	const date = new Date(normalizedValue);
 
 	if (Number.isNaN(date.getTime())) {
-		throw new NodeOperationError(context.getNode(), `${fieldName} must be a valid RFC3339 date-time string`, {
-			itemIndex,
-		});
+		throw new NodeOperationError(
+			context.getNode(),
+			`${fieldName} must be a valid RFC3339 date-time string`,
+			{
+				itemIndex,
+			},
+		);
 	}
 
 	return date.toISOString().replace('.000Z', 'Z');

@@ -38,5 +38,11 @@ export async function getCalls(this: IExecuteFunctions, itemIndex: number) {
 		body.dateTimeTo = normalizedDateTimeTo;
 	}
 
-	return await callTrackingApiRequest.call(this, 'POST', '/calltracking/v1/getCalls/', body, itemIndex);
+	return await callTrackingApiRequest.call(
+		this,
+		'POST',
+		'/calltracking/v1/getCalls/',
+		body,
+		itemIndex,
+	);
 }

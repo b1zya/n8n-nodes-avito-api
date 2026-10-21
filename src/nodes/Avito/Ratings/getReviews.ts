@@ -6,7 +6,7 @@ import { avitoApiRequest } from '../GenericFunctions';
  * Получение списка активных отзывов с пагинацией
  * API: GET /ratings/v1/reviews
  * Scope: ratings:read
- * 
+ *
  * Rate Limits: 300 запросов/минуту
  * Максимум записей за запрос: 50 отзывов
  */
@@ -19,17 +19,22 @@ export async function getReviews(this: IExecuteFunctions, itemIndex: number) {
 
 	// Параметры пагинации
 	const enablePagination = this.getNodeParameter('enablePagination', itemIndex, false) as boolean;
-	const paginationType = this.getNodeParameter('paginationType', itemIndex, 'all') as 'all' | 'limit';
+	const paginationType = this.getNodeParameter('paginationType', itemIndex, 'all') as
+		'all' | 'limit';
 	const maxRequests = this.getNodeParameter('maxRequests', itemIndex, 10) as number;
 	const enableDelay = this.getNodeParameter('enableDelay', itemIndex, false) as boolean;
 	const requestDelay = this.getNodeParameter('requestDelay', itemIndex, 100) as number;
 
 	// Валидация параметров
 	if (offset < 0) {
-		throw new NodeOperationError(this.getNode(), 'Смещение не может быть отрицательным', { itemIndex });
+		throw new NodeOperationError(this.getNode(), 'Смещение не может быть отрицательным', {
+			itemIndex,
+		});
 	}
 	if (limit < 1 || limit > 50) {
-		throw new NodeOperationError(this.getNode(), 'Лимит должен быть от 1 до 50 (ограничение API)', { itemIndex });
+		throw new NodeOperationError(this.getNode(), 'Лимит должен быть от 1 до 50 (ограничение API)', {
+			itemIndex,
+		});
 	}
 
 	// Если пагинация отключена - выполняем простой запрос
@@ -91,7 +96,7 @@ async function executeSingleReviewsRequest(
 			rate_limit_info: {
 				max_requests_per_minute: 300,
 				recommended_delay_ms: 200,
-			}
+			},
 		},
 	};
 }
@@ -130,7 +135,7 @@ async function executePaginatedReviewsRequest(
 		const recentRequests = requestTimes.filter((time: number) => now - time < rateLimitWindow);
 		requestTimes.length = 0;
 		requestTimes.push(...recentRequests);
-		
+
 		return requestTimes.length < maxRequestsPerMinute;
 	};
 
@@ -144,16 +149,16 @@ async function executePaginatedReviewsRequest(
 				// Если превысили лимит, ждем до начала следующей минуты
 				const oldestRequest = Math.min(...requestTimes);
 				const waitTime = rateLimitWindow - (Date.now() - oldestRequest) + 100; // +100ms запас
-				
+
 				// Используем логирование через context вместо console
 				await sleep(waitTime);
-				
+
 				// Перепроверяем после ожидания
 				if (!checkRateLimit()) {
 					throw new NodeOperationError(
 						context.getNode(),
 						'Не удалось соблюсти rate limit после ожидания',
-						{ itemIndex }
+						{ itemIndex },
 					);
 				}
 			}
@@ -190,7 +195,7 @@ async function executePaginatedReviewsRequest(
 			// Проверяем условия остановки
 			const receivedCount = response.reviews.length;
 			const isLastPage = receivedCount < limit;
-			
+
 			// Останавливаемся если получили меньше записей чем лимит
 			if (isLastPage) {
 				break;
@@ -205,7 +210,9 @@ async function executePaginatedReviewsRequest(
 		}
 
 		const executionTime = Date.now() - startTime;
-		const requestsInLastMinute = requestTimes.filter((time: number) => Date.now() - time < rateLimitWindow).length;
+		const requestsInLastMinute = requestTimes.filter(
+			(time: number) => Date.now() - time < rateLimitWindow,
+		).length;
 
 		return {
 			reviews: allReviews,
@@ -237,10 +244,16 @@ async function executePaginatedReviewsRequest(
 		}
 
 		// Проверяем, не связана ли ошибка с rate limiting
-		const isRateLimitError = error && typeof error === 'object' && 'response' in error && (error as { response?: { status?: number } }).response?.status === 429;
+		const isRateLimitError =
+			error &&
+			typeof error === 'object' &&
+			'response' in error &&
+			(error as { response?: { status?: number } }).response?.status === 429;
 		const errorMessage = isRateLimitError
 			? 'Превышен лимит запросов (429). Увеличьте задержку между запросами.'
-			: error instanceof Error ? error.message : 'Неизвестная ошибка';
+			: error instanceof Error
+				? error.message
+				: 'Неизвестная ошибка';
 
 		throw new NodeOperationError(
 			context.getNode(),

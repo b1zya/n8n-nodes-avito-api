@@ -12,17 +12,17 @@ export async function getCategoryFields(this: IExecuteFunctions, itemIndex: numb
 	const nodeSlug = this.getNodeParameter('nodeSlug', itemIndex) as string;
 
 	if (!nodeSlug || !nodeSlug.trim()) {
-		throw new NodeOperationError(
-			this.getNode(),
-			'Укажите slug категории',
-			{ itemIndex }
-		);
+		throw new NodeOperationError(this.getNode(), 'Укажите slug категории', { itemIndex });
 	}
 
 	// Получаем дополнительные заголовки из фиксированной коллекции
-	const additionalHeadersData = this.getNodeParameter('additionalHeaders', itemIndex, {}) as AdditionalHeadersData;
+	const additionalHeadersData = this.getNodeParameter(
+		'additionalHeaders',
+		itemIndex,
+		{},
+	) as AdditionalHeadersData;
 	const additionalHeaders: Record<string, string> = {};
-	
+
 	// Преобразуем fixedCollection в объект заголовков
 	if (additionalHeadersData.parameter && Array.isArray(additionalHeadersData.parameter)) {
 		for (const header of additionalHeadersData.parameter) {

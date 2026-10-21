@@ -27,7 +27,9 @@ export async function accountSpendings(this: IExecuteFunctions, itemIndex: numbe
 	};
 
 	if (!userId || typeof userId !== 'number' || !Number.isFinite(userId) || userId <= 0) {
-		throw new NodeOperationError(this.getNode(), 'Укажите корректный ID пользователя (> 0)', { itemIndex });
+		throw new NodeOperationError(this.getNode(), 'Укажите корректный ID пользователя (> 0)', {
+			itemIndex,
+		});
 	}
 
 	if (!dateFromRaw || !dateToRaw) {
@@ -35,7 +37,9 @@ export async function accountSpendings(this: IExecuteFunctions, itemIndex: numbe
 	}
 
 	if (!spendingTypes.length) {
-		throw new NodeOperationError(this.getNode(), 'Выберите хотя бы один тип расходов', { itemIndex });
+		throw new NodeOperationError(this.getNode(), 'Выберите хотя бы один тип расходов', {
+			itemIndex,
+		});
 	}
 
 	let dateFrom: string;
@@ -48,9 +52,13 @@ export async function accountSpendings(this: IExecuteFunctions, itemIndex: numbe
 	}
 
 	if (!isStrictYYYYMMDD(dateFrom) || !isStrictYYYYMMDD(dateTo)) {
-		throw new NodeOperationError(this.getNode(), 'Дата должна быть в формате YYYY-MM-DD (без времени)', {
-			itemIndex,
-		});
+		throw new NodeOperationError(
+			this.getNode(),
+			'Дата должна быть в формате YYYY-MM-DD (без времени)',
+			{
+				itemIndex,
+			},
+		);
 	}
 
 	if (dateFrom > dateTo) {

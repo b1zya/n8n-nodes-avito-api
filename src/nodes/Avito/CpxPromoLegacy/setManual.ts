@@ -10,8 +10,7 @@ export async function setManual(this: IExecuteFunctions, itemIndex: number) {
 	const bidPenny = this.getNodeParameter('bidPenny', itemIndex) as number;
 	const actionTypeId = this.getNodeParameter('actionTypeId', itemIndex) as number;
 	const limitPenny = this.getNodeParameter('limitPenny', itemIndex, undefined) as
-		| number
-		| undefined;
+		number | undefined;
 
 	// ОСТАВЛЕНО: Специфичная бизнес-валидация для этой операции
 	if (!itemId) {

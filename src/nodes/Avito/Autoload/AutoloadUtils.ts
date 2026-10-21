@@ -104,10 +104,14 @@ export function validateUploadPaging(
 ): void {
 	// В v4 нумерация страниц начинается с 1, а не с 0 как в устаревших v2/v3.
 	if (!Number.isInteger(page) || page < 1) {
-		throw new NodeOperationError(context.getNode(), 'Номер страницы должен быть больше или равен 1', {
-			itemIndex,
-			description: 'В Autoload API v4 страницы нумеруются с 1 (в устаревших v2/v3 — с 0).',
-		});
+		throw new NodeOperationError(
+			context.getNode(),
+			'Номер страницы должен быть больше или равен 1',
+			{
+				itemIndex,
+				description: 'В Autoload API v4 страницы нумеруются с 1 (в устаревших v2/v3 — с 0).',
+			},
+		);
 	}
 
 	if (!Number.isInteger(perPage) || perPage < 1 || perPage > maxPerPage) {

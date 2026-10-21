@@ -55,7 +55,8 @@ export const callTrackingFields: INodeProperties[] = [
 		type: 'dateTime',
 		required: true,
 		default: '',
-		description: 'Время, с которого нужно начинать поиск звонков по callTime. Перед отправкой преобразуется в RFC3339 UTC, например 2021-01-02T00:00:00Z.',
+		description:
+			'Время, с которого нужно начинать поиск звонков по callTime. Перед отправкой преобразуется в RFC3339 UTC, например 2021-01-02T00:00:00Z.',
 		displayOptions: { show: { resource: ['callTracking'], operation: ['getCalls'] } },
 	},
 	{
@@ -63,7 +64,8 @@ export const callTrackingFields: INodeProperties[] = [
 		name: 'callTrackingDateTimeTo',
 		type: 'dateTime',
 		default: '',
-		description: 'Время, до которого нужно искать звонки по callTime. Перед отправкой преобразуется в RFC3339 UTC. Если не указано, Avito использует dateTimeFrom + 1 месяц. Максимум dateTimeFrom + 3 месяца.',
+		description:
+			'Время, до которого нужно искать звонки по callTime. Перед отправкой преобразуется в RFC3339 UTC. Если не указано, Avito использует dateTimeFrom + 1 месяц. Максимум dateTimeFrom + 3 месяца.',
 		displayOptions: { show: { resource: ['callTracking'], operation: ['getCalls'] } },
 	},
 	{
@@ -105,7 +107,8 @@ export const callTrackingFields: INodeProperties[] = [
 		name: 'fileName',
 		type: 'string',
 		default: '',
-		description: 'Имя файла для аудиозаписи. Если не указано, будет использовано call-{callId}.mp3.',
+		description:
+			'Имя файла для аудиозаписи. Если не указано, будет использовано call-{callId}.mp3.',
 		placeholder: 'call-record.mp3',
 		displayOptions: { show: { resource: ['callTracking'], operation: ['getRecordByCallId'] } },
 	},
@@ -114,7 +117,8 @@ export const callTrackingFields: INodeProperties[] = [
 		name: 'enableCallTrackingDelay',
 		type: 'boolean',
 		default: false,
-		description: 'Whether to add a delay before each CallTracking request after the first input item',
+		description:
+			'Whether to add a delay before each CallTracking request after the first input item',
 		hint: 'По документации getCallById/getCalls ограничены 5 запросами/мин, getRecordByCallId - 50 запросами/мин.',
 		displayOptions: { show: { resource: ['callTracking'] } },
 	},
@@ -131,7 +135,8 @@ export const callTrackingFields: INodeProperties[] = [
 		displayOptions: { show: { resource: ['callTracking'], enableCallTrackingDelay: [true] } },
 	},
 	{
-		displayName: '<b>CallTracking API Avito</b><br><br>Методы работают через OAuth Client Credentials.<br><br><b>Лимиты по документации:</b><br>• Звонок по ID: 5 запросов/мин<br>• Звонки по времени: 5 запросов/мин<br>• Аудиозапись звонка: 50 запросов/мин<br><br><b>Аудиозаписи:</b><br>• Доступны в течение 3 месяцев после завершения звонка<br>• Обычно становятся доступны с задержкой до 30 минут<br>• Endpoint может вернуть 425 Too Early, если запись еще не готова<br>• Ответ сохраняется в binary-поле как audio/mpeg',
+		displayName:
+			'<b>CallTracking API Avito</b><br><br>Методы работают через OAuth Client Credentials.<br><br><b>Лимиты по документации:</b><br>• Звонок по ID: 5 запросов/мин<br>• Звонки по времени: 5 запросов/мин<br>• Аудиозапись звонка: 50 запросов/мин<br><br><b>Аудиозаписи:</b><br>• Доступны в течение 3 месяцев после завершения звонка<br>• Обычно становятся доступны с задержкой до 30 минут<br>• Endpoint может вернуть 425 Too Early, если запись еще не готова<br>• Ответ сохраняется в binary-поле как audio/mpeg',
 		name: 'callTrackingInfoNotice',
 		type: 'notice',
 		default: '',

@@ -24,6 +24,12 @@ export const specialOffersOperations: INodeProperties[] = [
 				action: 'Get special offers tariff information',
 			},
 			{
+				name: 'Подтвердить И Оплатить Рассылку',
+				value: 'openApiMultiConfirm',
+				description: 'Подтвердить отправку рассылки и оплатить ее из кошелька Авито',
+				action: 'Confirm and pay special offers dispatches',
+			},
+			{
 				name: 'Создать Рассылку',
 				value: 'openApiMultiCreate',
 				description: 'Создать рассылку по нескольким объявлениям с фиксацией аудитории',
@@ -34,12 +40,6 @@ export const specialOffersOperations: INodeProperties[] = [
 				value: 'openApiStats',
 				description: 'Получить статистику по отправленным рассылкам за период',
 				action: 'Get special offers statistics',
-			},
-			{
-				name: 'Подтвердить И Оплатить Рассылку',
-				value: 'openApiMultiConfirm',
-				description: 'Подтвердить отправку рассылки и оплатить ее из кошелька Авито',
-				action: 'Confirm and pay special offers dispatches',
 			},
 		],
 	},
@@ -89,7 +89,6 @@ export const specialOffersFields: INodeProperties[] = [
 						required: true,
 						default: 0,
 						typeOptions: { minValue: 1 },
-						description: 'ID рассылки',
 					},
 					{
 						displayName: 'Slug Предложения',
@@ -115,7 +114,8 @@ export const specialOffersFields: INodeProperties[] = [
 						type: 'number',
 						default: 0,
 						typeOptions: { minValue: 0 },
-						description: 'Финальный размер скидки. Используется только для discount-предложений; 0 не отправляется.',
+						description:
+							'Финальный размер скидки. Используется только для discount-предложений; 0 не отправляется.',
 					},
 				],
 			},
@@ -156,7 +156,8 @@ export const specialOffersFields: INodeProperties[] = [
 		displayOptions: { show: { resource: specialOffersResource, operation: ['openApiStats'] } },
 	},
 	{
-		displayName: '<b>Информация о Special Offers API Avito</b><br><br><b>Методы:</b><br>• <code>POST /special-offers/v1/available</code> - доступность услуги по объявлениям<br>• <code>POST /special-offers/v1/multiCreate</code> - создание рассылки<br>• <code>POST /special-offers/v1/multiConfirm</code> - подтверждение и оплата<br>• <code>POST /special-offers/v1/stats</code> - статистика рассылок<br>• <code>POST /special-offers/v1/tariffInfo</code> - остаток рассылок в тарифе<br><br><b>Scope:</b> <code>special_offers:sending</code><br><br><b>Важно:</b> API находится в beta-version. Подтверждение рассылки списывает деньги из кошелька Авито либо использует сообщения из тарифа.',
+		displayName:
+			'<b>Информация о Special Offers API Avito</b><br><br><b>Методы:</b><br>• <code>POST /special-offers/v1/available</code> - доступность услуги по объявлениям<br>• <code>POST /special-offers/v1/multiCreate</code> - создание рассылки<br>• <code>POST /special-offers/v1/multiConfirm</code> - подтверждение и оплата<br>• <code>POST /special-offers/v1/stats</code> - статистика рассылок<br>• <code>POST /special-offers/v1/tariffInfo</code> - остаток рассылок в тарифе<br><br><b>Scope:</b> <code>special_offers:sending</code><br><br><b>Важно:</b> API находится в beta-version. Подтверждение рассылки списывает деньги из кошелька Авито либо использует сообщения из тарифа.',
 		name: 'specialOffersInfoNotice',
 		type: 'notice',
 		default: '',

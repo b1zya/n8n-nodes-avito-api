@@ -9,7 +9,7 @@ import { avitoApiRequest } from '../GenericFunctions';
 export async function getRatingInfo(this: IExecuteFunctions, itemIndex: number) {
 	// Эта операция не требует дополнительных параметров
 	// Просто выполняем запрос к API рейтингов
-	
+
 	return await avitoApiRequest.call(
 		this,
 		'GET',

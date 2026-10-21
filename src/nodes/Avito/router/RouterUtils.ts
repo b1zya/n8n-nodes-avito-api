@@ -129,11 +129,9 @@ export async function routeItemOperation(
 		case 'accountSpendings':
 			return await accountSpendings.call(this, itemIndex);
 		default:
-			throw new NodeOperationError(
-				this.getNode(),
-				`Unknown item operation: ${operation}`,
-				{ itemIndex },
-			);
+			throw new NodeOperationError(this.getNode(), `Unknown item operation: ${operation}`, {
+				itemIndex,
+			});
 	}
 }
 
@@ -158,11 +156,9 @@ export async function routePromotionOperation(
 		case 'listOrders':
 			return await listOrders.call(this, itemIndex);
 		default:
-			throw new NodeOperationError(
-				this.getNode(),
-				`Unknown promotion operation: ${operation}`,
-				{ itemIndex },
-			);
+			throw new NodeOperationError(this.getNode(), `Unknown promotion operation: ${operation}`, {
+				itemIndex,
+			});
 	}
 }
 
@@ -179,11 +175,9 @@ export async function routeUserOperation(
 		case 'postOperationsHistory':
 			return await postOperationsHistory.call(this, itemIndex);
 		default:
-			throw new NodeOperationError(
-				this.getNode(),
-				`Unknown user operation: ${operation}`,
-				{ itemIndex },
-			);
+			throw new NodeOperationError(this.getNode(), `Unknown user operation: ${operation}`, {
+				itemIndex,
+			});
 	}
 }
 
@@ -260,11 +254,9 @@ export async function routeRatingsOperation(
 		case 'removeAnswer':
 			return await removeAnswer.call(this, itemIndex);
 		default:
-			throw new NodeOperationError(
-				this.getNode(),
-				`Unknown ratings operation: ${operation}`,
-				{ itemIndex },
-			);
+			throw new NodeOperationError(this.getNode(), `Unknown ratings operation: ${operation}`, {
+				itemIndex,
+			});
 	}
 }
 
@@ -310,11 +302,9 @@ export async function routeAutoloadOperation(
 		case 'getAvitoIdsByAdIds':
 			return await getAvitoIdsByAdIds.call(this, itemIndex);
 		default:
-			throw new NodeOperationError(
-				this.getNode(),
-				`Unknown autoload operation: ${operation}`,
-				{ itemIndex },
-			);
+			throw new NodeOperationError(this.getNode(), `Unknown autoload operation: ${operation}`, {
+				itemIndex,
+			});
 	}
 }
 
@@ -327,11 +317,9 @@ export async function routeTariffOperation(
 		case 'getTariffInfo':
 			return await getTariffInfo.call(this, itemIndex);
 		default:
-			throw new NodeOperationError(
-				this.getNode(),
-				`Unknown tariff operation: ${operation}`,
-				{ itemIndex },
-			);
+			throw new NodeOperationError(this.getNode(), `Unknown tariff operation: ${operation}`, {
+				itemIndex,
+			});
 	}
 }
 
@@ -384,11 +372,9 @@ export async function routeCpaOperation(
 		case 'getPhonesInfoFromChats':
 			return await getPhonesInfoFromChats.call(this, itemIndex);
 		default:
-			throw new NodeOperationError(
-				this.getNode(),
-				`Unknown CPA operation: ${operation}`,
-				{ itemIndex },
-			);
+			throw new NodeOperationError(this.getNode(), `Unknown CPA operation: ${operation}`, {
+				itemIndex,
+			});
 	}
 }
 
@@ -408,11 +394,9 @@ export async function routeCallTrackingOperation(
 		case 'getRecordByCallId':
 			return await getRecordByCallId.call(this, itemIndex);
 		default:
-			throw new NodeOperationError(
-				this.getNode(),
-				`Unknown CallTracking operation: ${operation}`,
-				{ itemIndex },
-			);
+			throw new NodeOperationError(this.getNode(), `Unknown CallTracking operation: ${operation}`, {
+				itemIndex,
+			});
 	}
 }
 
@@ -452,10 +436,8 @@ export async function routeMessengerOperation(
 		case 'uploadImages':
 			return await uploadImages.call(this, itemIndex);
 		default:
-			throw new NodeOperationError(
-				this.getNode(),
-				`Unknown Messenger operation: ${operation}`,
-				{ itemIndex },
-			);
+			throw new NodeOperationError(this.getNode(), `Unknown Messenger operation: ${operation}`, {
+				itemIndex,
+			});
 	}
 }

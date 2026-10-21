@@ -9,9 +9,13 @@ import type { AdditionalHeadersData } from '../types/AvitoTypes';
  */
 export async function getCategoryTree(this: IExecuteFunctions, itemIndex: number) {
 	// Получаем дополнительные заголовки из фиксированной коллекции
-	const additionalHeadersData = this.getNodeParameter('additionalHeaders', itemIndex, {}) as AdditionalHeadersData;
+	const additionalHeadersData = this.getNodeParameter(
+		'additionalHeaders',
+		itemIndex,
+		{},
+	) as AdditionalHeadersData;
 	const additionalHeaders: Record<string, string> = {};
-	
+
 	// Преобразуем fixedCollection в объект заголовков
 	if (additionalHeadersData.parameter && Array.isArray(additionalHeadersData.parameter)) {
 		for (const header of additionalHeadersData.parameter) {

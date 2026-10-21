@@ -3,7 +3,6 @@ import { NodeOperationError } from 'n8n-workflow';
 import { avitoApiRequest } from '../GenericFunctions';
 import type { DynamicRequestBody } from '../types/AvitoTypes';
 
-
 export async function applyVas(this: IExecuteFunctions, itemIndex: number) {
 	const itemId = this.getNodeParameter('itemId', itemIndex) as number;
 	const slugs = (this.getNodeParameter('slugs', itemIndex) as string)

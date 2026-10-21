@@ -35,11 +35,17 @@ import {
 	accountHierarchyFields,
 } from './Descriptions/AccountHierarchyDescription';
 import { promotionOperations, promotionFields } from './Descriptions/PromotionDescription';
-import { cpxPromoLegacyOperations, cpxPromoLegacyFields } from './Descriptions/CpxPromoLegacyDescription';
+import {
+	cpxPromoLegacyOperations,
+	cpxPromoLegacyFields,
+} from './Descriptions/CpxPromoLegacyDescription';
 import { ratingsOperations, ratingsFields } from './Descriptions/RatingsDescription';
 import { autoloadOperations, autoloadFields } from './Descriptions/AutoloadDescription';
 import { tariffOperations, tariffFields } from './Descriptions/TariffDescription';
-import { specialOffersOperations, specialOffersFields } from './Descriptions/SpecialOffersDescription';
+import {
+	specialOffersOperations,
+	specialOffersFields,
+} from './Descriptions/SpecialOffersDescription';
 import { cpaOperations, cpaFields } from './Descriptions/CpaDescription';
 import { callTrackingOperations, callTrackingFields } from './Descriptions/CallTrackingDescription';
 import { messengerOperations, messengerFields } from './Descriptions/MessengerDescription';
@@ -156,13 +162,20 @@ export class Avito implements INodeType {
 					returnData.push({ json: { error: getErrorMessage(error) }, pairedItem: { item: i } });
 					continue;
 				}
+				// Errors from the helpers already carry their message, description and HTTP details.
+				// Both constructors return an instance of their own class unchanged (and ignore the
+				// options), so set the item index first and pass the error through instead of
+				// rebuilding it from its message. Every API call is wrapped in NodeApiError by then,
+				// so anything else is a parameter or code error, reported as NodeOperationError.
 				if (error instanceof NodeApiError) {
-					throw new NodeApiError(this.getNode(), error as unknown as JsonObject, { itemIndex: i });
+					error.context.itemIndex = i;
+					throw new NodeApiError(this.getNode(), error as unknown as JsonObject);
 				}
 				if (error instanceof NodeOperationError) {
-					throw new NodeOperationError(this.getNode(), error.message, { itemIndex: i });
+					error.context.itemIndex = i;
+					throw new NodeOperationError(this.getNode(), error);
 				}
-				throw new NodeApiError(this.getNode(), error as JsonObject, { itemIndex: i });
+				throw new NodeOperationError(this.getNode(), error as Error, { itemIndex: i });
 			}
 		}
 		return [returnData];
