@@ -16,15 +16,17 @@ export async function createAnswer(this: IExecuteFunctions, itemIndex: number) {
 
 	// Дополнительная валидация текста ответа
 	if (!answerText.trim()) {
-		throw new NodeOperationError(this.getNode(), 'Текст ответа не может быть пустым', { itemIndex });
+		throw new NodeOperationError(this.getNode(), 'Текст ответа не может быть пустым', {
+			itemIndex,
+		});
 	}
 
 	// Проверка длины текста (разумные ограничения)
 	if (answerText.length > 4000) {
 		throw new NodeOperationError(
-			this.getNode(), 
-			'Текст ответа слишком длинный (максимум 4000 символов)', 
-			{ itemIndex }
+			this.getNode(),
+			'Текст ответа слишком длинный (максимум 4000 символов)',
+			{ itemIndex },
 		);
 	}
 

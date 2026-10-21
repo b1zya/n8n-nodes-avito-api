@@ -13,9 +13,13 @@ export async function openApiMultiConfirm(this: IExecuteFunctions, itemIndex: nu
 	const expiresAt = Number(this.getNodeParameter('specialOffersExpiresAt', itemIndex, 0));
 
 	if (!Number.isInteger(expiresAt) || expiresAt < 0) {
-		throw new NodeOperationError(this.getNode(), 'Дата окончания предложения должна быть Unix timestamp >= 0', {
-			itemIndex,
-		});
+		throw new NodeOperationError(
+			this.getNode(),
+			'Дата окончания предложения должна быть Unix timestamp >= 0',
+			{
+				itemIndex,
+			},
+		);
 	}
 
 	const body: IDataObject = { dispatches };

@@ -35,11 +35,17 @@ import {
 	accountHierarchyFields,
 } from './Descriptions/AccountHierarchyDescription';
 import { promotionOperations, promotionFields } from './Descriptions/PromotionDescription';
-import { cpxPromoLegacyOperations, cpxPromoLegacyFields } from './Descriptions/CpxPromoLegacyDescription';
+import {
+	cpxPromoLegacyOperations,
+	cpxPromoLegacyFields,
+} from './Descriptions/CpxPromoLegacyDescription';
 import { ratingsOperations, ratingsFields } from './Descriptions/RatingsDescription';
 import { autoloadOperations, autoloadFields } from './Descriptions/AutoloadDescription';
 import { tariffOperations, tariffFields } from './Descriptions/TariffDescription';
-import { specialOffersOperations, specialOffersFields } from './Descriptions/SpecialOffersDescription';
+import {
+	specialOffersOperations,
+	specialOffersFields,
+} from './Descriptions/SpecialOffersDescription';
 import { cpaOperations, cpaFields } from './Descriptions/CpaDescription';
 import { callTrackingOperations, callTrackingFields } from './Descriptions/CallTrackingDescription';
 import { messengerOperations, messengerFields } from './Descriptions/MessengerDescription';

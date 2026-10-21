@@ -1,5 +1,10 @@
 import type { IExecuteFunctions, IDataObject } from 'n8n-workflow';
-import { cpaApiRequest, validateDateTime, validateNonNegativeInteger, validatePositiveInteger } from './CpaUtils';
+import {
+	cpaApiRequest,
+	validateDateTime,
+	validateNonNegativeInteger,
+	validatePositiveInteger,
+} from './CpaUtils';
 
 /**
  * Получение списка CPA-звонков по времени создания.

@@ -18,7 +18,8 @@ export const userOperations: INodeProperties[] = [
 			{
 				name: 'Информация Об Авторизованном Пользователе',
 				value: 'getUserInfoSelf',
-				description: 'Получение идентификатора и регистрационных данных авторизованного пользователя',
+				description:
+					'Получение идентификатора и регистрационных данных авторизованного пользователя',
 				action: 'Get authorized user information',
 			},
 			{
@@ -59,11 +60,13 @@ export const userFields: INodeProperties[] = [
 		type: 'dateTime',
 		required: true,
 		default: '',
-		description: 'Конец периода истории операций. Диапазон между датами должен быть не более одной недели.',
+		description:
+			'Конец периода истории операций. Диапазон между датами должен быть не более одной недели.',
 		displayOptions: { show: { resource: ['user'], operation: ['postOperationsHistory'] } },
 	},
 	{
-		displayName: '<b>Информация о User API Avito</b><br><br><b>Методы:</b><br>• <code>GET /core/v1/accounts/self</code> - данные авторизованного пользователя<br>• <code>GET /core/v1/accounts/{user_id}/balance/</code> - текущий баланс кошелька<br>• <code>POST /core/v1/accounts/operations_history/</code> - история операций кошелька<br><br><b>Scopes:</b><br>• <code>user:read</code> - информация о пользователе<br>• <code>user_balance:read</code> - баланс кошелька<br>• <code>user_operations:read</code> - история операций<br><br><b>Важно:</b> CPA-баланс находится в отдельном ресурсе CPA и запрашивается через <code>/cpa/v3/balanceInfo</code>.',
+		displayName:
+			'<b>Информация о User API Avito</b><br><br><b>Методы:</b><br>• <code>GET /core/v1/accounts/self</code> - данные авторизованного пользователя<br>• <code>GET /core/v1/accounts/{user_id}/balance/</code> - текущий баланс кошелька<br>• <code>POST /core/v1/accounts/operations_history/</code> - история операций кошелька<br><br><b>Scopes:</b><br>• <code>user:read</code> - информация о пользователе<br>• <code>user_balance:read</code> - баланс кошелька<br>• <code>user_operations:read</code> - история операций<br><br><b>Важно:</b> CPA-баланс находится в отдельном ресурсе CPA и запрашивается через <code>/cpa/v3/balanceInfo</code>.',
 		name: 'userInfoNotice',
 		type: 'notice',
 		default: '',

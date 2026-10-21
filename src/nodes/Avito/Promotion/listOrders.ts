@@ -1,5 +1,9 @@
 import type { IExecuteFunctions, IDataObject } from 'n8n-workflow';
-import { getPromotionAhEmployeeId, promotionApiRequest, validatePositiveInteger } from './PromotionUtils';
+import {
+	getPromotionAhEmployeeId,
+	promotionApiRequest,
+	validatePositiveInteger,
+} from './PromotionUtils';
 
 export async function listOrders(this: IExecuteFunctions, itemIndex: number): Promise<IDataObject> {
 	const page = this.getNodeParameter('promotionOrdersPage', itemIndex, 1) as number;

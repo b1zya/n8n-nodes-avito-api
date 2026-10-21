@@ -44,7 +44,8 @@ export const promotionOperations: INodeProperties[] = [
 			{
 				name: 'Активные Услуги По Объявлениям',
 				value: 'getServicesByItems',
-				description: 'Получение списка активных услуг продвижения по объявлениям (v2). При degraded: true ответ может быть неполным.',
+				description:
+					'Получение списка активных услуг продвижения по объявлениям (v2). При degraded: true ответ может быть неполным.',
 				action: 'Get active promotion services by items',
 			},
 			{
@@ -75,7 +76,8 @@ export const promotionFields: INodeProperties[] = [
 		name: 'promotionAhEmployeeId',
 		type: 'number',
 		default: 0,
-		description: 'Идентификатор сотрудника в иерархии аккаунтов, от имени которого выполняется запрос. Оставьте 0, чтобы работать от личного аккаунта.',
+		description:
+			'Идентификатор сотрудника в иерархии аккаунтов, от имени которого выполняется запрос. Оставьте 0, чтобы работать от личного аккаунта.',
 		hint: 'Это employeeId из «Иерархия Аккаунтов → Сотрудники Иерархии», а не ID компании. С 29.09.2026 методы продвижения принимают только X-Ah-Employee-Id, X-Employee-Of здесь не используется. Для подключения услуг от имени сотрудника нужен достаточный баланс «Лимит на продвижение», может понадобиться scope ah:access.',
 		typeOptions: {
 			minValue: 0,
@@ -148,7 +150,8 @@ export const promotionFields: INodeProperties[] = [
 		type: 'json',
 		required: true,
 		default: '[{"itemId":123456,"duration":7,"oldPrice":10000,"price":10000}]',
-		description: 'JSON-массив объектов. Поля: itemId, duration, oldPrice, price. Значения price/oldPrice в копейках за один день.',
+		description:
+			'JSON-массив объектов. Поля: itemId, duration, oldPrice, price. Значения price/oldPrice в копейках за один день.',
 		displayOptions: {
 			show: {
 				resource: promotionResource,
@@ -220,7 +223,8 @@ export const promotionFields: INodeProperties[] = [
 		],
 	},
 	{
-		displayName: '<b>Promotion API v1</b><br><br>Новая версия API управления услугами продвижения. Deprecated VAS-методы из старой Item API здесь не добавляются.<br><br><b>Скоупы:</b><br>• items:info — словарь и список активных услуг<br>• items:apply_bbip — BBIP, заявки и статусы<br>• ah:access — может понадобиться для сценариев иерархии аккаунтов<br><br><b>Лимиты:</b> большинство методов 100 RPM, создание BBIP-заявки 10 RPM.',
+		displayName:
+			'<b>Promotion API v1</b><br><br>Новая версия API управления услугами продвижения. Deprecated VAS-методы из старой Item API здесь не добавляются.<br><br><b>Скоупы:</b><br>• items:info — словарь и список активных услуг<br>• items:apply_bbip — BBIP, заявки и статусы<br>• ah:access — может понадобиться для сценариев иерархии аккаунтов<br><br><b>Лимиты:</b> большинство методов 100 RPM, создание BBIP-заявки 10 RPM.',
 		name: 'promotionV1Notice',
 		type: 'notice',
 		default: '',

@@ -12,23 +12,22 @@ export async function getAvitoIdsByAdIds(this: IExecuteFunctions, itemIndex: num
 
 	// Валидация обязательного параметра
 	if (!adIdsQuery || !adIdsQuery.trim()) {
-		throw new NodeOperationError(
-			this.getNode(),
-			'Укажите ID объявлений из файла автозагрузки',
-			{ itemIndex }
-		);
+		throw new NodeOperationError(this.getNode(), 'Укажите ID объявлений из файла автозагрузки', {
+			itemIndex,
+		});
 	}
 
 	// Дополнительная валидация - проверим что есть хотя бы один ID
 	const cleanQuery = adIdsQuery.trim();
-	const idsArray = cleanQuery.split(/[,|]/).map(id => id.trim()).filter(Boolean);
-	
+	const idsArray = cleanQuery
+		.split(/[,|]/)
+		.map((id) => id.trim())
+		.filter(Boolean);
+
 	if (idsArray.length === 0) {
-		throw new NodeOperationError(
-			this.getNode(),
-			'Укажите хотя бы один ID объявления из файла',
-			{ itemIndex }
-		);
+		throw new NodeOperationError(this.getNode(), 'Укажите хотя бы один ID объявления из файла', {
+			itemIndex,
+		});
 	}
 
 	// Выполняем запрос к API

@@ -54,7 +54,10 @@ export const cpxPromoLegacyFields: INodeProperties[] = [
 		default: 0,
 		required: true,
 		displayOptions: {
-			show: { resource: cpxPromoLegacyResource, operation: ['getBids', 'setManual', 'setAuto', 'remove'] },
+			show: {
+				resource: cpxPromoLegacyResource,
+				operation: ['getBids', 'setManual', 'setAuto', 'remove'],
+			},
 		},
 	},
 	{
@@ -66,7 +69,9 @@ export const cpxPromoLegacyFields: INodeProperties[] = [
 		required: true,
 		placeholder: '123456,789012,345678',
 		hint: 'Legacy CPXPromo endpoint. Не является частью новой Promotion v1 API.',
-		displayOptions: { show: { resource: cpxPromoLegacyResource, operation: ['getPromotionsByItemIds'] } },
+		displayOptions: {
+			show: { resource: cpxPromoLegacyResource, operation: ['getPromotionsByItemIds'] },
+		},
 	},
 	{
 		displayName: 'Ставка (в копейках)',
@@ -85,12 +90,18 @@ export const cpxPromoLegacyFields: INodeProperties[] = [
 		options: [
 			{ name: 'Звонок [1]', value: 1, description: 'Оплата за звонок по объявлению' },
 			{ name: 'Пакет кликов [5]', value: 5, description: 'Оплата за переходы к объявлению' },
-			{ name: 'Мессенджер, передача контакта в чате [7]', value: 7, description: 'Оплата за обращение через чат' },
+			{
+				name: 'Мессенджер, передача контакта в чате [7]',
+				value: 7,
+				description: 'Оплата за обращение через чат',
+			},
 		],
 		default: 5,
 		description: 'Legacy CPXPromo тип целевого действия',
 		required: true,
-		displayOptions: { show: { resource: cpxPromoLegacyResource, operation: ['setManual', 'setAuto'] } },
+		displayOptions: {
+			show: { resource: cpxPromoLegacyResource, operation: ['setManual', 'setAuto'] },
+		},
 	},
 	{
 		displayName: 'Дневной лимит (в копейках)',
@@ -126,7 +137,8 @@ export const cpxPromoLegacyFields: INodeProperties[] = [
 		displayOptions: { show: { resource: cpxPromoLegacyResource, operation: ['setAuto'] } },
 	},
 	{
-		displayName: '<b>CPXPromo Legacy</b><br><br>Эти методы используют endpoint-ы <code>/cpxpromo/1/*</code> и вынесены отдельно, чтобы не смешивать их с новой официальной Promotion v1 API.<br><br><b>Скоупы Authorization Code:</b> cpxpromo:read, cpxpromo:edit.',
+		displayName:
+			'<b>CPXPromo Legacy</b><br><br>Эти методы используют endpoint-ы <code>/cpxpromo/1/*</code> и вынесены отдельно, чтобы не смешивать их с новой официальной Promotion v1 API.<br><br><b>Скоупы Authorization Code:</b> cpxpromo:read, cpxpromo:edit.',
 		name: 'cpxPromoLegacyNotice',
 		type: 'notice',
 		default: '',

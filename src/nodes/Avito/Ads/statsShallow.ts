@@ -3,11 +3,7 @@ import { NodeOperationError } from 'n8n-workflow';
 import { getErrorMessage } from '../types/AvitoTypes';
 import type { DynamicRequestBody } from '../types/AvitoTypes';
 
-import {
-	avitoApiRequest,
-	validateRequiredFields,
-	validateItemIds,
-} from '../GenericFunctions';
+import { avitoApiRequest, validateRequiredFields, validateItemIds } from '../GenericFunctions';
 
 import {
 	toYYYYMMDD,
@@ -22,7 +18,7 @@ export async function statsShallow(this: IExecuteFunctions, itemIndex: number) {
 
 	// «сырые» даты из UI
 	const dateFromRaw = this.getNodeParameter('dateFrom', itemIndex) as string;
-	const dateToRaw   = this.getNodeParameter('dateTo', itemIndex) as string;
+	const dateToRaw = this.getNodeParameter('dateTo', itemIndex) as string;
 
 	// опции с дефолтами
 	const fields = this.getNodeParameter('statsFields', itemIndex, [
@@ -45,7 +41,7 @@ export async function statsShallow(this: IExecuteFunctions, itemIndex: number) {
 	let dateTo = '';
 	try {
 		dateFrom = toYYYYMMDD(dateFromRaw);
-		dateTo   = toYYYYMMDD(dateToRaw);
+		dateTo = toYYYYMMDD(dateToRaw);
 	} catch (e: unknown) {
 		throw new NodeOperationError(this.getNode(), getErrorMessage(e), { itemIndex });
 	}
@@ -82,7 +78,6 @@ export async function statsShallow(this: IExecuteFunctions, itemIndex: number) {
 			{ itemIndex },
 		);
 	}
-
 
 	// 5) валидируем список ID
 	const validItemIds = validateItemIds.call(this, this, itemIndex, itemIds, 200);

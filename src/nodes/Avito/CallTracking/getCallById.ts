@@ -12,5 +12,11 @@ export async function getCallById(this: IExecuteFunctions, itemIndex: number) {
 
 	const body: IDataObject = { callId };
 
-	return await callTrackingApiRequest.call(this, 'POST', '/calltracking/v1/getCallById/', body, itemIndex);
+	return await callTrackingApiRequest.call(
+		this,
+		'POST',
+		'/calltracking/v1/getCallById/',
+		body,
+		itemIndex,
+	);
 }

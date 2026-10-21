@@ -9,5 +9,12 @@ export async function getBids(this: IExecuteFunctions, itemIndex: number) {
 	validateRequiredFields.call(this, this, itemIndex, { itemId });
 
 	// ✅ ИСПРАВЛЕНО: Стандартный запрос вместо кастомной логики
-	return await avitoApiRequest.call(this, 'GET', `/cpxpromo/1/getBids/${itemId}`, undefined, undefined, itemIndex);
+	return await avitoApiRequest.call(
+		this,
+		'GET',
+		`/cpxpromo/1/getBids/${itemId}`,
+		undefined,
+		undefined,
+		itemIndex,
+	);
 }

@@ -1,7 +1,10 @@
 import type { IExecuteFunctions, IDataObject } from 'n8n-workflow';
 import { messengerApiRequest, parseJsonArray, validatePositiveInteger } from './MessengerUtils';
 
-export async function addToBlacklist(this: IExecuteFunctions, itemIndex: number): Promise<IDataObject> {
+export async function addToBlacklist(
+	this: IExecuteFunctions,
+	itemIndex: number,
+): Promise<IDataObject> {
 	const userId = this.getNodeParameter('messengerUserId', itemIndex) as number;
 	const usersJson = this.getNodeParameter('messengerBlacklistUsers', itemIndex) as string;
 

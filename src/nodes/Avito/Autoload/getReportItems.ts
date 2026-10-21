@@ -2,7 +2,11 @@ import type { IExecuteFunctions, IDataObject } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
 import { avitoApiRequest, validateRequiredFields } from '../GenericFunctions';
 import { getErrorMessage } from '../types/AvitoTypes';
-import type { PaginatedQueryParams, ReportItemsFilters, ReportItemsResponse } from '../types/AvitoTypes';
+import type {
+	PaginatedQueryParams,
+	ReportItemsFilters,
+	ReportItemsResponse,
+} from '../types/AvitoTypes';
 
 /**
  * Детализированные результаты выгрузки объявлений с пагинацией
@@ -27,18 +31,27 @@ export async function getReportItems(this: IExecuteFunctions, itemIndex: number)
 	const filters = this.getNodeParameter('itemsFilters', itemIndex, {}) as ReportItemsFilters;
 
 	// Параметры пагинации
-	const enablePagination = this.getNodeParameter('itemsEnablePagination', itemIndex, false) as boolean;
-	const paginationType = this.getNodeParameter('itemsPaginationType', itemIndex, 'all') as 'all' | 'limit';
+	const enablePagination = this.getNodeParameter(
+		'itemsEnablePagination',
+		itemIndex,
+		false,
+	) as boolean;
+	const paginationType = this.getNodeParameter('itemsPaginationType', itemIndex, 'all') as
+		'all' | 'limit';
 	const maxPages = this.getNodeParameter('itemsMaxPages', itemIndex, 20) as number;
 
 	// Валидация
 	validateRequiredFields.call(this, this, itemIndex, { reportId });
 
 	if (page < 0) {
-		throw new NodeOperationError(this.getNode(), 'Номер страницы должен быть больше или равен 0', { itemIndex });
+		throw new NodeOperationError(this.getNode(), 'Номер страницы должен быть больше или равен 0', {
+			itemIndex,
+		});
 	}
 	if (perPage < 1 || perPage > 200) {
-		throw new NodeOperationError(this.getNode(), 'Количество на странице должно быть от 1 до 200', { itemIndex });
+		throw new NodeOperationError(this.getNode(), 'Количество на странице должно быть от 1 до 200', {
+			itemIndex,
+		});
 	}
 
 	// Формируем параметры запроса
@@ -74,14 +87,14 @@ async function executeSingleItemsRequest(
 	startTime: number,
 ): Promise<IDataObject> {
 	// ✅ ИСПРАВЛЕНО: Правильная версия API v2 вместо v1
-	const response = await avitoApiRequest.call(
+	const response = (await avitoApiRequest.call(
 		context,
 		'GET',
 		`/autoload/v2/reports/${reportId}/items`,
 		undefined,
 		queryParams,
 		itemIndex,
-	) as ReportItemsResponse;
+	)) as ReportItemsResponse;
 
 	if (!response || !Array.isArray(response.items)) {
 		throw new NodeOperationError(context.getNode(), 'Получен некорректный ответ от Avito API', {
@@ -94,7 +107,7 @@ async function executeSingleItemsRequest(
 	return {
 		...(response as Record<string, unknown>),
 		meta: {
-			...(response.meta as Record<string, unknown> || {}),
+			...((response.meta as Record<string, unknown>) || {}),
 			pagination_enabled: false,
 			execution_time_ms: executionTime,
 			single_request: true,
@@ -131,14 +144,14 @@ async function executePaginatedItemsRequest(
 			};
 
 			// ✅ ИСПРАВЛЕНО: Правильная версия API v2 вместо v1
-			const response = await avitoApiRequest.call(
+			const response = (await avitoApiRequest.call(
 				context,
 				'GET',
-				`/autoload/v2/reports/${reportId}/items`,  // Было: `/autoload/v1/reports/${reportId}/items`
+				`/autoload/v2/reports/${reportId}/items`, // Было: `/autoload/v1/reports/${reportId}/items`
 				undefined,
 				queryParams,
 				itemIndex,
-			) as ReportItemsResponse;
+			)) as ReportItemsResponse;
 
 			if (!response || !Array.isArray(response.items)) {
 				break;
@@ -157,7 +170,7 @@ async function executePaginatedItemsRequest(
 			// Проверяем условия остановки
 			const receivedCount = response.items?.length ?? 0;
 			const isLastPage = receivedCount < (baseQueryParams.per_page ?? 50);
-			
+
 			if (isLastPage) {
 				break;
 			}

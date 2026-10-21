@@ -1,5 +1,9 @@
 import type { IExecuteFunctions, INodeExecutionData } from 'n8n-workflow';
-import { callTrackingBinaryRequest, validatePositiveInteger, validateRequiredString } from './CallTrackingUtils';
+import {
+	callTrackingBinaryRequest,
+	validatePositiveInteger,
+	validateRequiredString,
+} from './CallTrackingUtils';
 
 /**
  * Получение audio/mpeg записи звонка по callId.
@@ -11,7 +15,11 @@ export async function getRecordByCallId(
 	itemIndex: number,
 ): Promise<INodeExecutionData> {
 	const callId = this.getNodeParameter('callTrackingCallId', itemIndex) as number;
-	const binaryPropertyName = this.getNodeParameter('binaryPropertyName', itemIndex, 'record') as string;
+	const binaryPropertyName = this.getNodeParameter(
+		'binaryPropertyName',
+		itemIndex,
+		'record',
+	) as string;
 	const fileNameParameter = this.getNodeParameter('fileName', itemIndex, '') as string;
 
 	validatePositiveInteger(this, itemIndex, 'callId', callId);

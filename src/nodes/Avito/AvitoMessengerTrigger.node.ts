@@ -30,7 +30,7 @@ async function avitoHookRequest<T extends IDataObject = IDataObject>(
 	};
 
 	try {
-		return await context.helpers.httpRequestWithAuthentication.call(
+		return (await context.helpers.httpRequestWithAuthentication.call(
 			context,
 			'avitoOAuth2Api',
 			options,
@@ -41,7 +41,7 @@ async function avitoHookRequest<T extends IDataObject = IDataObject>(
 					keepBearer: true,
 				},
 			},
-		) as T;
+		)) as T;
 	} catch (error: unknown) {
 		throw new NodeApiError(context.getNode(), error as JsonObject);
 	}
@@ -112,10 +112,12 @@ export class AvitoMessengerTrigger implements INodeType {
 				name: 'autoRegister',
 				type: 'boolean',
 				default: true,
-				description: 'Whether to subscribe/unsubscribe the production webhook URL in Avito when the workflow is activated/deactivated',
+				description:
+					'Whether to subscribe/unsubscribe the production webhook URL in Avito when the workflow is activated/deactivated',
 			},
 			{
-				displayName: '<b>Avito Messenger Webhook V3</b><br><br>При активации workflow node регистрирует production URL через <code>POST /messenger/v3/webhook</code>, а при деактивации отключает его через <code>POST /messenger/v1/webhook/unsubscribe</code>.<br><br>По документации Avito URL должен быть публично доступен и отвечать HTTP 200 за 2 секунды.',
+				displayName:
+					'<b>Avito Messenger Webhook V3</b><br><br>При активации workflow node регистрирует production URL через <code>POST /messenger/v3/webhook</code>, а при деактивации отключает его через <code>POST /messenger/v1/webhook/unsubscribe</code>.<br><br>По документации Avito URL должен быть публично доступен и отвечать HTTP 200 за 2 секунды.',
 				name: 'webhookNotice',
 				type: 'notice',
 				default: '',
@@ -134,14 +136,15 @@ export class AvitoMessengerTrigger implements INodeType {
 				}
 
 				const webhookUrl = getWebhookUrl(this);
-				const response = await avitoHookRequest(
-					this,
-					'POST',
-					'/messenger/v1/subscriptions',
-				);
-				const subscriptions = response.subscriptions as Array<{ url?: string; version?: string }> | undefined;
+				const response = await avitoHookRequest(this, 'POST', '/messenger/v1/subscriptions');
+				const subscriptions = response.subscriptions as
+					Array<{ url?: string; version?: string }> | undefined;
 
-				return subscriptions?.some((subscription) => subscription.url === webhookUrl && subscription.version === '3') ?? false;
+				return (
+					subscriptions?.some(
+						(subscription) => subscription.url === webhookUrl && subscription.version === '3',
+					) ?? false
+				);
 			},
 			async create(this: IHookFunctions): Promise<boolean> {
 				const autoRegister = this.getNodeParameter('autoRegister', true) as boolean;
@@ -150,12 +153,7 @@ export class AvitoMessengerTrigger implements INodeType {
 					return true;
 				}
 
-				await avitoHookRequest(
-					this,
-					'POST',
-					'/messenger/v3/webhook',
-					{ url: getWebhookUrl(this) },
-				);
+				await avitoHookRequest(this, 'POST', '/messenger/v3/webhook', { url: getWebhookUrl(this) });
 
 				return true;
 			},
@@ -166,12 +164,9 @@ export class AvitoMessengerTrigger implements INodeType {
 					return true;
 				}
 
-				await avitoHookRequest(
-					this,
-					'POST',
-					'/messenger/v1/webhook/unsubscribe',
-					{ url: getWebhookUrl(this) },
-				);
+				await avitoHookRequest(this, 'POST', '/messenger/v1/webhook/unsubscribe', {
+					url: getWebhookUrl(this),
+				});
 
 				return true;
 			},

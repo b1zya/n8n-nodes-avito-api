@@ -16,31 +16,28 @@ export async function getAutoloadItemsInfoV2(this: IExecuteFunctions, itemIndex:
 
 	// Валидация обязательного параметра
 	if (!autoloadItemsQuery || !autoloadItemsQuery.trim()) {
-		throw new NodeOperationError(
-			this.getNode(),
-			'Укажите ID объявлений из файла автозагрузки',
-			{ itemIndex }
-		);
+		throw new NodeOperationError(this.getNode(), 'Укажите ID объявлений из файла автозагрузки', {
+			itemIndex,
+		});
 	}
 
 	// Дополнительная валидация - проверим количество ID (максимум 100)
 	const cleanQuery = autoloadItemsQuery.trim();
-	const idsArray = cleanQuery.split(/[,|]/).map(id => id.trim()).filter(Boolean);
-	
+	const idsArray = cleanQuery
+		.split(/[,|]/)
+		.map((id) => id.trim())
+		.filter(Boolean);
+
 	if (idsArray.length === 0) {
-		throw new NodeOperationError(
-			this.getNode(),
-			'Укажите хотя бы один ID объявления',
-			{ itemIndex }
-		);
+		throw new NodeOperationError(this.getNode(), 'Укажите хотя бы один ID объявления', {
+			itemIndex,
+		});
 	}
 
 	if (idsArray.length > 100) {
-		throw new NodeOperationError(
-			this.getNode(),
-			'Максимум 100 ID объявлений за один запрос',
-			{ itemIndex }
-		);
+		throw new NodeOperationError(this.getNode(), 'Максимум 100 ID объявлений за один запрос', {
+			itemIndex,
+		});
 	}
 
 	// Выполняем запрос к API

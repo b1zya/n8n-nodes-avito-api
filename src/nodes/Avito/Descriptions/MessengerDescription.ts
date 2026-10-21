@@ -187,7 +187,8 @@ export const messengerFields: INodeProperties[] = [
 		name: 'messengerItemIds',
 		type: 'string',
 		default: '',
-		description: 'Получение чатов только по объявлениям с указанными item_id. Передавайте через запятую.',
+		description:
+			'Получение чатов только по объявлениям с указанными item_id. Передавайте через запятую.',
 		placeholder: '12345,6789',
 		displayOptions: { show: { resource: messengerResource, operation: ['getChats'] } },
 	},
@@ -223,7 +224,9 @@ export const messengerFields: INodeProperties[] = [
 			minValue: 1,
 			maxValue: 100,
 		},
-		displayOptions: { show: { resource: messengerResource, operation: ['getChats', 'getMessages'] } },
+		displayOptions: {
+			show: { resource: messengerResource, operation: ['getChats', 'getMessages'] },
+		},
 	},
 	{
 		displayName: 'Смещение',
@@ -236,7 +239,9 @@ export const messengerFields: INodeProperties[] = [
 			minValue: 0,
 			maxValue: 1000,
 		},
-		displayOptions: { show: { resource: messengerResource, operation: ['getChats', 'getMessages'] } },
+		displayOptions: {
+			show: { resource: messengerResource, operation: ['getChats', 'getMessages'] },
+		},
 	},
 	{
 		displayName: 'Binary Property',
@@ -265,11 +270,13 @@ export const messengerFields: INodeProperties[] = [
 		type: 'json',
 		required: true,
 		default: '[{"user_id":94235311,"context":{"item_id":0,"reason_id":1}}]',
-		description: 'Массив users для blacklist. Документированные reason_id: 1 спам, 2 мошенничество, 3 оскорбления, 4 другая причина.',
+		description:
+			'Массив users для blacklist. Документированные reason_id: 1 спам, 2 мошенничество, 3 оскорбления, 4 другая причина.',
 		displayOptions: { show: { resource: messengerResource, operation: ['addToBlacklist'] } },
 	},
 	{
-		displayName: '<b>Messenger API Avito</b><br><br>Методы работают только для основного аккаунта компании. Для webhook-подписок Avito требует публичный URL, который отвечает HTTP 200 за 2 секунды.<br><br><b>Скоупы:</b><br>• messenger:read — чтение чатов, сообщений, голосовых файлов и управление webhook-подписками<br>• messenger:write — отправка/удаление сообщений, загрузка изображений, blacklist<br><br><b>Изображения:</b> uploadImages принимает одно binary-изображение до 24 МБ.',
+		displayName:
+			'<b>Messenger API Avito</b><br><br>Методы работают только для основного аккаунта компании. Для webhook-подписок Avito требует публичный URL, который отвечает HTTP 200 за 2 секунды.<br><br><b>Скоупы:</b><br>• messenger:read — чтение чатов, сообщений, голосовых файлов и управление webhook-подписками<br>• messenger:write — отправка/удаление сообщений, загрузка изображений, blacklist<br><br><b>Изображения:</b> uploadImages принимает одно binary-изображение до 24 МБ.',
 		name: 'messengerInfoNotice',
 		type: 'notice',
 		default: '',

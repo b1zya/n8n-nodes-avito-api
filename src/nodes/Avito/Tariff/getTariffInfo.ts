@@ -7,12 +7,5 @@ import { avitoApiRequest } from '../GenericFunctions';
  * Auth: ClientCredentials
  */
 export async function getTariffInfo(this: IExecuteFunctions, itemIndex: number) {
-	return await avitoApiRequest.call(
-		this,
-		'GET',
-		'/tariff/info/1',
-		undefined,
-		undefined,
-		itemIndex,
-	);
+	return await avitoApiRequest.call(this, 'GET', '/tariff/info/1', undefined, undefined, itemIndex);
 }

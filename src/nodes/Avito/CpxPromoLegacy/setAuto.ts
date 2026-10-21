@@ -11,7 +11,12 @@ export async function setAuto(this: IExecuteFunctions, itemIndex: number) {
 	const actionTypeId = this.getNodeParameter('actionTypeId', itemIndex) as number;
 
 	// ИСПРАВЛЕНО: Валидация через стандартные функции
-	validateRequiredFields.call(this, this, itemIndex, { itemId, budgetPenny, budgetType, actionTypeId });
+	validateRequiredFields.call(this, this, itemIndex, {
+		itemId,
+		budgetPenny,
+		budgetType,
+		actionTypeId,
+	});
 
 	// ПРОВЕРКА: Дополнительная валидация бюджета
 	if (budgetPenny <= 0) {

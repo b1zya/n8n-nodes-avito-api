@@ -22,5 +22,11 @@ export async function createActionComplaint(this: IExecuteFunctions, itemIndex: 
 		message,
 	};
 
-	return await cpaApiRequest.call(this, 'POST', '/cpa/v1/createComplaintByActionId', body, itemIndex);
+	return await cpaApiRequest.call(
+		this,
+		'POST',
+		'/cpa/v1/createComplaintByActionId',
+		body,
+		itemIndex,
+	);
 }

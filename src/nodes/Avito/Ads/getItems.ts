@@ -1,13 +1,9 @@
 import type { IExecuteFunctions, IDataObject } from 'n8n-workflow';
 import { NodeOperationError, sleep } from 'n8n-workflow';
 
-import {
-	avitoApiRequest,
-	validateAvitoApiParams
-} from '../GenericFunctions';
+import { avitoApiRequest, validateAvitoApiParams } from '../GenericFunctions';
 import type { PaginatedQueryParams, ItemsResponse } from '../types/AvitoTypes';
 import { toYYYYMMDD } from '../utils/date_normalize';
-
 
 export async function getItems(this: IExecuteFunctions, itemIndex: number) {
 	const startTime = Date.now();
@@ -65,9 +61,16 @@ export async function getItems(this: IExecuteFunctions, itemIndex: number) {
 	}
 
 	// Если пагинация включена - выполняем расширенную логику
-	return await executePaginatedRequest(this, maxPages, enableDelay, requestDelay, baseParams, itemIndex, startTime);
+	return await executePaginatedRequest(
+		this,
+		maxPages,
+		enableDelay,
+		requestDelay,
+		baseParams,
+		itemIndex,
+		startTime,
+	);
 }
-
 
 async function executeSinglePageRequest(
 	context: IExecuteFunctions,
@@ -76,15 +79,14 @@ async function executeSinglePageRequest(
 	startTime: number,
 ): Promise<IDataObject> {
 	try {
-
-		const response = await avitoApiRequest.call(
+		const response = (await avitoApiRequest.call(
 			context,
 			'GET',
 			'/core/v1/items',
 			undefined,
 			requestParams,
 			itemIndex,
-		) as ItemsResponse;
+		)) as ItemsResponse;
 
 		if (!response || !response.resources || !Array.isArray(response.resources)) {
 			throw new NodeOperationError(context.getNode(), 'Получен некорректный ответ от Avito API', {
@@ -97,7 +99,7 @@ async function executeSinglePageRequest(
 		return {
 			...(response as Record<string, unknown>),
 			meta: {
-				...(response.meta as Record<string, unknown> || {}),
+				...((response.meta as Record<string, unknown>) || {}),
 				pagination_enabled: false,
 				start_page: requestParams.page,
 				total_items: response.resources?.length ?? 0,
@@ -155,7 +157,7 @@ async function executePaginatedRequest(
 			// Проверяем условия остановки
 			const receivedCount = response.resources.length;
 			const isLastPage = receivedCount < (baseParams.per_page ?? 25);
-			
+
 			if (isLastPage) {
 				break;
 			}
