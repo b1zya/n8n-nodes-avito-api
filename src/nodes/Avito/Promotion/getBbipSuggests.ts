@@ -1,5 +1,5 @@
 import type { IExecuteFunctions, IDataObject } from 'n8n-workflow';
-import { getPromotionEmployeeOf, promotionApiRequest, validatePromotionItemIds } from './PromotionUtils';
+import { getPromotionAhEmployeeId, promotionApiRequest, validatePromotionItemIds } from './PromotionUtils';
 
 export async function getBbipSuggests(this: IExecuteFunctions, itemIndex: number): Promise<IDataObject> {
 	const itemIdsParam = this.getNodeParameter('promotionItemIds', itemIndex) as string;
@@ -10,6 +10,6 @@ export async function getBbipSuggests(this: IExecuteFunctions, itemIndex: number
 		'/promotion/v1/items/services/bbip/suggests/get',
 		{ itemIds: validatePromotionItemIds(this, itemIndex, itemIdsParam) },
 		itemIndex,
-		getPromotionEmployeeOf(this, itemIndex),
+		getPromotionAhEmployeeId(this, itemIndex),
 	);
 }

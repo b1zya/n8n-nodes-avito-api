@@ -4,7 +4,11 @@
 
 > **✨ Update:** v3.0.0 adds the Account Hierarchy API and migrates Autoload to the v4 uploads API. See [CHANGELOG.md](CHANGELOG.md).
 >
+> **⚠️ Upgrading to v3.1.0:** Promotion now sends `X-Ah-Employee-Id` (an employee ID) instead of `X-Employee-Of` (a company ID). The old `ID Компании (X-Employee-Of)` field is gone; fill in `ID Сотрудника (X-Ah-Employee-Id)` with the `employeeId` from Account Hierarchy → `Сотрудники Иерархии`.
+>
 > **⚠️ Upgrading to v3.0.0:** the Promotion `Работать От Имени Сотрудника` toggle became the numeric `ID Компании (X-Employee-Of)` field and must be filled in again — otherwise requests run under the personal account instead of the company. Autoload v4 numbers pages from `1` and renames `report_id` to `upload_id`.
+>
+> **⚠️ Обновление до v3.1.0:** Продвижение отправляет `X-Ah-Employee-Id` (ID сотрудника) вместо `X-Employee-Of` (ID компании). Поля «ID Компании (X-Employee-Of)» больше нет: укажите в «ID Сотрудника (X-Ah-Employee-Id)» значение `employeeId` из Иерархия Аккаунтов → «Сотрудники Иерархии».
 >
 > **⚠️ Обновление до v3.0.0:** переключатель Продвижения «Работать От Имени Сотрудника» стал числовым полем «ID Компании (X-Employee-Of)» и требует заполнения заново — иначе запросы пойдут от личного аккаунта, а не от компании. Автозагрузка v4 нумерует страницы с `1` и переименовывает `report_id` в `upload_id`.
 >
@@ -87,16 +91,16 @@ The package configuration points n8n to built files under `dist/src/...`.
 - `X-Employee-Of` is exposed for the four operations that accept it
 - Deprecated `checkAhUserV1` is intentionally not added
 
-#### 🎯 **Promotion v1 (Продвижение)**
+#### 🎯 **Promotion (Продвижение)**
 
 - `POST /promotion/v1/items/services/dict` - service type dictionary
-- `POST /promotion/v1/items/services/get` - active services by item IDs
+- `POST /promotion/v2/items/services/get` - active services by item IDs, with the `degraded` flag for possibly incomplete data
 - `POST /promotion/v1/items/services/orders/get` - orders list
 - `POST /promotion/v1/items/services/orders/status` - order status
 - `POST /promotion/v1/items/services/bbip/suggests/get` - BBIP budget suggestions
 - `POST /promotion/v1/items/services/bbip/forecasts/get` - BBIP forecast
 - `PUT /promotion/v1/items/services/bbip/orders/create` - create BBIP order
-- `X-Employee-Of` is sent on the six operations that accept it; the deprecated `X-Is-Employee` is no longer used
+- `X-Ah-Employee-Id` (hierarchy employee ID) is sent on all seven operations; Avito no longer accepts `X-Employee-Of` or `X-Is-Employee` here
 
 #### 🎯 **CPXPromo Legacy**
 
@@ -310,16 +314,16 @@ items:info,stats:read,user:read
 - `X-Employee-Of` вынесен в UI для тех четырёх операций, которые его принимают
 - deprecated `checkAhUserV1` намеренно не добавлен
 
-#### 🎯 **Продвижение (Promotion v1)**
+#### 🎯 **Продвижение (Promotion)**
 
 - `POST /promotion/v1/items/services/dict` - словарь типов услуг
-- `POST /promotion/v1/items/services/get` - активные услуги по объявлениям
+- `POST /promotion/v2/items/services/get` - активные услуги по объявлениям с признаком `degraded` для возможно неполных данных
 - `POST /promotion/v1/items/services/orders/get` - список заявок
 - `POST /promotion/v1/items/services/orders/status` - статус заявки
 - `POST /promotion/v1/items/services/bbip/suggests/get` - варианты бюджета BBIP
 - `POST /promotion/v1/items/services/bbip/forecasts/get` - прогноз BBIP
 - `PUT /promotion/v1/items/services/bbip/orders/create` - создание BBIP-заявки
-- `X-Employee-Of` отправляется в шести операциях, которые его принимают; устаревший `X-Is-Employee` больше не используется
+- `X-Ah-Employee-Id` (ID сотрудника иерархии) отправляется во всех семи операциях; `X-Employee-Of` и `X-Is-Employee` Avito здесь больше не принимает
 
 #### 🎯 **CPXPromo Legacy**
 

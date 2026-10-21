@@ -8,6 +8,7 @@ const employeeHeaderOperations = [
 	'getBbipSuggests',
 	'getOrderStatus',
 	'getServicesByItems',
+	'getServicesDict',
 	'listOrders',
 ];
 
@@ -43,7 +44,7 @@ export const promotionOperations: INodeProperties[] = [
 			{
 				name: 'Активные Услуги По Объявлениям',
 				value: 'getServicesByItems',
-				description: 'Получение списка активных услуг продвижения по объявлениям',
+				description: 'Получение списка активных услуг продвижения по объявлениям (v2). При degraded: true ответ может быть неполным.',
 				action: 'Get active promotion services by items',
 			},
 			{
@@ -70,12 +71,12 @@ export const promotionOperations: INodeProperties[] = [
 
 export const promotionFields: INodeProperties[] = [
 	{
-		displayName: 'ID Компании (X-Employee-Of)',
-		name: 'promotionEmployeeOf',
+		displayName: 'ID Сотрудника (X-Ah-Employee-Id)',
+		name: 'promotionAhEmployeeId',
 		type: 'number',
 		default: 0,
-		description: 'Идентификатор компании, от имени которой работает сотрудник. Оставьте 0, чтобы работать от личного аккаунта.',
-		hint: 'Пришёл на смену устаревшему X-Is-Employee. Сотруднику, авторизованному под своим аккаунтом, Avito по умолчанию не даёт доступа к объявлениям компании. Для подключения услуг от имени сотрудника нужен достаточный баланс «Лимит на продвижение», может понадобиться scope ah:access.',
+		description: 'Идентификатор сотрудника в иерархии аккаунтов, от имени которого выполняется запрос. Оставьте 0, чтобы работать от личного аккаунта.',
+		hint: 'Это employeeId из «Иерархия Аккаунтов → Сотрудники Иерархии», а не ID компании. С 29.09.2026 методы продвижения принимают только X-Ah-Employee-Id, X-Employee-Of здесь не используется. Для подключения услуг от имени сотрудника нужен достаточный баланс «Лимит на продвижение», может понадобиться scope ah:access.',
 		typeOptions: {
 			minValue: 0,
 		},
@@ -87,7 +88,7 @@ export const promotionFields: INodeProperties[] = [
 		type: 'string',
 		required: true,
 		default: '',
-		description: 'Идентификаторы объявлений через запятую. По документации Promotion v1 максимум 100.',
+		description: 'Идентификаторы объявлений через запятую. По документации Avito максимум 100.',
 		placeholder: '123456,789012',
 		displayOptions: {
 			show: {

@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-avito-api",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "n8n node для интеграции с API Авито для бизнеса",
   "keywords": [
     "n8n-community-node-package",
@@ -49,11 +49,11 @@
     "strict": false
   },
   "devDependencies": {
-    "@n8n/node-cli": "^0.45.4",
+    "@n8n/node-cli": "^0.53.2",
     "eslint": "9.39.4",
     "n8n-workflow": "^2.16.0",
-    "prettier": "3.9.6",
-    "release-it": "20.0.1",
+    "prettier": "3.9.10",
+    "release-it": "21.1.1",
     "typescript": "5.9.3"
   },
   "peerDependencies": {
