@@ -18,7 +18,16 @@ Switches Promotion to the `X-Ah-Employee-Id` header and moves the active service
 #### Changed
 
 - `Словарь Типов Услуг` (`/promotion/v1/items/services/dict`) now accepts and sends the employee header too, since the specification declares it on all Promotion operations.
-- Updated `@n8n/node-cli` from `0.45.4` to `0.53.2` (bundled community-nodes lint rules `0.29` → `0.36`, adding `no-unsafe-connection-type-cast` and `valid-node-categories`; the node passes both), `prettier` from `3.9.6` to `3.9.10`, and `release-it` from `20.0.1` to `21.1.1` (requires Node `^22.22.2 || ^24.15.0 || >=26`).
+- Operation and resource lists are now sorted alphabetically, as the n8n linter requires. Only the order in the UI changes; values and defaults are the same.
+- The Messenger trigger's source files and class were renamed from `AvitoMessengerTrigger` to `AvitoTrigger` to match the node name. The node type `avitoTrigger` is unchanged, so saved workflows keep working.
+- Updated `@n8n/node-cli` from `0.45.4` to `0.54.0` (pinned: it is still tagged `beta` on npm). It brings `@n8n/eslint-plugin-community-nodes` `0.37.0`, adding `no-unsafe-connection-type-cast` and `valid-node-categories`, and `eslint-plugin-n8n-nodes-base` `2.0.0`. Also updated `prettier` from `3.9.6` to `3.9.10` and `release-it` from `20.0.1` to `21.1.1` (requires Node `^22.22.2 || ^24.15.0 || >=26`).
+- The n8n-nodes-base lint rules now actually run on `src/`: `@n8n/node-cli` enables them only for `./nodes` and `./credentials`. The 23 findings they surfaced are fixed.
+- Prettier now uses the `@n8n/node-cli` template config (`.prettierrc.js`) and `src` was reformatted with it. The previous config had no `singleQuote`, so `npm run format` would have switched every string to double quotes.
+
+#### Fixed
+
+- Errors raised inside an operation are no longer rebuilt from their message when the node rethrows them: the description and HTTP details from Avito now reach the n8n UI. Errors that do not come from the API (for example a `TypeError`) are reported as `NodeOperationError` instead of being presented as API errors.
+- Codex files used the `n8n-nodes-base.` prefix reserved for built-in nodes. The node IDs are now `n8n-nodes-avito-api.avito` and `n8n-nodes-avito-api.avitoTrigger` (the trigger's ID also named the wrong node, `avitoMessengerTrigger`).
 
 #### Deprecated
 
@@ -36,7 +45,16 @@ Switches Promotion to the `X-Ah-Employee-Id` header and moves the active service
 #### Изменено
 
 - «Словарь Типов Услуг» (`/promotion/v1/items/services/dict`) теперь тоже принимает и отправляет заголовок сотрудника: спецификация объявляет его во всех операциях Продвижения.
-- Обновлены `@n8n/node-cli` с `0.45.4` до `0.53.2` (встроенные правила lint для community-нод `0.29` → `0.36`, добавлены `no-unsafe-connection-type-cast` и `valid-node-categories`; нода проходит оба), `prettier` с `3.9.6` до `3.9.10` и `release-it` с `20.0.1` до `21.1.1` (требует Node `^22.22.2 || ^24.15.0 || >=26`).
+- Списки операций и ресурсов отсортированы по алфавиту, как требует линтер n8n. Меняется только порядок в интерфейсе; значения и значения по умолчанию те же.
+- Файлы и класс триггера Мессенджера переименованы с `AvitoMessengerTrigger` на `AvitoTrigger` под имя ноды. Тип ноды `avitoTrigger` не изменился, сохранённые workflow продолжают работать.
+- `@n8n/node-cli` обновлён с `0.45.4` до `0.54.0` (версия закреплена: в npm она пока с тегом `beta`). Вместе с ним приходят `@n8n/eslint-plugin-community-nodes` `0.37.0` с новыми правилами `no-unsafe-connection-type-cast` и `valid-node-categories` и `eslint-plugin-n8n-nodes-base` `2.0.0`. Также обновлены `prettier` с `3.9.6` до `3.9.10` и `release-it` с `20.0.1` до `21.1.1` (требует Node `^22.22.2 || ^24.15.0 || >=26`).
+- Правила n8n-nodes-base теперь действительно проверяют `src/`: `@n8n/node-cli` включает их только для `./nodes` и `./credentials`. Найденные ими 23 замечания исправлены.
+- Prettier использует конфиг из шаблона `@n8n/node-cli` (`.prettierrc.js`), `src` переформатирован по нему. В прежнем конфиге не было `singleQuote`, и `npm run format` перевёл бы все строки на двойные кавычки.
+
+#### Исправлено
+
+- Ошибки внутри операций больше не пересобираются из одного текста при повторном выбросе: описание и HTTP-детали от Авито доходят до интерфейса n8n. Ошибки не от API (например, `TypeError`) теперь показываются как `NodeOperationError`, а не выдаются за ошибки API.
+- Codex-файлы использовали префикс `n8n-nodes-base.`, зарезервированный за встроенными нодами. Теперь идентификаторы — `n8n-nodes-avito-api.avito` и `n8n-nodes-avito-api.avitoTrigger` (у триггера к тому же было указано чужое имя `avitoMessengerTrigger`).
 
 #### Устарело
 
